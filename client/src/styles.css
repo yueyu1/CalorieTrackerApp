@@ -1,5 +1,73 @@
-/* You can add global styles to this file, and also import other style files */
 @import "@angular/material/prebuilt-themes/indigo-pink.css";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* ====================================== */
+/*    Shared style for ALL toast types
+/* ====================================== */
+
+/* Position spacing: bottom + right margins */
+.mat-mdc-snack-bar-container {
+  margin: 0 16px 16px 0 !important;
+}
+
+/* Surface styling */
+.mat-mdc-snack-bar-container .mdc-snackbar__surface {
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  box-shadow:
+    0 3px 5px rgba(0, 0, 0, 0.1),
+    0 10px 15px rgba(0, 0, 0, 0.05) !important;
+}
+
+/* Action button: "Close" */
+.mat-mdc-snack-bar-container .mat-mdc-button {
+  font-weight: 600;
+  font-size: 13px;
+}
+
+/* ============================= */
+/*       ERROR (Red)             */
+/* ============================= */
+.mat-mdc-snack-bar-container.error-toast .mdc-snackbar__surface {
+  background-color: #dc2626 !important;   /* red-600 */
+  color: #ffffff !important;
+}
+.mat-mdc-snack-bar-container.error-toast .mat-mdc-button {
+  color: #fee2e2 !important;
+}
+
+/* ============================= */
+/*       SUCCESS (Green)         */
+/* ============================= */
+.mat-mdc-snack-bar-container.success-toast .mdc-snackbar__surface {
+  background-color: #16a34a !important;   /* green-600 */
+  color: #ffffff !important;
+}
+.mat-mdc-snack-bar-container.success-toast .mat-mdc-button {
+  color: #bbf7d0 !important;
+}
+
+/* ============================= */
+/*       WARNING (Amber)         */
+/* ============================= */
+.mat-mdc-snack-bar-container.warning-toast .mdc-snackbar__surface {
+  background-color: #f59e0b !important;   /* amber-500 */
+  color: #1f2937 !important;              /* dark grey */
+}
+.mat-mdc-snack-bar-container.warning-toast .mat-mdc-button {
+  color: #1f2937 !important;
+}
+
+/* ============================= */
+/*       INFO (Blue)             */
+/* ============================= */
+.mat-mdc-snack-bar-container.info-toast .mdc-snackbar__surface {
+  background-color: #2563eb !important;   /* blue-600 */
+  color: #ffffff !important;
+}
+.mat-mdc-snack-bar-container.info-toast .mat-mdc-button {
+  color: #dbeafe !important;
+}

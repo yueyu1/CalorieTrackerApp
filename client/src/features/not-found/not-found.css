@@ -1,0 +1,103 @@
+:host {
+  display: block;
+  min-height: calc(100vh - 64px); /* leaves room for navbar */
+  background: #f5f6ff;
+}
+
+/* Center the card */
+.notfound-wrapper {
+  max-width: 520px;
+  margin: 80px auto;
+  padding: 0 16px;
+}
+
+/* Card */
+.notfound-card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 28px 28px 24px;
+}
+
+/* Icon row */
+.notfound-icon-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 8px;
+  margin-bottom: 6px;
+}
+
+.notfound-icon {
+  font-size: 42px;
+  line-height: 1 !important;
+  height: 42px;
+  width: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2563eb;
+}
+
+/* Header text */
+.notfound-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.notfound-header h1 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.notfound-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Actions */
+.notfound-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.primary-btn {
+  min-height: 44px;
+  padding: 0 28px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+.secondary-btn {
+  min-height: 44px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-transform: none;
+}
+
+/* Smaller screens */
+@media (max-width: 600px) {
+  .notfound-wrapper {
+    margin: 56px auto;
+  }
+
+  .notfound-card {
+    padding: 24px 20px 20px;
+  }
+
+  .notfound-actions {
+    flex-direction: column;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    width: 100%;
+  }
+}

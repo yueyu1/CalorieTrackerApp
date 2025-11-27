@@ -1,0 +1,21 @@
+<div style="margin: 5%;">
+    <button (click)="testForbidden()" mat-stroked-button color="primary">
+        Forbidden
+    </button>
+
+    <button (click)="testUnauthorized()" mat-stroked-button color="accent" style="margin-left: 10px;">
+        Unauthorized
+    </button>
+
+    <button (click)="testBadRequest()" mat-stroked-button color="warn" style="margin-left: 10px;">
+        Bad Request
+    </button>
+
+    <button (click)="testServerError()" mat-stroked-button color="basic" style="margin-left: 10px;">
+        Server Error
+    </button>
+
+    <button (click)="testNotFound()" mat-stroked-button color="primary" style="margin-left: 10px;">
+        Not Found
+    </button>
+</div>

@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccountService } from '../../../core/services/account-service';
 import { tap } from 'rxjs';
+import { ToastService } from '../../../core/services/toast-service';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ import { tap } from 'rxjs';
 export class Login implements OnInit {
   private layoutService = inject(LayoutService);
   private accountService = inject(AccountService);
+  private toastService = inject(ToastService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   protected loginForm: FormGroup;
@@ -60,9 +62,10 @@ export class Login implements OnInit {
       this.accountService.login(this.loginForm.value).subscribe({
         next: () => {
           this.router.navigate(['/dashboard']);
+          this.toastService.success('Login successful!');
         },
-        error: (error) => {
-          console.log('Login error', error);
+        error: () => {
+          this.toastService.error('Login failed. Please check your credentials and try again.');
         },
         complete: () => {
           // fake delay
