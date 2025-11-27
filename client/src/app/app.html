@@ -1,6 +1,4 @@
-@for (member of members(); track $index) {
-  <div>{{member.id}} - {{ member.email }}</div>
-}
-
-<p><mat-slide-toggle>Slide me!</mat-slide-toggle></p>
-<p><mat-slide-toggle labelPosition="before">...and slide me too!</mat-slide-toggle></p>
+@if (layoutService.showNav()) {
+    <app-nav></app-nav>
+} 
+<router-outlet></router-outlet>
