@@ -1,1 +1,95 @@
-<p>register works!</p>
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Create your account</h1>
+      <p>Sign up to start tracking your calories and reaching your goals.</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="auth-field">
+        <mat-label>Email</mat-label>
+        <input
+          matInput
+          type="email"
+          formControlName="email"
+          placeholder="you@example.com"
+        />
+        @if (email?.hasError('required')) {
+            <mat-error>Email is required.</mat-error>
+        }
+        @if (email?.hasError('email') && !email?.hasError('required')) {
+            <mat-error>Please enter a valid email address.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="auth-field">
+        <mat-label>Display name</mat-label>
+        <input
+          matInput
+          type="text"
+          formControlName="displayName"
+          placeholder="How should we call you?"
+        />
+        @if (displayName?.hasError('required')) {
+            <mat-error>Display name is required.</mat-error>
+        }
+        @if (displayName?.hasError('minlength') && !displayName?.hasError('required')) {
+            <mat-error>Display name must be at least 2 characters.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="auth-field">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          type="password"
+          formControlName="password"
+        />
+        @if (password?.hasError('required')) {
+            <mat-error>Password is required.</mat-error>
+        }
+        @if (password?.hasError('minlength') && !password?.hasError('required')) {
+            <mat-error>Password must be at least 6 characters.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="auth-field">
+        <mat-label>Confirm password</mat-label>
+        <input
+          matInput
+          type="password"
+          formControlName="confirmPassword"
+        />
+        @if (confirmPassword?.hasError('required')) {
+            <mat-error>Please confirm your password.</mat-error>
+        }
+
+        @if (confirmPassword?.hasError('passwordMismatch') && 
+          !confirmPassword?.hasError('required')) {
+            <mat-error>Passwords do not match.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="auth-actions">
+        <button
+          mat-flat-button
+          color="primary"
+          type="submit"
+          class="primary-btn"
+          [disabled]="isSubmitting"
+        >
+          {{ isSubmitting ? 'Creating account…' : 'Create account' }}
+        </button>
+      </div>
+    </form>
+
+    <button routerLink="/" class="cancel-button">
+      Cancel
+    </button>
+
+    <div class="auth-footer">
+      <span>Already have an account?</span>
+      <a routerLink="/account/login">Log in</a>
+    </div>
+  </div>
+</div>

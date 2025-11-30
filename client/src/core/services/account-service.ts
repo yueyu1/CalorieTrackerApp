@@ -20,6 +20,15 @@ export class AccountService {
     );
   }
 
+  register(model: { email: string; displayName: string; password: string }) {
+    const url = `${this.baseUrl}/account/register`;
+    return this.httpClient.post<User>(url, model).pipe(
+      tap(response => {
+        localStorage.setItem('access_token', response.token);
+      })
+    );
+  }
+
   logout() {
     localStorage.removeItem('access_token');
   }

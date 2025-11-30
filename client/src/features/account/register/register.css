@@ -1,0 +1,105 @@
+:host {
+  display: block;
+  min-height: calc(100vh - 64px);
+  background: #f5f6ff;
+}
+
+.auth-wrapper {
+  max-width: 420px;
+  margin: 72px auto;
+  padding: 0 16px;
+}
+
+.auth-card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  padding: 28px 28px 24px;
+}
+
+/* Header */
+.auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-header h1 {
+  margin: 0 0 8px;
+  font-size: 26px;
+  font-weight: 600;
+  color: #111827;
+}
+
+.auth-header p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+/* Fields */
+.auth-field {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+/* Primary button */
+.auth-actions {
+  margin-top: 6px;
+}
+
+.auth-actions .primary-btn {
+  width: 100%;
+  min-height: 52px;
+  padding: 0;
+  font-size: 16px;
+  font-weight: 600;
+  text-transform: none;
+  border-radius: 999px;
+}
+
+/* Cancel */
+.cancel-button {
+  margin-top: 10px;
+  padding: 10px 0;
+  width: 100%;
+  font-size: 15px;
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.cancel-button:hover {
+  text-decoration: underline;
+  color: #374151;
+}
+
+/* Footer link */
+.auth-footer {
+  margin-top: 22px;
+  text-align: center;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.auth-footer a {
+  margin-left: 4px;
+  font-weight: 500;
+  color: #2563eb;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .auth-wrapper {
+    margin: 56px auto;
+  }
+
+  .auth-card {
+    padding: 24px 20px 20px;
+  }
+}
