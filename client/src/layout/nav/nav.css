@@ -3,7 +3,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 48px !important;
+  padding: 12px 32px !important;
   background: #ffffff !important;
   box-shadow: 0 1px 0 rgba(15, 23, 42, 0.08);
 }
@@ -39,17 +39,6 @@
   color: #1e293b !important;
 }
 
-/* Primary action when logged in: Add Entry */
-.public-header .primary-action-btn {
-  border-radius: 999px;
-  padding-inline: 18px;
-  text-transform: none;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
 /* User chip (menu trigger) */
 .user-chip {
   display: inline-flex;
@@ -74,17 +63,63 @@
   justify-content: center;
   background: #eff6ff;
   color: #1d4ed8;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
 }
 
 /* Name text */
 .user-chip .user-name {
   white-space: nowrap;
+  font-weight: 500;
+  margin-left: 1px;
+  position: relative;
+  top: -1px; /* lift the text slightly */
 }
 
 /* Dropdown icon */
 .user-chip .chevron-icon {
   font-size: 18px;
   opacity: 0.7;
+}
+
+/* Group of top-level links shown when logged in */
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 8px;
+}
+
+/* Base style for each nav link */
+.nav-link {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4b5563;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 14px; /* use 999 for rounded */
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.nav-link:hover {
+  background-color: #eef2ff;
+  color: #1d4ed8;
+}
+
+.nav-link-active {
+  background-color: #3b5ccc;
+  color: #ffffff;
+  box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2);
+  font-weight: 550;   /* slightly lighter than 600 */
+  padding: 6px 13px;  /* left-right balance */
+}
+
+/* Slightly tighten right-section to keep things balanced */
+.public-header .right-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
