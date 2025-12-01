@@ -1,4 +1,4 @@
-/* Navbar container */
+/* Logged-in header can feel more "app-like" */
 .public-header {
   display: flex;
   justify-content: space-between;
@@ -8,7 +8,7 @@
   box-shadow: 0 1px 0 rgba(15, 23, 42, 0.08);
 }
 
-/* Left logo – make it more prominent */
+/* Left logo */
 .public-header .logo {
   font-size: 21px;
   font-weight: 600;
@@ -16,7 +16,14 @@
   cursor: pointer;
 }
 
-/* Right login button – taller & larger text */
+/* Right section layout */
+.public-header .right-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Reuse login button style for logged-out state */
 .public-header .login-btn {
   font-size: 17px;
   font-weight: 500;
@@ -24,11 +31,60 @@
   padding: 8px 18px !important;
   text-transform: none !important;
   border-radius: 999px !important;
-  line-height: 1.4;         /* helps it feel taller */
+  line-height: 1.4;
 }
 
-/* Hover */
 .public-header .login-btn:hover {
   background: rgba(37, 99, 235, 0.08);
   color: #1e293b !important;
+}
+
+/* Primary action when logged in: Add Entry */
+.public-header .primary-action-btn {
+  border-radius: 999px;
+  padding-inline: 18px;
+  text-transform: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* User chip (menu trigger) */
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+  text-transform: none;
+  font-weight: 500;
+  color: #111827;
+  white-space: nowrap;
+}
+
+/* Circle avatar with initial */
+.user-chip .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+/* Name text */
+.user-chip .user-name {
+  white-space: nowrap;
+}
+
+/* Dropdown icon */
+.user-chip .chevron-icon {
+  font-size: 18px;
+  opacity: 0.7;
 }

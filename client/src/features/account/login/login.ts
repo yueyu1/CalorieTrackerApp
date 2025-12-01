@@ -70,7 +70,6 @@ export class Login implements OnInit {
           // fake delay
           setTimeout(() => {
             this.isSubmitting.set(false);
-            // later: navigate to dashboard, etc.
           }, 500);
         }
       });
