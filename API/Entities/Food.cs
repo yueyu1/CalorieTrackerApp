@@ -1,4 +1,3 @@
-using System;
 using System.Text.Json.Serialization;
 
 namespace API.Entities;
@@ -12,7 +11,20 @@ public class Food
     public double Protein { get; set; }
     public double Carbs { get; set; }
     public double Fat { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
+    /// <summary>
+    /// The quantity that these macros apply to (e.g. 100, 1, etc.).
+    /// </summary>
+    public double BaseQuantity { get; set; } = 100;
+
+    /// <summary>
+    /// The unit that BaseQuantity is in (e.g. "g", "serving", "piece").
+    /// </summary>
+    public string BaseUnit { get; set; } = "g";
+
+    // Navigation properties
     public string? UserId { get; set; }
     [JsonIgnore]
     public AppUser? User { get; set; }

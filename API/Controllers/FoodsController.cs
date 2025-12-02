@@ -26,20 +26,37 @@ namespace API.Controllers
             scope = scope.ToLowerInvariant();
             foods = scope switch
             {
-                "global" => foods.Where(f => f.UserId == null),
-                "mine" => foods.Where(f => f.UserId == currentUserId),
-                _ => foods.Where(f => f.UserId == null || f.UserId == currentUserId)
+                "global" => foods
+                    .Where(f => f.UserId == null)
+                    .OrderBy(f => f.Name), // global foods alphabetically
+
+                "mine" => foods
+                    .Where(f => f.UserId == currentUserId)
+                    .OrderByDescending(f => f.CreatedAt), // my foods recent first
+
+                _ => foods // "all"
+                    .OrderByDescending(f => f.UserId == currentUserId) // my foods first
+                    .ThenByDescending(f => f.CreatedAt) // then my recent foods
+                    .ThenBy(f => f.Name) // then global alphabetically
             };
 
             if (!string.IsNullOrWhiteSpace(q))
             {
-                q = q.ToLowerInvariant().Trim();
-                foods = foods.Where(f => f.Name.ToLower().Contains(q));
+                 var qLower = q.ToLowerInvariant().Trim();
+                foods = foods
+                    .Where(f => 
+                        f.Name.ToLower().Contains(qLower)) // filter by query
+                    .OrderByDescending(f => 
+                        f.Name.ToLower().StartsWith(qLower)) // prioritize starts with
+                    .ThenBy(f => 
+                        f.Name.ToLower().Contains(qLower)) // then contains
+                    .ThenByDescending(f => 
+                        f.UserId == currentUserId) // then my foods
+                    .ThenBy(f => 
+                        f.Name); // then alphabetically
             }
 
-            var result = await foods
-                .OrderBy(f => f.Name)
-                .ToListAsync();
+            var result = await foods.ToListAsync();
             return Ok(result);
         }
 
@@ -74,6 +91,7 @@ namespace API.Controllers
                 Carbs = foodDto.Carbs,
                 Protein = foodDto.Protein,
                 Fat = foodDto.Fat,
+                CreatedAt = DateTime.UtcNow,
                 UserId = currentUserId
             };
 
@@ -101,6 +119,7 @@ namespace API.Controllers
             food.Carbs = foodDto.Carbs;
             food.Protein = foodDto.Protein;
             food.Fat = foodDto.Fat;
+            food.UpdatedAt = DateTime.UtcNow;
 
             await _db.SaveChangesAsync();
 
