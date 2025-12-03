@@ -1,0 +1,357 @@
+:host {
+  display: block;
+}
+
+/* Layout */
+.daily-log-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+}
+
+/* Header */
+.daily-log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.header-left h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.header-left p {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+}
+
+/* Date pill (Material button) */
+.date-pill {
+  border-radius: 999px;
+  padding-inline: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-pill-label {
+  font-size: 13px;
+  color: #6b7280;
+}
+
+.date-pill-value {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.date-pill-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  color: #9ca3af;
+}
+
+/* Summary row wrapper (sticky) */
+.summary-wrapper {
+  position: sticky;
+  top: 72px; /* adjust to account for your navbar height */
+  z-index: 5;
+  padding-bottom: 16px;
+  background: linear-gradient(
+    to bottom,
+    rgba(248, 250, 252, 0.98),
+    rgba(248, 250, 252, 0.94),
+    rgba(248, 250, 252, 0.9) 60%,
+    transparent
+  );
+}
+
+/* Summary row */
+.daily-log-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.summary-card {
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.summary-value {
+  font-size: 20px;
+  font-weight: 700;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.summary-unit {
+  font-size: 11px;
+  color: #9ca3af;
+}
+
+/* Meals */
+.meals-section {
+  margin-top: 20px;
+}
+
+.meals-title {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.meal-card {
+  border-radius: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  overflow: hidden;
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.meal-card--expanded {
+  transform: translateY(-1px);
+  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.14);
+}
+
+/* Card header */
+.meal-header {
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 14px 20px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 2.1fr) auto;
+  align-items: center;
+  column-gap: 24px;
+  row-gap: 8px;
+  cursor: pointer;
+}
+
+.meal-header-main {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meal-name {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.meal-header-calories {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* Middle column: macros block */
+.meal-header-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+}
+
+.meal-header-summary--empty {
+  opacity: 0.7;
+  align-items: center;
+  justify-content: center;
+}
+
+.meal-header-empty-text {
+  font-size: 13px;
+  color: #9ca3af;
+  text-align: center;
+}
+
+.meal-header-macros-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px clamp(20px, 4vw, 48px);;
+  align-items: center;
+}
+
+.macro-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+}
+
+.macro-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #9ca3af;
+}
+
+.macro-values-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.macro-chip {
+  font-size: 12px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background-color: #eef2ff;
+  color: #4338ca;
+  font-weight: 500;
+}
+
+.macro-percent {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+/* Right column: actions stay on the right edge */
+.meal-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: flex-end;
+}
+
+.add-food-btn {
+  border-radius: 999px;
+  padding-inline: 14px;
+}
+
+/* Chevron icon rotate */
+.chevron-icon {
+  transition: transform 0.18s ease;
+  color: #9ca3af;
+}
+
+.chevron-icon--open {
+  transform: rotate(180deg);
+}
+
+/* Body */
+.meal-body {
+  background-color: #f9fafb;
+}
+
+.meal-body-inner {
+  padding: 10px 20px 16px;
+}
+
+/* table */
+.meal-table-header,
+.meal-table-row {
+  display: grid;
+  /* Food | Calories | P | C | F */
+  grid-template-columns: 3fr 1.1fr 1fr 1fr 1fr;
+  column-gap: 12px;
+  align-items: center;
+}
+
+.meal-table-header {
+  padding: 8px 0 4px;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #9ca3af;
+}
+
+.meal-table-row {
+  padding: 7px 0;
+  font-size: 13px;
+  border-top: 1px solid rgba(209, 213, 219, 0.8);
+}
+
+.meal-table-row:first-of-type {
+  border-top: none;
+}
+
+.col-calories,
+.col-protein,
+.col-carbs,
+.col-fat {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.col-calories,
+.col-protein,
+.col-carbs,
+.col-fat {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.col-calories .macro-value {
+  font-weight: 600; /* Slightly stronger than macros */
+}
+
+.col-protein,
+.col-carbs,
+.col-fat .macro-value {
+  font-weight: 500;
+}
+
+.macro-unit {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+/* Empty meal */
+.meal-empty {
+  padding: 18px 4px 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+
+.meal-empty p {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .daily-log-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .summary-wrapper {
+    top: 64px;
+  }
+
+  .daily-log-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .meal-table-header,
+  .meal-table-row {
+    grid-template-columns: 2.5fr 1.1fr 0.9fr 0.9fr 0.9fr;
+  }
+}

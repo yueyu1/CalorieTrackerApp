@@ -84,7 +84,7 @@ export class Register implements OnInit {
       this.accountService.register(payload).subscribe({
         next: () => {
           this.isSubmitting = false;
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/daily-log']);
         },
         error: () => {
           this.isSubmitting = false;

@@ -60,7 +60,7 @@ export class Login implements OnInit {
 
       this.accountService.login(this.loginForm.value).subscribe({
         next: () => {
-          this.router.navigate(['/dashboard']);
+          this.router.navigate(['/daily-log']);
           this.toastService.success('Login successful!');
         },
         error: () => {

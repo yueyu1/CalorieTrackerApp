@@ -18,6 +18,15 @@
       <!-- TOP-LEVEL NAV LINKS (Dashboard highlighted when active) -->
       <div class="nav-links">
         <a
+          routerLink="/daily-log"
+          routerLinkActive="nav-link-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+        >
+          Daily Log
+        </a>
+        
+        <a
           routerLink="/dashboard"
           routerLinkActive="nav-link-active"
           [routerLinkActiveOptions]="{ exact: true }"
