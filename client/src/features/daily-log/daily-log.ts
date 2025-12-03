@@ -1,11 +1,11 @@
 import { Component, computed, signal } from '@angular/core';
 import { Meal, MealType } from '../../types/meal';
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { MATERIAL_IMPORTS } from '../../shared/material';
 
 @Component({
   selector: 'app-daily-log',
-  imports: [DatePipe, DecimalPipe, MATERIAL_IMPORTS],
+  imports: [CommonModule, DatePipe, DecimalPipe, MATERIAL_IMPORTS],
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.css',
 })
@@ -75,7 +75,7 @@ export class DailyLog {
     'Breakfast',
   ]);
 
-    // ---- Daily totals ----
+  // ---- Daily totals ----
   totalCalories = computed(() =>
     this._meals()
       .flatMap((m) => m.items)
@@ -98,6 +98,35 @@ export class DailyLog {
     this._meals()
       .flatMap((m) => m.items)
       .reduce((sum, i) => sum + i.fat, 0)
+  );
+
+  // ---- Macro calorie calculations ----
+  proteinCalories = computed(() => this.totalProtein() * 4);
+  carbsCalories = computed(() => this.totalCarbs() * 4);
+  fatCalories = computed(() => this.totalFat() * 9);
+
+  get totalMacroCalories() {
+    return this.proteinCalories() +
+          this.carbsCalories() +
+          this.fatCalories();
+  }
+
+  proteinCaloriePercent = computed(() =>
+    this.totalMacroCalories > 0
+      ? (this.proteinCalories() / this.totalMacroCalories) * 100
+      : 0
+  );
+
+  carbsCaloriePercent = computed(() =>
+    this.totalMacroCalories > 0
+      ? (this.carbsCalories() / this.totalMacroCalories) * 100
+      : 0
+  );
+
+  fatCaloriePercent = computed(() =>
+    this.totalMacroCalories > 0
+      ? (this.fatCalories() / this.totalMacroCalories) * 100
+      : 0
   );
 
   // ---- Per-meal helpers ----
@@ -151,8 +180,6 @@ export class DailyLog {
 
   // ---- Actions ----
   onAddFood(meal: Meal): void {
-    // Open your Add Food modal here, passing meal.mealType and date.
-    // After saving, reload meals from the API and update _meals.
     console.log('Add food to', meal.mealType);
   }
 }

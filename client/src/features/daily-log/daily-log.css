@@ -108,6 +108,23 @@
   color: #9ca3af;
 }
 
+.summary-meta {
+  margin-top: 4px;
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 11px;
+}
+
+.summary-percent {
+  font-weight: 600;
+  color: #4f46e5; /* matches your primary accent */
+}
+
+.summary-meta-label {
+  color: #9ca3af;
+}
+
 /* Meals */
 .meals-section {
   margin-top: 20px;
@@ -131,6 +148,32 @@
   box-shadow: 0 22px 50px rgba(15, 23, 42, 0.14);
 }
 
+/* Lift non-expanded cards slightly on hover */
+.meal-card:hover:not(.meal-card--expanded) {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.11);
+}
+
+/* Lift the icon bubble when card is hovered */
+.meal-card:hover .meal-icon {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.18);
+}
+
+/* Optional: tiny background pop on hover */
+.meal-card:hover .meal-icon--breakfast {
+  background-color: #fde68a;
+}
+.meal-card:hover .meal-icon--lunch {
+  background-color: #bae6fd;
+}
+.meal-card:hover .meal-icon--dinner {
+  background-color: #ddd6fe;
+}
+.meal-card:hover .meal-icon--snacks {
+  background-color: #fecaca;
+}
+
 /* Card header */
 .meal-header {
   width: 100%;
@@ -148,19 +191,73 @@
 .meal-header-main {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: flex-start;
+}
+
+.meal-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.meal-title-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 
 .meal-name {
   margin: 0;
-  font-size: 16px;
-  font-weight: 600;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
 }
 
 .meal-header-calories {
   font-size: 13px;
-  font-weight: 600;
-  color: #111827;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.meal-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eef2ff;
+  color: #4338ca;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.12);
+  flex-shrink: 0;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+
+.meal-icon mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Variant colors per meal type */
+.meal-icon--breakfast {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.meal-icon--lunch {
+  background: #e0f2fe;
+  color: #0369a1;
+}
+
+.meal-icon--dinner {
+  background: #ede9fe;
+  color: #6d28d9;
+}
+
+.meal-icon--snacks {
+  background: #fee2e2;
+  color: #b91c1c;
 }
 
 /* Middle column: macros block */

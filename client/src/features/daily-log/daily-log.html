@@ -20,6 +20,7 @@
   <!-- Sticky summary row -->
   <div class="summary-wrapper">
     <div class="daily-log-summary">
+      <!-- Calories -->
       <mat-card class="summary-card">
         <div class="summary-label">Calories</div>
         <div class="summary-value">
@@ -28,27 +29,48 @@
         </div>
       </mat-card>
 
+      <!-- Protein -->
       <mat-card class="summary-card">
         <div class="summary-label">Protein</div>
         <div class="summary-value">
           {{ totalProtein() | number: '1.0-0' }}
           <span class="summary-unit">g</span>
         </div>
+        <div class="summary-meta">
+          <span class="summary-percent">
+            {{ proteinCaloriePercent() | number:'1.0-0' }}%
+          </span>
+          <span class="summary-meta-label">of calories</span>
+        </div>
       </mat-card>
 
+      <!-- Carbs -->
       <mat-card class="summary-card">
         <div class="summary-label">Carbs</div>
         <div class="summary-value">
           {{ totalCarbs() | number: '1.0-0' }}
           <span class="summary-unit">g</span>
         </div>
+        <div class="summary-meta">
+          <span class="summary-percent">
+            {{ carbsCaloriePercent() | number:'1.0-0' }}%
+          </span>
+          <span class="summary-meta-label">of calories</span>
+        </div>
       </mat-card>
 
+      <!-- Fat -->
       <mat-card class="summary-card">
         <div class="summary-label">Fat</div>
         <div class="summary-value">
           {{ totalFat() | number: '1.0-0' }}
           <span class="summary-unit">g</span>
+        </div>
+        <div class="summary-meta">
+          <span class="summary-percent">
+            {{ fatCaloriePercent() | number:'1.0-0' }}%
+          </span>
+          <span class="summary-meta-label">of calories</span>
         </div>
       </mat-card>
     </div>
@@ -56,7 +78,7 @@
 
   <!-- Meals -->
   <section class="meals-section">
-    <h2 class="meals-title">Today’s Meals</h2>
+    <h2 class="meals-title">Today's Meals</h2>
 
     @for (meal of meals(); track $index) {
       <mat-card 
@@ -72,10 +94,34 @@
           @if (getMealTotals(meal); as t) {
             <!-- Left column: meal name + calories -->
             <div class="meal-header-main">
-              <h3 class="meal-name">{{ meal.mealType }}</h3>
-              <span class="meal-header-calories">
-                {{ t.calories | number: '1.0-0' }} kcal
-              </span>
+              <div class="meal-title-row">
+                <!-- Icon bubble -->
+                <div
+                  class="meal-icon"
+                  [ngClass]="{
+                    'meal-icon--breakfast': meal.mealType === 'Breakfast',
+                    'meal-icon--lunch': meal.mealType === 'Lunch',
+                    'meal-icon--dinner': meal.mealType === 'Dinner',
+                    'meal-icon--snacks': meal.mealType === 'Snacks'
+                  }"
+                >
+                  @switch (meal.mealType) {
+                    @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
+                    @case ('Lunch')     { <mat-icon fontIcon="lunch_dining"></mat-icon> }
+                    @case ('Dinner')    { <mat-icon fontIcon="dinner_dining"></mat-icon> }
+                    @case ('Snacks')    { <mat-icon fontIcon="restaurant"></mat-icon> }
+                    @default            { <mat-icon fontIcon="restaurant"></mat-icon> }
+                  }
+                </div>
+
+                <!-- Text block -->
+                <div class="meal-title-text">
+                  <h3 class="meal-name">{{ meal.mealType }}</h3>
+                  <span class="meal-header-calories">
+                    {{ t.calories | number: '1.0-0' }} kcal
+                  </span>
+                </div>
+              </div>
             </div>
 
             <!-- Middle column: macros summary (only when there are items) -->
