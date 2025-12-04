@@ -42,6 +42,14 @@
           </span>
           <span class="summary-meta-label">of calories</span>
         </div>
+        <div class="summary-bar-wrapper">
+          <div class="summary-bar-bg">
+            <div
+              class="summary-bar-fill protein-fill"
+              [style.transform]="'scaleX(' + (proteinCaloriePercent() / 100) + ')'"
+            ></div>
+          </div>
+        </div>
       </mat-card>
 
       <!-- Carbs -->
@@ -56,6 +64,14 @@
             {{ carbsCaloriePercent() | number:'1.0-0' }}%
           </span>
           <span class="summary-meta-label">of calories</span>
+        </div>
+        <div class="summary-bar-wrapper">
+          <div class="summary-bar-bg">
+            <div
+              class="summary-bar-fill carbs-fill"
+              [style.transform]="'scaleX(' + (carbsCaloriePercent() / 100) + ')'"
+            ></div>
+          </div>
         </div>
       </mat-card>
 
@@ -72,6 +88,14 @@
           </span>
           <span class="summary-meta-label">of calories</span>
         </div>
+        <div class="summary-bar-wrapper">
+        <div class="summary-bar-bg">
+          <div
+            class="summary-bar-fill fat-fill"
+            [style.transform]="'scaleX(' + (fatCaloriePercent() / 100) + ')'"
+          ></div>
+        </div>
+    </div>
       </mat-card>
     </div>
   </div>

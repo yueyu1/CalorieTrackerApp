@@ -87,6 +87,27 @@
   border-radius: 18px;
   padding: 14px 16px;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+  background: white;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
+  cursor: default; /* indicate non-clickable */
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  background-color: #fdfdfd; /* slight surface lift */
+}
+
+.summary-card:nth-child(2):hover {
+  box-shadow: 0 18px 45px rgba(99, 102, 241, 0.25); /* protein indigo glow */
+}
+
+.summary-card:nth-child(3):hover {
+  box-shadow: 0 18px 45px rgba(14, 165, 233, 0.25); /* carbs blue glow */
+}
+
+.summary-card:nth-child(4):hover {
+  box-shadow: 0 18px 45px rgba(248, 113, 113, 0.25); /* fat red glow */
 }
 
 .summary-label {
@@ -125,6 +146,43 @@
   color: #9ca3af;
 }
 
+/* Wrapper for spacing */
+.summary-bar-wrapper {
+  margin-top: 6px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Background track */
+.summary-bar-bg {
+  width: 60%;
+  height: 4px;
+  border-radius: 999px;
+  background-color: #e5e7eb; /* neutral gray */
+  overflow: hidden;
+  position: relative;
+}
+
+.summary-bar-fill {
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  transform-origin: left center;
+  transform: scaleX(0);
+  transition: transform 0.35s ease-out;
+}
+
+.protein-fill {
+  background-color: #6366f1; /* indigo */
+}
+.carbs-fill {
+  background-color: #0ea5e9; /* sky blue */
+}
+.fat-fill {
+  background-color: #f87171; /* light red */
+}
+
 /* Meals */
 .meals-section {
   margin-top: 20px;
@@ -136,16 +194,17 @@
 }
 
 .meal-card {
-  border-radius: 24px;
-  margin-bottom: 16px;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+  min-height: 84px;
+  border-radius: 26px;
+  margin-bottom: 22px;
+  box-shadow: 0 18px 44px rgba(15, 23, 42, 0.09);
   overflow: hidden;
   transition: box-shadow 0.18s ease, transform 0.18s ease;
 }
 
 .meal-card--expanded {
   transform: translateY(-1px);
-  box-shadow: 0 22px 50px rgba(15, 23, 42, 0.14);
+  box-shadow: 0 24px 56px rgba(15, 23, 42, 0.15);
 }
 
 /* Lift non-expanded cards slightly on hover */
@@ -179,12 +238,12 @@
   width: 100%;
   border: none;
   background: transparent;
-  padding: 14px 20px;
+  padding: 18px 24px;
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 2.1fr) auto;
   align-items: center;
-  column-gap: 24px;
-  row-gap: 8px;
+  column-gap: 28px;
+  row-gap: 10px;
   cursor: pointer;
 }
 
@@ -197,7 +256,7 @@
 .meal-title-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
 }
 
 .meal-title-text {
@@ -208,13 +267,13 @@
 
 .meal-name {
   margin: 0;
-  font-size: 17px;
+  font-size: 18px;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
 
 .meal-header-calories {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #6b7280;
 }
@@ -267,7 +326,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .meal-header-summary--empty {
@@ -285,33 +344,33 @@
 .meal-header-macros-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 8px clamp(20px, 4vw, 48px);;
+  gap: 10px clamp(22px, 4vw, 50px);;
   align-items: center;
 }
 
 .macro-group {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 5px;
   align-items: center;
 }
 
 .macro-label {
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.05em;
   color: #9ca3af;
 }
 
 .macro-values-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 
 .macro-chip {
-  font-size: 12px;
-  padding: 3px 10px;
+  font-size: 13px;
+  padding: 4px 12px;
   border-radius: 999px;
   background-color: #eef2ff;
   color: #4338ca;
@@ -319,7 +378,7 @@
 }
 
 .macro-percent {
-  font-size: 11px;
+  font-size: 12px;
   color: #6b7280;
 }
 
@@ -360,21 +419,21 @@
 .meal-table-row {
   display: grid;
   /* Food | Calories | P | C | F */
-  grid-template-columns: 3fr 1.1fr 1fr 1fr 1fr;
+  grid-template-columns: 3fr 1.2fr 1fr 1fr 1fr;
   column-gap: 12px;
   align-items: center;
 }
 
 .meal-table-header {
   padding: 8px 0 4px;
-  font-size: 11px;
+  font-size: 12px;
   text-transform: uppercase;
   color: #9ca3af;
 }
 
 .meal-table-row {
-  padding: 7px 0;
-  font-size: 13px;
+  padding: 10px 0;
+  font-size: 14px;
   border-top: 1px solid rgba(209, 213, 219, 0.8);
 }
 

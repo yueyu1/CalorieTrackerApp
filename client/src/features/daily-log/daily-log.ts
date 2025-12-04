@@ -16,24 +16,24 @@ export class DailyLog {
     {
       mealType: 'Breakfast',
       items: [
-        {
-          id: 1,
-          name: 'Oatmeal',
-          brand: 'Quaker',
-          calories: 150,
-          protein: 6,
-          carbs: 27,
-          fat: 3,
-        },
-        {
-          id: 2,
-          name: 'Banana',
-          brand: undefined,
-          calories: 100,
-          protein: 1,
-          carbs: 27,
-          fat: 0,
-        },
+        // {
+        //   id: 1,
+        //   name: 'Oatmeal',
+        //   brand: 'Quaker',
+        //   calories: 150,
+        //   protein: 6,
+        //   carbs: 27,
+        //   fat: 3,
+        // },
+        // {
+        //   id: 2,
+        //   name: 'Banana',
+        //   brand: undefined,
+        //   calories: 100,
+        //   protein: 1,
+        //   carbs: 27,
+        //   fat: 0,
+        // },
       ],
     },
     {
@@ -43,24 +43,24 @@ export class DailyLog {
     {
       mealType: 'Dinner',
       items: [
-        {
-          id: 3,
-          name: 'Grilled Chicken Breast',
-          brand: undefined,
-          calories: 250,
-          protein: 43,
-          carbs: 0,
-          fat: 9,
-        },
-        {
-          id: 4,
-          name: 'Brown Rice',
-          brand: undefined,
-          calories: 225,
-          protein: 4,
-          carbs: 45,
-          fat: 6,
-        },
+        // {
+        //   id: 3,
+        //   name: 'Grilled Chicken Breast',
+        //   brand: undefined,
+        //   calories: 250,
+        //   protein: 43,
+        //   carbs: 0,
+        //   fat: 9,
+        // },
+        // {
+        //   id: 4,
+        //   name: 'Brown Rice',
+        //   brand: undefined,
+        //   calories: 225,
+        //   protein: 4,
+        //   carbs: 45,
+        //   fat: 6,
+        // },
       ],
     },
     {
@@ -71,9 +71,7 @@ export class DailyLog {
 
   meals = this._meals.asReadonly();
 
-  private readonly expandedMealTypes = signal<MealType[]>([
-    'Breakfast',
-  ]);
+  private readonly expandedMealTypes = signal<MealType[]>([]);
 
   // ---- Daily totals ----
   totalCalories = computed(() =>
