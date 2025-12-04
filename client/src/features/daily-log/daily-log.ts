@@ -1,7 +1,9 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Meal, MealType } from '../../types/meal';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { MATERIAL_IMPORTS } from '../../shared/material';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-daily-log',
@@ -9,93 +11,44 @@ import { MATERIAL_IMPORTS } from '../../shared/material';
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.css',
 })
-export class DailyLog {
-  today = new Date();
-
-  private readonly _meals = signal<Meal[]>([
-    {
-      mealType: 'Breakfast',
-      items: [
-        // {
-        //   id: 1,
-        //   name: 'Oatmeal',
-        //   brand: 'Quaker',
-        //   calories: 150,
-        //   protein: 6,
-        //   carbs: 27,
-        //   fat: 3,
-        // },
-        // {
-        //   id: 2,
-        //   name: 'Banana',
-        //   brand: undefined,
-        //   calories: 100,
-        //   protein: 1,
-        //   carbs: 27,
-        //   fat: 0,
-        // },
-      ],
-    },
-    {
-      mealType: 'Lunch',
-      items: [],
-    },
-    {
-      mealType: 'Dinner',
-      items: [
-        // {
-        //   id: 3,
-        //   name: 'Grilled Chicken Breast',
-        //   brand: undefined,
-        //   calories: 250,
-        //   protein: 43,
-        //   carbs: 0,
-        //   fat: 9,
-        // },
-        // {
-        //   id: 4,
-        //   name: 'Brown Rice',
-        //   brand: undefined,
-        //   calories: 225,
-        //   protein: 4,
-        //   carbs: 45,
-        //   fat: 6,
-        // },
-      ],
-    },
-    {
-      mealType: 'Snacks',
-      items: [],
-    },
-  ]);
-
-  meals = this._meals.asReadonly();
-
+export class DailyLog implements OnInit {
+  private http = inject(HttpClient);
+  private apiUrl = environment.apiUrl;
   private readonly expandedMealTypes = signal<MealType[]>([]);
+  protected meals = signal<Meal[]>([]);
+  protected today = new Date();
+
+  ngOnInit(): void {
+    const date = this.today.toISOString().split('T')[0];
+
+    this.http.get<Meal[]>(`${this.apiUrl}/meals/daily?date=${date}`)
+      .subscribe({
+        next: (data) => {
+          console.log('Loaded daily meals', data);
+          this.meals.set(data);
+        },
+        error: (err) => {
+          console.error('Failed to load daily meals', err);
+        }
+      });
+  }
 
   // ---- Daily totals ----
+
   totalCalories = computed(() =>
-    this._meals()
-      .flatMap((m) => m.items)
-      .reduce((sum, i) => sum + i.calories, 0)
+    this.meals().reduce((sum, m) => sum + m.totalCalories, 0)
   );
 
   totalProtein = computed(() =>
-    this._meals()
-      .flatMap((m) => m.items)
-      .reduce((sum, i) => sum + i.protein, 0)
+    this.meals().reduce((sum, m) => sum + m.totalProtein, 0)
   );
 
   totalCarbs = computed(() =>
-    this._meals()
-      .flatMap((m) => m.items)
-      .reduce((sum, i) => sum + i.carbs, 0)
+    this.meals().reduce((sum, m) => sum + m.totalCarbs, 0)
   );
 
   totalFat = computed(() =>
-    this._meals()
-      .flatMap((m) => m.items)
-      .reduce((sum, i) => sum + i.fat, 0)
+    this.meals().reduce((sum, m) => sum + m.totalFat, 0)
   );
 
   // ---- Macro calorie calculations ----
@@ -105,8 +58,8 @@ export class DailyLog {
 
   get totalMacroCalories() {
     return this.proteinCalories() +
-          this.carbsCalories() +
-          this.fatCalories();
+      this.carbsCalories() +
+      this.fatCalories();
   }
 
   proteinCaloriePercent = computed(() =>
@@ -128,25 +81,12 @@ export class DailyLog {
   );
 
   // ---- Per-meal helpers ----
-  getMealTotals(meal: Meal) {
-    return meal.items.reduce(
-      (acc, i) => ({
-        calories: acc.calories + i.calories,
-        protein: acc.protein + i.protein,
-        carbs: acc.carbs + i.carbs,
-        fat: acc.fat + i.fat,
-      }),
-      { calories: 0, protein: 0, carbs: 0, fat: 0 }
-    );
-  }
 
   /** Macro distribution for a meal based on macro calories (P=4, C=4, F=9 kcal) */
   getMealMacroPercents(meal: Meal) {
-    const totals = this.getMealTotals(meal);
-
-    const proteinCalories = totals.protein * 4;
-    const carbCalories = totals.carbs * 4;
-    const fatCalories = totals.fat * 9;
+    const proteinCalories = meal.totalProtein * 4;
+    const carbCalories = meal.totalCarbs * 4;
+    const fatCalories = meal.totalFat * 9;
 
     const macroCalories =
       proteinCalories + carbCalories + fatCalories;
@@ -161,6 +101,8 @@ export class DailyLog {
       fat: (fatCalories / macroCalories) * 100,
     };
   }
+
+  // ---- UI state helpers ----
 
   isMealExpanded(meal: Meal): boolean {
     return this.expandedMealTypes().includes(meal.mealType);

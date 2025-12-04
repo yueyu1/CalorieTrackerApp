@@ -3,6 +3,7 @@ using API.Dtos;
 using API.Entities;
 using API.Enums;
 using API.Extensions;
+using API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,9 +11,17 @@ namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MealsController(AppDbContext db) : ControllerBase
+    public class MealsController(
+        AppDbContext db,
+        INutritionCalculationService nutritionCalculationService) : ControllerBase
     {
-        private readonly AppDbContext _db = db;
+        private static readonly MealType[] DefaultMealTypes =
+        [
+            MealType.Breakfast,
+                MealType.Lunch,
+                MealType.Dinner,
+                MealType.Snacks
+        ];
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Meal>>> GetMeals(
@@ -24,7 +33,7 @@ namespace API.Controllers
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var query = _db.Meals
+            var query = db.Meals
                 .Where(m => m.UserId == currentUserId)
                 .AsQueryable();
 
@@ -53,12 +62,60 @@ namespace API.Controllers
             return Ok(meals);
         }
 
+        // GET api/meals/daily?date=2025-12-03
+        [HttpGet("daily")]
+        public async Task<ActionResult<IEnumerable<Meal>>> GetMealsByDate([FromQuery] DateOnly date)
+        {
+            var currentUserId = HttpContext.GetCurrentUserId();
+
+            var meals = await db.Meals
+                .Where(m => m.UserId == currentUserId && m.MealDate == date)
+                .Include(m => m.MealFoods)
+                    .ThenInclude(mf => mf.Food)
+                .ToListAsync();
+
+            var mealsByType = meals.ToDictionary(m => m.Type);
+            var result = new List<DailyMealDto>();
+
+            foreach (var mealType in DefaultMealTypes)
+            {
+                if (mealsByType.TryGetValue(mealType, out var existing))
+                {
+                    result.Add(MapMealToDailyDto(existing));
+                }
+                else
+                {
+                    result.Add(new DailyMealDto
+                    {
+                        Id = 0,
+                        MealType = mealType,
+                        MealDate = date,
+                        CustomName = null,
+                        Items = [],
+                        TotalCalories = 0,
+                        TotalProtein = 0,
+                        TotalCarbs = 0,
+                        TotalFat = 0
+                    });
+                }
+            }
+
+            // Include any custom meal types the user may have created for that date
+            result.AddRange(
+                meals
+                    .Where(m => !DefaultMealTypes.Contains(m.Type))
+                    .Select(MapMealToDailyDto)
+            );
+
+            return Ok(result.OrderBy(m => m.MealType).ToList());
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Meal>> GetMeal(int id)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var meal = await _db.Meals
+            var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == id)
                 .Include(m => m.MealFoods)
                     .ThenInclude(mf => mf.Food)
@@ -84,7 +141,7 @@ namespace API.Controllers
 
             foreach (var entry in dto.Entries)
             {
-                var food = await _db.Foods.FindAsync(entry.FoodId);
+                var food = await db.Foods.FindAsync(entry.FoodId);
                 if (food == null)
                 {
                     return BadRequest($"Food with ID {entry.FoodId} does not exist.");
@@ -102,8 +159,8 @@ namespace API.Controllers
                 meal.MealFoods.Add(mealFood);
             }
 
-            _db.Meals.Add(meal);
-            await _db.SaveChangesAsync();
+            db.Meals.Add(meal);
+            await db.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetMeals), new { id = meal.Id }, meal);
         }
@@ -113,7 +170,7 @@ namespace API.Controllers
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var meal = await _db.Meals
+            var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == id)
                 .FirstOrDefaultAsync();
 
@@ -123,7 +180,7 @@ namespace API.Controllers
             meal.Type = dto.Type;
             meal.CustomName = dto.CustomName;
 
-            await _db.SaveChangesAsync();
+            await db.SaveChangesAsync();
 
             return NoContent();
         }
@@ -133,14 +190,14 @@ namespace API.Controllers
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var meal = await _db.Meals
+            var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == id)
                 .FirstOrDefaultAsync();
 
             if (meal == null) return NotFound();
 
-            _db.Meals.Remove(meal);
-            await _db.SaveChangesAsync();
+            db.Meals.Remove(meal);
+            await db.SaveChangesAsync();
 
             return NoContent();
         }
@@ -150,13 +207,13 @@ namespace API.Controllers
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var meal = await _db.Meals
+            var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == mealId)
                 .FirstOrDefaultAsync();
 
             if (meal == null) return NotFound();
 
-            var entries = await _db.MealFoods
+            var entries = await db.MealFoods
                 .Where(mf => mf.MealId == mealId)
                 .Include(mf => mf.Food)
                 .OrderBy(mf => mf.CreatedAt)
@@ -171,13 +228,13 @@ namespace API.Controllers
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var meal = await _db.Meals
+            var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == mealId)
                 .FirstOrDefaultAsync();
 
             if (meal == null) return NotFound();
 
-            var food = await _db.Foods.FindAsync(dto.FoodId);
+            var food = await db.Foods.FindAsync(dto.FoodId);
             if (food == null)
             {
                 return BadRequest($"Food with ID {dto.FoodId} does not exist.");
@@ -192,8 +249,8 @@ namespace API.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
-            _db.MealFoods.Add(mealFood);
-            await _db.SaveChangesAsync();
+            db.MealFoods.Add(mealFood);
+            await db.SaveChangesAsync();
 
             return NoContent();
         }
@@ -203,13 +260,13 @@ namespace API.Controllers
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var meal = await _db.Meals
+            var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == mealId)
                 .FirstOrDefaultAsync();
 
             if (meal == null) return NotFound();
 
-            var mealFood = await _db.MealFoods
+            var mealFood = await db.MealFoods
                 .Where(mf => mf.MealId == mealId && mf.FoodId == foodId)
                 .FirstOrDefaultAsync();
 
@@ -219,7 +276,7 @@ namespace API.Controllers
             mealFood.Unit = dto.Unit;
             mealFood.UpdatedAt = DateTime.UtcNow;
 
-            await _db.SaveChangesAsync();
+            await db.SaveChangesAsync();
 
             return NoContent();
         }
@@ -229,22 +286,62 @@ namespace API.Controllers
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var meal = await _db.Meals
+            var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == mealId)
                 .FirstOrDefaultAsync();
 
             if (meal == null) return NotFound();
 
-            var mealFood = await _db.MealFoods
+            var mealFood = await db.MealFoods
                 .Where(mf => mf.MealId == mealId && mf.FoodId == foodId)
                 .FirstOrDefaultAsync();
 
             if (mealFood == null) return NotFound();
 
-            _db.MealFoods.Remove(mealFood);
-            await _db.SaveChangesAsync();
+            db.MealFoods.Remove(mealFood);
+            await db.SaveChangesAsync();
 
             return NoContent();
         }
-    }   
+
+        private DailyMealDto MapMealToDailyDto(Meal meal)
+        {
+            var items = meal.MealFoods.Select(MapMealFoodToItemDto).ToList();
+
+            return new DailyMealDto
+            {
+                Id = meal.Id,
+                MealType = meal.Type,
+                CustomName = meal.CustomName,
+                MealDate = meal.MealDate,
+                Items = items,
+                TotalCalories = items.Sum(i => i.Calories),
+                TotalProtein = items.Sum(i => i.Protein),
+                TotalCarbs = items.Sum(i => i.Carbs),
+                TotalFat = items.Sum(i => i.Fat)
+            };
+        }
+
+        private DailyMealItemDto MapMealFoodToItemDto(MealFood mealFood)
+        {
+            var nutrition = nutritionCalculationService.CalculateNutrition(mealFood);
+
+            var food = mealFood.Food; // included via ThenInclude
+
+            return new DailyMealItemDto
+            {
+                MealId = mealFood.MealId,
+                FoodId = mealFood.FoodId,
+                Name = food.Name,
+                Brand = food.Brand,
+                Quantity = mealFood.Quantity,
+                Unit = mealFood.Unit,
+
+                Calories = nutrition.Calories,
+                Protein = nutrition.Protein,
+                Carbs = nutrition.Carbs,
+                Fat = nutrition.Fat
+            };
+        }
+    }
 }

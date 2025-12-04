@@ -115,91 +115,90 @@
           class="meal-header"
           (click)="toggleMeal(meal)"
         >
-          @if (getMealTotals(meal); as t) {
-            <!-- Left column: meal name + calories -->
-            <div class="meal-header-main">
-              <div class="meal-title-row">
-                <!-- Icon bubble -->
-                <div
-                  class="meal-icon"
-                  [ngClass]="{
-                    'meal-icon--breakfast': meal.mealType === 'Breakfast',
-                    'meal-icon--lunch': meal.mealType === 'Lunch',
-                    'meal-icon--dinner': meal.mealType === 'Dinner',
-                    'meal-icon--snacks': meal.mealType === 'Snacks'
-                  }"
-                >
-                  @switch (meal.mealType) {
-                    @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
-                    @case ('Lunch')     { <mat-icon fontIcon="lunch_dining"></mat-icon> }
-                    @case ('Dinner')    { <mat-icon fontIcon="dinner_dining"></mat-icon> }
-                    @case ('Snacks')    { <mat-icon fontIcon="restaurant"></mat-icon> }
-                    @default            { <mat-icon fontIcon="restaurant"></mat-icon> }
-                  }
+
+          <!-- Left column: meal name + calories -->
+          <div class="meal-header-main">
+            <div class="meal-title-row">
+              <!-- Icon bubble -->
+              <div
+                class="meal-icon"
+                [ngClass]="{
+                  'meal-icon--breakfast': meal.mealType === 'Breakfast',
+                  'meal-icon--lunch': meal.mealType === 'Lunch',
+                  'meal-icon--dinner': meal.mealType === 'Dinner',
+                  'meal-icon--snacks': meal.mealType === 'Snacks'
+                }"
+              >
+                @switch (meal.mealType) {
+                  @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
+                  @case ('Lunch')     { <mat-icon fontIcon="lunch_dining"></mat-icon> }
+                  @case ('Dinner')    { <mat-icon fontIcon="dinner_dining"></mat-icon> }
+                  @case ('Snacks')    { <mat-icon fontIcon="restaurant"></mat-icon> }
+                  @default            { <mat-icon fontIcon="restaurant"></mat-icon> }
+                }
+              </div>
+
+              <!-- Text block -->
+              <div class="meal-title-text">
+                <h3 class="meal-name">{{ meal.mealType }}</h3>
+                <span class="meal-header-calories">
+                  {{ meal.totalCalories | number: '1.0-0' }} kcal
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Middle column: macros summary (only when there are items) -->
+          @if (meal.items.length > 0 && getMealMacroPercents(meal); as mp) {
+            <div class="meal-header-summary">
+              <div class="meal-header-macros-grid">
+                <!-- Protein -->
+                <div class="macro-group">
+                  <div class="macro-label">Protein</div>
+                  <div class="macro-values-row">
+                    <span class="macro-chip">
+                      {{ meal.totalProtein | number: '1.0-0' }} g
+                    </span>
+                    <span class="macro-percent">
+                      {{ mp.protein | number: '1.0-0' }}%
+                    </span>
+                  </div>
                 </div>
 
-                <!-- Text block -->
-                <div class="meal-title-text">
-                  <h3 class="meal-name">{{ meal.mealType }}</h3>
-                  <span class="meal-header-calories">
-                    {{ t.calories | number: '1.0-0' }} kcal
-                  </span>
+                <!-- Carbs -->
+                <div class="macro-group">
+                  <div class="macro-label">Carbs</div>
+                  <div class="macro-values-row">
+                    <span class="macro-chip">
+                      {{ meal.totalCarbs | number: '1.0-0' }} g
+                    </span>
+                    <span class="macro-percent">
+                      {{ mp.carbs | number: '1.0-0' }}%
+                    </span>
+                  </div>
+                </div>
+
+                <!-- Fat -->
+                <div class="macro-group">
+                  <div class="macro-label">Fat</div>
+                  <div class="macro-values-row">
+                    <span class="macro-chip">
+                      {{ meal.totalFat | number: '1.0-0' }} g
+                    </span>
+                    <span class="macro-percent">
+                      {{ mp.fat | number: '1.0-0' }}%
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-
-            <!-- Middle column: macros summary (only when there are items) -->
-            @if (meal.items.length > 0 && getMealMacroPercents(meal); as mp) {
-              <div class="meal-header-summary">
-                <div class="meal-header-macros-grid">
-                  <!-- Protein -->
-                  <div class="macro-group">
-                    <div class="macro-label">Protein</div>
-                    <div class="macro-values-row">
-                      <span class="macro-chip">
-                        {{ t.protein | number: '1.0-0' }} g
-                      </span>
-                      <span class="macro-percent">
-                        {{ mp.protein | number: '1.0-0' }}%
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- Carbs -->
-                  <div class="macro-group">
-                    <div class="macro-label">Carbs</div>
-                    <div class="macro-values-row">
-                      <span class="macro-chip">
-                        {{ t.carbs | number: '1.0-0' }} g
-                      </span>
-                      <span class="macro-percent">
-                        {{ mp.carbs | number: '1.0-0' }}%
-                      </span>
-                    </div>
-                  </div>
-
-                  <!-- Fat -->
-                  <div class="macro-group">
-                    <div class="macro-label">Fat</div>
-                    <div class="macro-values-row">
-                      <span class="macro-chip">
-                        {{ t.fat | number: '1.0-0' }} g
-                      </span>
-                      <span class="macro-percent">
-                        {{ mp.fat | number: '1.0-0' }}%
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            } @else {
-              <!-- No items yet: show just name + calories span across two columns -->
-              <div class="meal-header-summary meal-header-summary--empty">
-                <span class="meal-header-empty-text">No foods logged yet</span>
-              </div>
-            }
+          } @else {
+            <!-- No items yet: show just name + calories span across two columns -->
+            <div class="meal-header-summary meal-header-summary--empty">
+              <span class="meal-header-empty-text">No foods logged yet</span>
+            </div>
           }
-
+          
           <!-- Right column: actions -->
           <div class="meal-header-actions">
             <button
