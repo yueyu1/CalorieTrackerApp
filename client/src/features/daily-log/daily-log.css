@@ -85,39 +85,74 @@
 
 .summary-card {
   border-radius: 18px;
-  padding: 14px 16px;
+  padding: 16px 18px;
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
   background: white;
   transition: transform 0.16s ease, box-shadow 0.16s ease, background-color 0.16s ease;
-  cursor: default; /* indicate non-clickable */
+  cursor: default;
 }
 
 .summary-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
-  background-color: #fdfdfd; /* slight surface lift */
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.10);
+  background-color: #fdfdfd;
 }
 
 .summary-card:nth-child(2):hover {
-  box-shadow: 0 18px 45px rgba(99, 102, 241, 0.25); /* protein indigo glow */
+  box-shadow: 0 14px 36px rgba(99, 102, 241, 0.18);
 }
 
 .summary-card:nth-child(3):hover {
-  box-shadow: 0 18px 45px rgba(14, 165, 233, 0.25); /* carbs blue glow */
+  box-shadow: 0 14px 36px rgba(14, 165, 233, 0.18);
 }
 
 .summary-card:nth-child(4):hover {
-  box-shadow: 0 18px 45px rgba(248, 113, 113, 0.25); /* fat red glow */
+  box-shadow: 0 14px 36px rgba(248, 113, 113, 0.18);
+}
+
+.summary-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.summary-icon-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 22px rgba(15, 23, 42, 0.15);
+}
+
+.summary-icon-badge mat-icon {
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.summary-header-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.summary-subtitle {
+  font-size: 14px;
+  color: #9ca3af;
 }
 
 .summary-label {
-  font-size: 12px;
-  color: #6b7280;
-  margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #4b5563;
 }
 
-.summary-value {
-  font-size: 20px;
+.summary-main-value {
+  margin-top: 8px;
+  font-size: 28px;
   font-weight: 700;
   display: flex;
   align-items: baseline;
@@ -125,41 +160,58 @@
 }
 
 .summary-unit {
-  font-size: 11px;
+  font-size: 14px;
   color: #9ca3af;
 }
 
 .summary-meta {
-  margin-top: 4px;
+  margin-top: 6px;
   display: flex;
   align-items: baseline;
   gap: 4px;
-  font-size: 11px;
+  font-size: 14px;
 }
 
 .summary-percent {
-  font-weight: 600;
-  color: #4f46e5; /* matches your primary accent */
+  font-weight: 700;
+  color: #4f46e5;
 }
 
 .summary-meta-label {
   color: #9ca3af;
 }
 
-/* Wrapper for spacing */
-.summary-bar-wrapper {
-  margin-top: 6px;
-  width: 100%;
+.summary-body {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 12px;
 }
 
-/* Background track */
+.summary-side {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.summary-bar-wrapper {
+  margin-top: 8px;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.summary-bar-wrapper--inline {
+  width: 100%;
+}
+
 .summary-bar-bg {
-  width: 60%;
-  height: 4px;
+  width: 100%;
+  height: 6px;
   border-radius: 999px;
-  background-color: #e5e7eb; /* neutral gray */
+  background-color: #e5e7eb;
   overflow: hidden;
   position: relative;
 }
@@ -183,14 +235,42 @@
   background-color: #f87171; /* light red */
 }
 
+.summary-card--calories .summary-icon-badge {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.summary-card--protein .summary-icon-badge {
+  background: #e0e7ff;
+  color: #4338ca;
+}
+
+.summary-card--carbs .summary-icon-badge {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.summary-card--fat .summary-icon-badge {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.summary-card--carbs .summary-percent {
+  color: #0284c7; /* slightly deeper blue */
+}
+
+.summary-card--fat .summary-percent {
+  color: #dc2626; /* clearer red */
+}
+
 /* Meals */
 .meals-section {
-  margin-top: 20px;
+  margin-top: 32px;
 }
 
 .meals-title {
   font-size: 18px;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .meal-card {
@@ -471,7 +551,7 @@
 }
 
 .macro-unit {
-  font-size: 11px;
+  font-size: 12px;
   opacity: 0.6;
 }
 
@@ -502,8 +582,24 @@
     top: 64px;
   }
 
+  .summary-body {
+    margin-top: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .summary-side {
+    align-items: flex-start;
+  }
+
   .daily-log-summary {
+    display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .summary-bar-bg {
+    width: 100%;
   }
 
   .meal-table-header,

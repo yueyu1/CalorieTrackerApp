@@ -21,81 +21,135 @@
   <div class="summary-wrapper">
     <div class="daily-log-summary">
       <!-- Calories -->
-      <mat-card class="summary-card">
-        <div class="summary-label">Calories</div>
-        <div class="summary-value">
+      <mat-card class="summary-card summary-card--calories">
+        <div class="summary-card-header">
+          <div class="summary-icon-badge">
+            <mat-icon fontIcon="local_fire_department"></mat-icon>
+          </div>
+          <div class="summary-header-text">
+            <div class="summary-label">Calories</div>
+            <div class="summary-subtitle">Daily total</div>
+          </div>
+        </div>
+
+        <div class="summary-main-value">
           {{ totalCalories() | number: '1.0-0' }}
           <span class="summary-unit">kcal</span>
         </div>
       </mat-card>
 
       <!-- Protein -->
-      <mat-card class="summary-card">
-        <div class="summary-label">Protein</div>
-        <div class="summary-value">
-          {{ totalProtein() | number: '1.0-0' }}
-          <span class="summary-unit">g</span>
+      <mat-card class="summary-card summary-card--protein">
+        <div class="summary-card-header">
+          <div class="summary-icon-badge">
+            <mat-icon fontIcon="egg_alt"></mat-icon>
+          </div>
+          <div class="summary-header-text">
+            <div class="summary-label">Protein</div>
+            <div class="summary-subtitle">Muscle support</div>
+          </div>
         </div>
-        <div class="summary-meta">
-          <span class="summary-percent">
-            {{ proteinCaloriePercent() | number:'1.0-0' }}%
-          </span>
-          <span class="summary-meta-label">of calories</span>
-        </div>
-        <div class="summary-bar-wrapper">
-          <div class="summary-bar-bg">
-            <div
-              class="summary-bar-fill protein-fill"
-              [style.transform]="'scaleX(' + (proteinCaloriePercent() / 100) + ')'"
-            ></div>
+
+        <div class="summary-body">
+          <!-- Left: grams -->
+          <div class="summary-main-value">
+            {{ totalProtein() | number: '1.0-0' }}
+            <span class="summary-unit">g</span>
+          </div>
+
+          <!-- Right: % + bar -->
+          <div class="summary-side">
+            <div class="summary-meta">
+              <span class="summary-percent">
+                {{ proteinCaloriePercent() | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of calories</span>
+            </div>
+
+            <div class="summary-bar-wrapper summary-bar-wrapper--inline">
+              <div class="summary-bar-bg">
+                <div class="summary-bar-fill protein-fill"
+                  [style.transform]="'scaleX(' + (proteinCaloriePercent() / 100) + ')'"></div>
+              </div>
+            </div>
           </div>
         </div>
       </mat-card>
 
       <!-- Carbs -->
-      <mat-card class="summary-card">
-        <div class="summary-label">Carbs</div>
-        <div class="summary-value">
-          {{ totalCarbs() | number: '1.0-0' }}
-          <span class="summary-unit">g</span>
+      <mat-card class="summary-card summary-card--carbs">
+        <div class="summary-card-header">
+          <div class="summary-icon-badge">
+            <mat-icon fontIcon="grain"></mat-icon>
+          </div>
+          <div class="summary-header-text">
+            <div class="summary-label">Carbs</div>
+            <div class="summary-subtitle">Energy</div>
+          </div>
         </div>
-        <div class="summary-meta">
-          <span class="summary-percent">
-            {{ carbsCaloriePercent() | number:'1.0-0' }}%
-          </span>
-          <span class="summary-meta-label">of calories</span>
-        </div>
-        <div class="summary-bar-wrapper">
-          <div class="summary-bar-bg">
-            <div
-              class="summary-bar-fill carbs-fill"
-              [style.transform]="'scaleX(' + (carbsCaloriePercent() / 100) + ')'"
-            ></div>
+
+        <div class="summary-body">
+          <!-- Left (grams) -->
+          <div class="summary-main-value">
+            {{ totalCarbs() | number: '1.0-0' }}
+            <span class="summary-unit">g</span>
+          </div>
+
+          <!-- Right (% + bar) -->
+          <div class="summary-side">
+            <div class="summary-meta">
+              <span class="summary-percent">
+                {{ carbsCaloriePercent() | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of calories</span>
+            </div>
+
+            <div class="summary-bar-wrapper summary-bar-wrapper--inline">
+              <div class="summary-bar-bg">
+                <div class="summary-bar-fill carbs-fill"
+                  [style.transform]="'scaleX(' + (carbsCaloriePercent() / 100) + ')'"></div>
+              </div>
+            </div>
           </div>
         </div>
       </mat-card>
 
       <!-- Fat -->
-      <mat-card class="summary-card">
-        <div class="summary-label">Fat</div>
-        <div class="summary-value">
-          {{ totalFat() | number: '1.0-0' }}
-          <span class="summary-unit">g</span>
+      <mat-card class="summary-card summary-card--fat">
+        <div class="summary-card-header">
+          <div class="summary-icon-badge">
+            <mat-icon fontIcon="opacity"></mat-icon>
+          </div>
+          <div class="summary-header-text">
+            <div class="summary-label">Fat</div>
+            <div class="summary-subtitle">Hormones & satiety</div>
+          </div>
         </div>
-        <div class="summary-meta">
-          <span class="summary-percent">
-            {{ fatCaloriePercent() | number:'1.0-0' }}%
-          </span>
-          <span class="summary-meta-label">of calories</span>
+
+        <div class="summary-body">
+          <!-- Left (grams) -->
+          <div class="summary-main-value">
+            {{ totalFat() | number: '1.0-0' }}
+            <span class="summary-unit">g</span>
+          </div>
+
+          <!-- Right (% + bar) -->
+          <div class="summary-side">
+            <div class="summary-meta">
+              <span class="summary-percent">
+                {{ fatCaloriePercent() | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of calories</span>
+            </div>
+
+            <div class="summary-bar-wrapper summary-bar-wrapper--inline">
+              <div class="summary-bar-bg">
+                <div class="summary-bar-fill fat-fill"
+                  [style.transform]="'scaleX(' + (fatCaloriePercent() / 100) + ')'"></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="summary-bar-wrapper">
-        <div class="summary-bar-bg">
-          <div
-            class="summary-bar-fill fat-fill"
-            [style.transform]="'scaleX(' + (fatCaloriePercent() / 100) + ')'"
-          ></div>
-        </div>
-    </div>
       </mat-card>
     </div>
   </div>
@@ -105,174 +159,156 @@
     <h2 class="meals-title">Today's Meals</h2>
 
     @for (meal of meals(); track $index) {
-      <mat-card 
-        class="meal-card" 
-        [class.meal-card--expanded]="isMealExpanded(meal)">
-        <!-- Meal header button -->
-        <button
-          matRipple
-          type="button"
-          class="meal-header"
-          (click)="toggleMeal(meal)"
-        >
+    <mat-card class="meal-card" [class.meal-card--expanded]="isMealExpanded(meal)">
+      <!-- Meal header button -->
+      <button matRipple type="button" class="meal-header" (click)="toggleMeal(meal)">
 
-          <!-- Left column: meal name + calories -->
-          <div class="meal-header-main">
-            <div class="meal-title-row">
-              <!-- Icon bubble -->
-              <div
-                class="meal-icon"
-                [ngClass]="{
+        <!-- Left column: meal name + calories -->
+        <div class="meal-header-main">
+          <div class="meal-title-row">
+            <!-- Icon bubble -->
+            <div class="meal-icon" [ngClass]="{
                   'meal-icon--breakfast': meal.mealType === 'Breakfast',
                   'meal-icon--lunch': meal.mealType === 'Lunch',
                   'meal-icon--dinner': meal.mealType === 'Dinner',
                   'meal-icon--snacks': meal.mealType === 'Snacks'
-                }"
-              >
-                @switch (meal.mealType) {
-                  @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
-                  @case ('Lunch')     { <mat-icon fontIcon="lunch_dining"></mat-icon> }
-                  @case ('Dinner')    { <mat-icon fontIcon="dinner_dining"></mat-icon> }
-                  @case ('Snacks')    { <mat-icon fontIcon="restaurant"></mat-icon> }
-                  @default            { <mat-icon fontIcon="restaurant"></mat-icon> }
-                }
-              </div>
+                }">
+              @switch (meal.mealType) {
+              @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
+              @case ('Lunch') { <mat-icon fontIcon="lunch_dining"></mat-icon> }
+              @case ('Dinner') { <mat-icon fontIcon="dinner_dining"></mat-icon> }
+              @case ('Snacks') { <mat-icon fontIcon="restaurant"></mat-icon> }
+              @default { <mat-icon fontIcon="restaurant"></mat-icon> }
+              }
+            </div>
 
-              <!-- Text block -->
-              <div class="meal-title-text">
-                <h3 class="meal-name">{{ meal.mealType }}</h3>
-                <span class="meal-header-calories">
-                  {{ meal.totalCalories | number: '1.0-0' }} kcal
+            <!-- Text block -->
+            <div class="meal-title-text">
+              <h3 class="meal-name">{{ meal.mealType }}</h3>
+              <span class="meal-header-calories">
+                {{ meal.totalCalories | number: '1.0-0' }} kcal
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Middle column: macros summary (only when there are items) -->
+        @if (meal.items.length > 0 && getMealMacroPercents(meal); as mp) {
+        <div class="meal-header-summary">
+          <div class="meal-header-macros-grid">
+            <!-- Protein -->
+            <div class="macro-group">
+              <div class="macro-label">Protein</div>
+              <div class="macro-values-row">
+                <span class="macro-chip">
+                  {{ meal.totalProtein | number: '1.0-0' }} g
+                </span>
+                <span class="macro-percent">
+                  {{ mp.protein | number: '1.0-0' }}%
+                </span>
+              </div>
+            </div>
+
+            <!-- Carbs -->
+            <div class="macro-group">
+              <div class="macro-label">Carbs</div>
+              <div class="macro-values-row">
+                <span class="macro-chip">
+                  {{ meal.totalCarbs | number: '1.0-0' }} g
+                </span>
+                <span class="macro-percent">
+                  {{ mp.carbs | number: '1.0-0' }}%
+                </span>
+              </div>
+            </div>
+
+            <!-- Fat -->
+            <div class="macro-group">
+              <div class="macro-label">Fat</div>
+              <div class="macro-values-row">
+                <span class="macro-chip">
+                  {{ meal.totalFat | number: '1.0-0' }} g
+                </span>
+                <span class="macro-percent">
+                  {{ mp.fat | number: '1.0-0' }}%
                 </span>
               </div>
             </div>
           </div>
+        </div>
+        } @else {
+        <!-- No items yet: show just name + calories span across two columns -->
+        <div class="meal-header-summary meal-header-summary--empty">
+          <span class="meal-header-empty-text">No foods logged yet</span>
+        </div>
+        }
 
-          <!-- Middle column: macros summary (only when there are items) -->
-          @if (meal.items.length > 0 && getMealMacroPercents(meal); as mp) {
-            <div class="meal-header-summary">
-              <div class="meal-header-macros-grid">
-                <!-- Protein -->
-                <div class="macro-group">
-                  <div class="macro-label">Protein</div>
-                  <div class="macro-values-row">
-                    <span class="macro-chip">
-                      {{ meal.totalProtein | number: '1.0-0' }} g
-                    </span>
-                    <span class="macro-percent">
-                      {{ mp.protein | number: '1.0-0' }}%
-                    </span>
-                  </div>
-                </div>
+        <!-- Right column: actions -->
+        <div class="meal-header-actions">
+          <button mat-stroked-button color="primary" type="button" class="add-food-btn"
+            (click)="onAddFood(meal); $event.stopPropagation()">
+            + Add Food
+          </button>
 
-                <!-- Carbs -->
-                <div class="macro-group">
-                  <div class="macro-label">Carbs</div>
-                  <div class="macro-values-row">
-                    <span class="macro-chip">
-                      {{ meal.totalCarbs | number: '1.0-0' }} g
-                    </span>
-                    <span class="macro-percent">
-                      {{ mp.carbs | number: '1.0-0' }}%
-                    </span>
-                  </div>
-                </div>
+          <mat-icon class="chevron-icon" [class.chevron-icon--open]="isMealExpanded(meal)"
+            fontIcon="expand_more"></mat-icon>
+        </div>
+      </button>
 
-                <!-- Fat -->
-                <div class="macro-group">
-                  <div class="macro-label">Fat</div>
-                  <div class="macro-values-row">
-                    <span class="macro-chip">
-                      {{ meal.totalFat | number: '1.0-0' }} g
-                    </span>
-                    <span class="macro-percent">
-                      {{ mp.fat | number: '1.0-0' }}%
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          } @else {
-            <!-- No items yet: show just name + calories span across two columns -->
-            <div class="meal-header-summary meal-header-summary--empty">
-              <span class="meal-header-empty-text">No foods logged yet</span>
-            </div>
+      <!-- Divider & body when expanded -->
+      @if (isMealExpanded(meal)) {
+      <div class="meal-body">
+        <mat-divider></mat-divider>
+
+        <div class="meal-body-inner">
+          @if (meal.items.length > 0) {
+          <div class="meal-table-header">
+            <span class="col-name">Food</span>
+            <span class="col-calories">Calories</span>
+            <span class="col-protein">Protein</span>
+            <span class="col-carbs">Carbs</span>
+            <span class="col-fat">Fat</span>
+          </div>
+
+          @for (item of meal.items; track $index) {
+          <div class="meal-table-row">
+            <span class="col-name">
+              {{ item.brand ? item.brand + ' ' + item.name : item.name }}
+            </span>
+            <span class="col-calories">
+              <span class="macro-value">{{ item.calories | number:'1.0-0' }}</span>
+              <span class="macro-unit">kcal</span>
+            </span>
+            <span class="col-protein">
+              <span class="macro-value">{{ item.protein | number: '1.0-0' }}</span>
+              <span class="macro-unit">g</span>
+            </span>
+            <span class="col-carbs">
+              <span class="macro-value">{{ item.carbs | number: '1.0-0' }}</span>
+              <span class="macro-unit">g</span>
+            </span>
+            <span class="col-fat">
+              <span class="macro-value">{{ item.fat | number: '1.0-0' }}</span>
+              <span class="macro-unit">g</span>
+            </span>
+          </div>
           }
-          
-          <!-- Right column: actions -->
-          <div class="meal-header-actions">
-            <button
-              mat-stroked-button
-              color="primary"
-              type="button"
-              class="add-food-btn"
-              (click)="onAddFood(meal); $event.stopPropagation()"
-            >
+          } @else {
+          <div class="meal-empty">
+            <p>
+              No foods logged for
+              {{ meal.mealType.toLowerCase() }} yet.
+            </p>
+
+            <button mat-flat-button color="primary" type="button" (click)="onAddFood(meal)">
               + Add Food
             </button>
-
-            <mat-icon
-              class="chevron-icon"
-              [class.chevron-icon--open]="isMealExpanded(meal)"
-              fontIcon="expand_more"
-            ></mat-icon>
           </div>
-        </button>
-
-        <!-- Divider & body when expanded -->
-        @if (isMealExpanded(meal)) {
-          <div class="meal-body">
-            <mat-divider></mat-divider>
-
-            <div class="meal-body-inner">
-              @if (meal.items.length > 0) {
-                <div class="meal-table-header">
-                  <span class="col-name">Food</span>
-                  <span class="col-calories">Calories</span>
-                  <span class="col-protein">Protein</span>
-                  <span class="col-carbs">Carbs</span>
-                  <span class="col-fat">Fat</span>
-                </div>
-
-                @for (item of meal.items; track $index) {
-                  <div class="meal-table-row">
-                    <span class="col-name">
-                      {{ item.brand ? item.brand + ' ' + item.name : item.name }}
-                    </span>
-                    <span class="col-calories">
-                      <span class="macro-value">{{ item.calories | number:'1.0-0' }}</span>
-                      <span class="macro-unit">kcal</span>
-                    </span>
-                    <span class="col-protein">
-                      <span class="macro-value">{{ item.protein | number: '1.0-0' }}</span>
-                      <span class="macro-unit">g</span>
-                    </span>
-                    <span class="col-carbs">
-                      <span class="macro-value">{{ item.carbs | number: '1.0-0' }}</span>
-                      <span class="macro-unit">g</span>
-                    </span>
-                    <span class="col-fat">
-                      <span class="macro-value">{{ item.fat | number: '1.0-0' }}</span>
-                      <span class="macro-unit">g</span>
-                    </span>
-                  </div>
-                }
-              } @else {
-              <div class="meal-empty">
-                <p>
-                  No foods logged for
-                  {{ meal.mealType.toLowerCase() }} yet.
-                </p>
-
-                <button mat-flat-button color="primary" type="button" (click)="onAddFood(meal)">
-                  + Add Food
-                </button>
-              </div>
-              }
-            </div>
-          </div>
-        }
-      </mat-card>
+          }
+        </div>
+      </div>
+      }
+    </mat-card>
     }
   </section>
 </div>
