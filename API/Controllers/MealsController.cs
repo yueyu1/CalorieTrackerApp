@@ -64,7 +64,7 @@ namespace API.Controllers
 
         // GET api/meals/daily?date=2025-12-03
         [HttpGet("daily")]
-        public async Task<ActionResult<IEnumerable<Meal>>> GetMealsByDate([FromQuery] DateOnly date)
+        public async Task<ActionResult<IEnumerable<DailyMealDto>>> GetMealsByDate([FromQuery] DateOnly date)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
@@ -127,7 +127,7 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Meal>> CreateMeal(CreateMealDto dto)
+        public async Task<ActionResult<MealDto>> CreateMeal(CreateMealDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
             var meal = new Meal
@@ -162,11 +162,11 @@ namespace API.Controllers
             db.Meals.Add(meal);
             await db.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMeals), new { id = meal.Id }, meal);
+            return CreatedAtAction(nameof(GetMeals), new { id = meal.Id }, MapToMealDto(meal));
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Meal>> UpdateMeal(int id, UpdateMealDto dto)
+        public async Task<ActionResult> UpdateMeal(int id, UpdateMealDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
@@ -302,6 +302,23 @@ namespace API.Controllers
             await db.SaveChangesAsync();
 
             return NoContent();
+        }
+
+        private static MealDto MapToMealDto(Meal meal)
+        {
+            return new MealDto
+            {
+                Id = meal.Id,
+                MealType = meal.Type,
+                CustomName = meal.CustomName,
+                MealDate = meal.MealDate,
+                Items = [.. meal.MealFoods.Select(mf => new MealFoodDto
+                {
+                    FoodId = mf.FoodId,
+                    Quantity = mf.Quantity,
+                    Unit = mf.Unit
+                })]
+            };
         }
 
         private DailyMealDto MapMealToDailyDto(Meal meal)

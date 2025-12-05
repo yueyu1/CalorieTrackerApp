@@ -2,8 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Meal, MealType } from '../../types/meal';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { MATERIAL_IMPORTS } from '../../shared/material';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../environments/environment';
+import { MealsService } from '../../core/services/meals-service';
 
 @Component({
   selector: 'app-daily-log',
@@ -12,25 +11,15 @@ import { environment } from '../../environments/environment';
   styleUrl: './daily-log.css',
 })
 export class DailyLog implements OnInit {
-  private http = inject(HttpClient);
-  private apiUrl = environment.apiUrl;
+  private mealsService = inject(MealsService);
   private readonly expandedMealTypes = signal<MealType[]>([]);
-  protected meals = signal<Meal[]>([]);
   protected today = new Date();
+  protected meals = this.mealsService.meals;
 
   ngOnInit(): void {
-    const date = this.today.toISOString().split('T')[0];
-
-    this.http.get<Meal[]>(`${this.apiUrl}/meals/daily?date=${date}`)
-      .subscribe({
-        next: (data) => {
-          console.log('Loaded daily meals', data);
-          this.meals.set(data);
-        },
-        error: (err) => {
-          console.error('Failed to load daily meals', err);
-        }
-      });
+    const date = this.today.toLocaleDateString('en-CA');
+    this.mealsService.loadDailyMeals(date);
+    console.log('Loaded meals for', date);
   }
 
   // ---- Daily totals ----
@@ -120,6 +109,6 @@ export class DailyLog implements OnInit {
 
   // ---- Actions ----
   onAddFood(meal: Meal): void {
-    console.log('Add food to', meal.mealType);
+    console.log('Add food to meal', meal);
   }
 }
