@@ -76,6 +76,45 @@ export class AddFoodDialog {
         { id: '100g', label: '100 g' },
       ],
     },
+    {
+      id: 3,
+      name: 'rice',
+      brand: 'Brand C',
+      calories: 200,
+      protein: 6,
+      carbs: 27,
+      fat: 3,
+      units: [
+        { id: 'serving', label: '1 serving (120 g)' },
+        { id: '100g', label: '100 g' },
+      ],
+    },
+    {
+      id: 4,
+      name: 'noddles',
+      brand: 'Brand D',
+      calories: 200,
+      protein: 6,
+      carbs: 27,
+      fat: 3,
+      units: [
+        { id: 'serving', label: '1 serving (120 g)' },
+        { id: '100g', label: '100 g' },
+      ],
+    },
+    {
+      id: 4,
+      name: 'corns',
+      brand: 'Brand E',
+      calories: 200,
+      protein: 6,
+      carbs: 27,
+      fat: 3,
+      units: [
+        { id: 'serving', label: '1 serving (120 g)' },
+        { id: '100g', label: '100 g' },
+      ],
+    },
     // ...more foods
   ];
 
