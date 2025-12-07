@@ -1,5 +1,5 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { MATERIAL_IMPORTS } from '../../../shared/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
@@ -8,7 +8,6 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } f
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
-import { CommonModule } from '@angular/common';
 
 interface UnitOption {
   id: string;
@@ -28,27 +27,30 @@ interface FoodItem {
 
 @Component({
   selector: 'app-add-food-dialog',
-  imports: [CommonModule,
+  imports: [
     ReactiveFormsModule,
-    MATERIAL_IMPORTS, 
+    MATERIAL_IMPORTS,
     MatDialogModule,
     MatFormFieldModule,
-    MatInputModule, 
-    MatChipsModule, 
+    MatInputModule,
+    MatChipsModule,
     MatSelectModule,
     MatOptionModule],
   templateUrl: './add-food-dialog.html',
   styleUrl: './add-food-dialog.css',
 })
-export class AddFoodDialog {
-  protected form: FormGroup;
+export class AddFoodDialog implements OnInit {
+  protected loading = signal(true);
+  protected form!: FormGroup;
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AddFoodDialog>);
-  private data = inject(MAT_DIALOG_DATA);
+  private data = inject(MAT_DIALOG_DATA) as
+    | { mealId: number; mealType?: string; mealDate?: string }
+    | null;
   protected selectedIds = new Set<number>();
+  protected foods: FoodItem[] = [];
 
-  // static food data (name, macros, units) – no form here
-  foods: FoodItem[] = [
+  seedFoods = [
     {
       id: 1,
       name: 'Grilled Chicken Breast',
@@ -118,6 +120,12 @@ export class AddFoodDialog {
     // ...more foods
   ];
 
+  constructor() {
+    this.form = this.fb.group({
+      search: [''],
+      foods: this.fb.array([]),
+    });
+  }
 
   get searchCtrl(): FormControl {
     return this.form.get('search') as FormControl;
@@ -129,7 +137,19 @@ export class AddFoodDialog {
 
   activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
 
-  constructor() {
+  ngOnInit(): void {
+    // TODO: replace this with real API call
+    // this.foodService.getFoods().subscribe(foods => { ... });
+
+    setTimeout(() => {
+      this.foods.push(...this.seedFoods);
+
+      this.buildFormFromFoods();
+      this.loading.set(false);
+    }, 1000);
+  }
+
+  private buildFormFromFoods(): void {
     this.form = this.fb.group({
       search: [''],
       foods: this.fb.array(
@@ -145,13 +165,11 @@ export class AddFoodDialog {
 
   /* ---------- selection + footer ---------- */
 
-  isSelected(index: number): boolean {
-    const id = this.foods[index].id;
+  isSelected(id: number): boolean {
     return this.selectedIds.has(id);
   }
 
-  toggleSelected(index: number): void {
-    const id = this.foods[index].id;
+  toggleSelected(id: number, index: number): void {
     if (this.selectedIds.has(id)) {
       this.selectedIds.delete(id);
     } else {

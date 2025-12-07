@@ -142,6 +142,83 @@
   color: #4b5563;
 }
 
+/* SKELETON LOADING -------------------------------------------------- */
+
+.afd-skeleton-list {
+  padding-right: 6px;
+}
+
+.afd-skeleton-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  background: #f3f4f6;
+  overflow: hidden;
+}
+
+.afd-skeleton-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.afd-skeleton-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Skeleton bars */
+.afd-skeleton-line {
+  height: 10px;
+  border-radius: 999px;
+  margin-bottom: 6px;
+  background: linear-gradient(
+    90deg,
+    #e5e7eb 0%,
+    #f3f4f6 20%,
+    #e5e7eb 40%,
+    #e5e7eb 100%
+  );
+  background-size: 200% 100%;
+  animation: afd-skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+.afd-skeleton-line-lg {
+  width: 50%;
+}
+
+.afd-skeleton-line-sm {
+  width: 35%;
+}
+
+/* Skeleton pills (for qty & unit area) */
+.afd-skeleton-pill {
+  width: 70px;
+  height: 28px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    #e5e7eb 0%,
+    #f3f4f6 20%,
+    #e5e7eb 40%,
+    #e5e7eb 100%
+  );
+  background-size: 200% 100%;
+  animation: afd-skeleton-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes afd-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* ---------- COMPACT MATERIAL FIELDS (only inside this dialog) ---------- */
 
 :host ::ng-deep .afd-qty-input .mat-mdc-text-field-wrapper,

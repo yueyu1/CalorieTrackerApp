@@ -33,49 +33,75 @@
 
   <!-- FOOD LIST -->
   <div class="afd-list" formArrayName="foods">
-    <div class="afd-row" *ngFor="let item of foods; let i = index" [class.is-selected]="isSelected(i)"
-      (click)="toggleSelected(i)">
-      <!-- LEFT: Name, brand, macros -->
-      <div class="afd-left">
-        <div class="afd-name">{{ item.name }}</div>
-        <div class="afd-brand">{{ item.brand }}</div>
-        <div class="afd-macros">
-          {{ item.calories }} kcal ·
-          Protein {{ item.protein }} g ·
-          Carbs {{ item.carbs }} g ·
-          Fat {{ item.fat }} g
+    @if (!this.loading()) {
+      @for (item of foods; track item.id) {
+        <div class="afd-row" [class.is-selected]="isSelected(item.id)"
+          (click)="toggleSelected(item.id, $index)">
+          <!-- LEFT -->
+          <div class="afd-left">
+            <div class="afd-name">{{ item.name }}</div>
+            <div class="afd-brand">{{ item.brand }}</div>
+            <div class="afd-macros">
+              {{ item.calories }} kcal ·
+              Protein {{ item.protein }} g ·
+              Carbs {{ item.carbs }} g ·
+              Fat {{ item.fat }} g
+            </div>
+          </div>
+
+          <!-- RIGHT: quantity + unit -->
+          <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
+            <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
+              <mat-icon>remove</mat-icon>
+            </button>
+
+            <mat-form-field appearance="outline" class="afd-qty-input">
+              <input matInput type="number" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
+                (input)="onQtyInput($index, $any($event.target).value, $event)" />
+            </mat-form-field>
+
+            <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
+              <mat-icon>add</mat-icon>
+            </button>
+
+            <mat-form-field appearance="outline" class="afd-unit-select">
+              <mat-select formControlName="unitId" (click)="onUnitClick($event)">
+                @for (unit of item.units; track unit) {
+                  <mat-option [value]="unit.id">
+                    {{ unit.label }}
+                  </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- CHECKMARK -->
+          @if (isSelected(item.id)) {
+            <div class="afd-check">
+              <mat-icon>check_circle</mat-icon>
+            </div>
+          }
         </div>
+      }
+    }
+    @else {
+      <!-- LOADING SKELETON -->
+      <div class="afd-list afd-skeleton-list">
+        @for (_ of [1, 2, 3, 4]; track _) {
+        <div class="afd-skeleton-row">
+          <div class="afd-skeleton-left">
+            <div class="afd-skeleton-line afd-skeleton-line-lg"></div>
+            <div class="afd-skeleton-line afd-skeleton-line-sm"></div>
+            <div class="afd-skeleton-line afd-skeleton-line-sm"></div>
+          </div>
+          <div class="afd-skeleton-right">
+            <div class="afd-skeleton-pill"></div>
+            <div class="afd-skeleton-pill"></div>
+          </div>
+        </div>
+        }
       </div>
-
-      <!-- RIGHT: quantity + unit -->
-      <div class="afd-controls" [formGroupName]="i" (click)="$event.stopPropagation()">
-        <button mat-icon-button type="button" (click)="decreaseQty(i, $event)">
-          <mat-icon>remove</mat-icon>
-        </button>
-
-        <mat-form-field appearance="outline" class="afd-qty-input">
-          <input matInput type="number" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
-            (input)="onQtyInput(i, $any($event.target).value, $event)" />
-        </mat-form-field>
-
-        <button mat-icon-button type="button" (click)="increaseQty(i, $event)">
-          <mat-icon>add</mat-icon>
-        </button>
-
-        <mat-form-field appearance="outline" class="afd-unit-select">
-          <mat-select formControlName="unitId" (click)="onUnitClick($event)">
-            <mat-option *ngFor="let unit of item.units" [value]="unit.id">
-              {{ unit.label }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <!-- CHECKMARK -->
-      <div class="afd-check" *ngIf="isSelected(i)">
-        <mat-icon>check_circle</mat-icon>
-      </div>
-    </div>
+    }
   </div>
 
   <!-- FOOTER -->
