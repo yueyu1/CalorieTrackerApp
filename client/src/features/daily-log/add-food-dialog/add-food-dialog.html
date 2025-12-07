@@ -1,0 +1,92 @@
+<form [formGroup]="form" class="afd-dialog">
+
+  <!-- HEADER -->
+  <div class="afd-header">
+    <h2>Add Food</h2>
+
+    <button mat-icon-button type="button" (click)="onClose()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- SEARCH -->
+  <mat-form-field appearance="outline" class="afd-search">
+    <mat-icon matPrefix>search</mat-icon>
+    <input matInput placeholder="Search food" formControlName="search" />
+  </mat-form-field>
+
+  <!-- FILTER CHIPS -->
+  <mat-chip-listbox class="afd-chips" aria-label="Food filters">
+    <mat-chip-option [selected]="activeFilter === 'all'" (click)="setFilter('all')">
+      All
+    </mat-chip-option>
+    <mat-chip-option [selected]="activeFilter === 'myFoods'" (click)="setFilter('myFoods')">
+      My Foods
+    </mat-chip-option>
+    <mat-chip-option [selected]="activeFilter === 'recent'" (click)="setFilter('recent')">
+      Recent
+    </mat-chip-option>
+    <mat-chip-option [selected]="activeFilter === 'brands'" (click)="setFilter('brands')">
+      Brands
+    </mat-chip-option>
+  </mat-chip-listbox>
+
+  <!-- FOOD LIST -->
+  <div class="afd-list" formArrayName="foods">
+    <div class="afd-row" *ngFor="let item of foods; let i = index" [class.is-selected]="isSelected(i)"
+      (click)="toggleSelected(i)">
+      <!-- LEFT: Name, brand, macros -->
+      <div class="afd-left">
+        <div class="afd-name">{{ item.name }}</div>
+        <div class="afd-brand">{{ item.brand }}</div>
+        <div class="afd-macros">
+          {{ item.calories }} kcal ·
+          Protein {{ item.protein }} g ·
+          Carbs {{ item.carbs }} g ·
+          Fat {{ item.fat }} g
+        </div>
+      </div>
+
+      <!-- RIGHT: quantity + unit -->
+      <div class="afd-controls" [formGroupName]="i" (click)="$event.stopPropagation()">
+        <button mat-icon-button type="button" (click)="decreaseQty(i, $event)">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <mat-form-field appearance="outline" class="afd-qty-input">
+          <input matInput type="number" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
+            (input)="onQtyInput(i, $any($event.target).value, $event)" />
+        </mat-form-field>
+
+        <button mat-icon-button type="button" (click)="increaseQty(i, $event)">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <mat-form-field appearance="outline" class="afd-unit-select">
+          <mat-select formControlName="unitId" (click)="onUnitClick($event)">
+            <mat-option *ngFor="let unit of item.units" [value]="unit.id">
+              {{ unit.label }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- CHECKMARK -->
+      <div class="afd-check" *ngIf="isSelected(i)">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="afd-footer">
+    <div class="afd-summary">
+      {{ selectedCount }} item{{ selectedCount === 1 ? '' : 's' }} selected ·
+      {{ selectedCalories }} kcal
+    </div>
+
+    <button mat-flat-button color="primary" type="button" (click)="confirmAdd()" [disabled]="selectedCount === 0">
+      Add to Breakfast
+    </button>
+  </div>
+</form>

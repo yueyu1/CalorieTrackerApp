@@ -2,6 +2,8 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Meal, MealType } from '../../types/meal';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { MATERIAL_IMPORTS } from '../../shared/material';
+import { MatDialog } from '@angular/material/dialog';
+import { AddFoodDialog } from './add-food-dialog/add-food-dialog';
 import { MealsService } from '../../core/services/meals-service';
 
 @Component({
@@ -15,6 +17,9 @@ export class DailyLog implements OnInit {
   private readonly expandedMealTypes = signal<MealType[]>([]);
   protected today = new Date();
   protected meals = this.mealsService.meals;
+  private dialog = inject(MatDialog);
+
+  // ---- Lifecycle ----
 
   ngOnInit(): void {
     const date = this.today.toLocaleDateString('en-CA');
@@ -109,6 +114,21 @@ export class DailyLog implements OnInit {
 
   // ---- Actions ----
   onAddFood(meal: Meal): void {
-    console.log('Add food to meal', meal);
+    const ref = this.dialog.open(AddFoodDialog, {
+      maxWidth: '100vw',
+      width: '1100px',
+      panelClass: 'add-food-dialog-panel',
+      data: {
+        mealId: meal.id,
+        mealType: meal.mealType,
+        mealDate: meal.mealDate,
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result || !result.items?.length) return;
+
+      console.log('Dialog returned:', result);
+    });
   }
 }

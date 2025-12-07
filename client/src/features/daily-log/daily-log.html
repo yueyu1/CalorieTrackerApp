@@ -8,11 +8,12 @@
 
     <div class="header-right">
       <button mat-stroked-button class="date-pill" type="button">
-        <span class="date-pill-label">Today</span>
-        <span class="date-pill-value">
-          {{ today | date: 'EEE, MMM d' }}
-        </span>
-        <mat-icon iconPositionEnd fontIcon="chevron_right" class="date-pill-icon" />
+        <mat-icon class="date-pill-icon" fontIcon="event"></mat-icon>
+        <div class="date-pill-text-block">
+          <span class="date-pill-tag">TODAY</span>
+          <span class="date-pill-date">{{ today | date:'EEE, MMM d' }}</span>
+        </div>
+        <mat-icon iconPositionEnd class="date-pill-chevron" fontIcon="chevron_right"></mat-icon>
       </button>
     </div>
   </div>
