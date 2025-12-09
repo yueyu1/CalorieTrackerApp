@@ -5,6 +5,7 @@ import { MATERIAL_IMPORTS } from '../../shared/material';
 import { MatDialog } from '@angular/material/dialog';
 import { AddFoodDialog } from './add-food-dialog/add-food-dialog';
 import { MealsService } from '../../core/services/meals-service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-daily-log',
@@ -18,13 +19,13 @@ export class DailyLog implements OnInit {
   protected today = new Date();
   protected meals = this.mealsService.meals;
   private dialog = inject(MatDialog);
-
+  
   // ---- Lifecycle ----
 
   ngOnInit(): void {
     const date = this.today.toLocaleDateString('en-CA');
     this.mealsService.loadDailyMeals(date);
-    console.log('Loaded meals for', date);
+    console.log('meal loaded', this.meals());
   }
 
   // ---- Daily totals ----
@@ -128,7 +129,14 @@ export class DailyLog implements OnInit {
     ref.afterClosed().subscribe(result => {
       if (!result || !result.items?.length) return;
 
-      console.log('Dialog returned:', result);
+      const { mealId, mealType, mealDate, items } = result;
+
+      this.mealsService.addFoodToMeal(mealId, mealType, mealDate, items).pipe(
+        tap(() => {
+          // Reload meals for the date
+          this.mealsService.loadDailyMeals(mealDate);
+        })
+      ).subscribe();
     });
   }
 }

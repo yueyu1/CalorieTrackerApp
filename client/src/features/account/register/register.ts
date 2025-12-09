@@ -82,8 +82,11 @@ export class Register implements OnInit {
         password: this.password?.value,
       }
       this.accountService.register(payload).subscribe({
-        next: () => {
+        next: (user) => {
           this.isSubmitting = false;
+          localStorage.setItem('access_token', user.token);
+          localStorage.setItem('user', JSON.stringify(user));
+          this.accountService.setCurrentUser();
           this.router.navigate(['/daily-log']);
         },
         error: () => {

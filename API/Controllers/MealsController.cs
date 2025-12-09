@@ -18,9 +18,9 @@ namespace API.Controllers
         private static readonly MealType[] DefaultMealTypes =
         [
             MealType.Breakfast,
-                MealType.Lunch,
-                MealType.Dinner,
-                MealType.Snacks
+            MealType.Lunch,
+            MealType.Dinner,
+            MealType.Snacks
         ];
 
         [HttpGet]
@@ -129,10 +129,15 @@ namespace API.Controllers
         [HttpPost]
         public async Task<ActionResult<MealDto>> CreateMeal(CreateMealDto dto)
         {
+            if (!Enum.TryParse<MealType>(dto.MealType, ignoreCase: true, out var mealType))
+            {
+                return BadRequest("Invalid meal type");
+            }
+            
             var currentUserId = HttpContext.GetCurrentUserId();
             var meal = new Meal
             {
-                Type = dto.Type,
+                Type = mealType,
                 CustomName = dto.CustomName,
                 MealDate = dto.MealDate,
                 CreatedAtUtc = DateTime.UtcNow,

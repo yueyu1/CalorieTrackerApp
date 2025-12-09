@@ -8,22 +8,11 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ReactiveFormsModule } f
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
-
-interface UnitOption {
-  id: string;
-  label: string;
-}
-
-interface FoodItem {
-  id: number;
-  name: string;
-  brand: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  units: UnitOption[];
-}
+import { MealType } from '../../../types/meal';
+import { FoodService } from '../../../core/services/food-service';
+import { tap } from 'rxjs';
+import { FoodItem } from '../../../types/food';
+import { MealEntryItem } from '../../../types/meal-entry-item';
 
 @Component({
   selector: 'app-add-food-dialog',
@@ -40,85 +29,16 @@ interface FoodItem {
   styleUrl: './add-food-dialog.css',
 })
 export class AddFoodDialog implements OnInit {
+  private foodService = inject(FoodService);
   protected loading = signal(true);
   protected form!: FormGroup;
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AddFoodDialog>);
-  private data = inject(MAT_DIALOG_DATA) as
-    | { mealId: number; mealType?: string; mealDate?: string }
-    | null;
+  private data = inject(MAT_DIALOG_DATA) as {
+    mealId: number; mealType: MealType; mealDate: string
+  };
   protected selectedIds = new Set<number>();
   protected foods: FoodItem[] = [];
-
-  seedFoods = [
-    {
-      id: 1,
-      name: 'Grilled Chicken Breast',
-      brand: 'Brand A',
-      calories: 110,
-      protein: 26,
-      carbs: 0,
-      fat: 3,
-      units: [
-        { id: 'serving', label: '1 serving (85 g)' },
-        { id: '100g', label: '100 g' },
-        { id: '4oz', label: '4 oz' },
-      ],
-    },
-    {
-      id: 2,
-      name: 'Quinoa',
-      brand: 'Brand B',
-      calories: 150,
-      protein: 6,
-      carbs: 27,
-      fat: 3,
-      units: [
-        { id: 'serving', label: '1 serving (120 g)' },
-        { id: '100g', label: '100 g' },
-      ],
-    },
-    {
-      id: 3,
-      name: 'rice',
-      brand: 'Brand C',
-      calories: 200,
-      protein: 6,
-      carbs: 27,
-      fat: 3,
-      units: [
-        { id: 'serving', label: '1 serving (120 g)' },
-        { id: '100g', label: '100 g' },
-      ],
-    },
-    {
-      id: 4,
-      name: 'noddles',
-      brand: 'Brand D',
-      calories: 200,
-      protein: 6,
-      carbs: 27,
-      fat: 3,
-      units: [
-        { id: 'serving', label: '1 serving (120 g)' },
-        { id: '100g', label: '100 g' },
-      ],
-    },
-    {
-      id: 5,
-      name: 'corns',
-      brand: 'Brand E',
-      calories: 200,
-      protein: 6,
-      carbs: 27,
-      fat: 3,
-      units: [
-        { id: 'serving', label: '1 serving (120 g)' },
-        { id: '100g', label: '100 g' },
-      ],
-    },
-    // ...more foods
-  ];
 
   constructor() {
     this.form = this.fb.group({
@@ -138,14 +58,14 @@ export class AddFoodDialog implements OnInit {
   activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
 
   ngOnInit(): void {
-    // TODO: replace this with real API call
-    // this.foodService.getFoods().subscribe(foods => { ... });
-
     setTimeout(() => {
-      this.foods.push(...this.seedFoods);
-
-      this.buildFormFromFoods();
-      this.loading.set(false);
+      this.foodService.getFoods().pipe(
+        tap(foods => {
+          this.foods = foods;
+          this.buildFormFromFoods();
+          this.loading.set(false);
+        })
+      ).subscribe();
     }, 1000);
   }
 
@@ -153,10 +73,10 @@ export class AddFoodDialog implements OnInit {
     this.form = this.fb.group({
       search: [''],
       foods: this.fb.array(
-        this.foods.map(() =>
+        this.foods.map((food) =>
           this.fb.group({
             quantity: [1],
-            unitId: ['serving'],
+            unitId: [food.units[0].id ?? null],
           })
         )
       ),
@@ -232,20 +152,27 @@ export class AddFoodDialog implements OnInit {
   }
 
   confirmAdd(): void {
-    const items = this.foods
+    const items: MealEntryItem[] = this.foods
       .map((food, index) => ({ food, index }))
       .filter(x => this.selectedIds.has(x.food.id))
       .map(x => {
         const group = this.foodsArray.at(x.index) as FormGroup;
+        const servings = group.get('quantity')!.value ?? 0;
+        const baseQty = x.food.baseQuantity;
+        const baseUnit = x.food.baseUnit; 
         return {
           foodId: x.food.id,
-          quantity: group.get('quantity')!.value ?? 0,
-          unitId: group.get('unitId')!.value ?? 'serving',
+          quantity: servings * baseQty,
+          unit: baseUnit,
         };
       });
 
-    console.log('Add to meal payload', items);
-    // this.dialogRef?.close({ mealId: this.data?.mealId, items });
+    this.dialogRef?.close({
+      mealId: this.data?.mealId,
+      mealType: this.data?.mealType,
+      mealDate: this.data?.mealDate,
+      items
+    });
   }
 
   onClose(): void {

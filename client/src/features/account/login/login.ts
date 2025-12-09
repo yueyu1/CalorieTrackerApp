@@ -65,6 +65,7 @@ export class Login implements OnInit {
         },
         error: () => {
           this.toastService.error('Login failed. Please check your credentials and try again.');
+          this.isSubmitting.set(false);
         },
         complete: () => {
           // fake delay
