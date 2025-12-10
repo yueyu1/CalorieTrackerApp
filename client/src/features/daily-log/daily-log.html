@@ -175,11 +175,11 @@
                   'meal-icon--snacks': meal.mealType === 'Snacks'
                 }">
               @switch (meal.mealType) {
-              @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
-              @case ('Lunch') { <mat-icon fontIcon="lunch_dining"></mat-icon> }
-              @case ('Dinner') { <mat-icon fontIcon="dinner_dining"></mat-icon> }
-              @case ('Snacks') { <mat-icon fontIcon="restaurant"></mat-icon> }
-              @default { <mat-icon fontIcon="restaurant"></mat-icon> }
+                @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
+                @case ('Lunch') { <mat-icon fontIcon="lunch_dining"></mat-icon> }
+                @case ('Dinner') { <mat-icon fontIcon="dinner_dining"></mat-icon> }
+                @case ('Snacks') { <mat-icon fontIcon="restaurant"></mat-icon> }
+                @default { <mat-icon fontIcon="restaurant"></mat-icon> }
               }
             </div>
 
@@ -202,7 +202,7 @@
               <div class="macro-label">Protein</div>
               <div class="macro-values-row">
                 <span class="macro-chip">
-                  {{ meal.totalProtein | number: '1.0-0' }} g
+                  {{ meal.totalProtein | number: '1.2-2' }} g
                 </span>
                 <span class="macro-percent">
                   {{ mp.protein | number: '1.0-0' }}%
@@ -215,7 +215,7 @@
               <div class="macro-label">Carbs</div>
               <div class="macro-values-row">
                 <span class="macro-chip">
-                  {{ meal.totalCarbs | number: '1.0-0' }} g
+                  {{ meal.totalCarbs | number: '1.2-2' }} g
                 </span>
                 <span class="macro-percent">
                   {{ mp.carbs | number: '1.0-0' }}%
@@ -228,7 +228,7 @@
               <div class="macro-label">Fat</div>
               <div class="macro-values-row">
                 <span class="macro-chip">
-                  {{ meal.totalFat | number: '1.0-0' }} g
+                  {{ meal.totalFat | number: '1.2-2' }} g
                 </span>
                 <span class="macro-percent">
                   {{ mp.fat | number: '1.0-0' }}%
@@ -258,61 +258,61 @@
 
       <!-- Divider & body when expanded -->
       @if (isMealExpanded(meal)) {
-      <div class="meal-body">
-        <mat-divider></mat-divider>
+        <div class="meal-body">
+          <mat-divider></mat-divider>
 
-        <div class="meal-body-inner">
-          @if (meal.items.length > 0) {
-          <div class="meal-table-header">
-            <span class="col-name">Food</span>
-            <span class="col-calories">Calories</span>
-            <span class="col-protein">Protein</span>
-            <span class="col-carbs">Carbs</span>
-            <span class="col-fat">Fat</span>
-          </div>
+          <div class="meal-body-inner">
+            @if (meal.items.length > 0) {
+            <div class="meal-table-header">
+              <span class="col-name">Food</span>
+              <span class="col-calories">Calories</span>
+              <span class="col-protein">Protein</span>
+              <span class="col-carbs">Carbs</span>
+              <span class="col-fat">Fat</span>
+            </div>
 
-          @for (item of meal.items; track $index) {
-          <div class="meal-table-row">
-            <span class="col-name">
-              <span class="food-name">
-                {{ item.brand ? item.brand + ' ' + item.name : item.name }}
-              </span>
-              <span class="food-quantity">
-                {{ item.quantity }} {{ item.unit }}
-              </span>
-            </span>
-            <span class="col-calories">
-              <span class="macro-value">{{ item.calories | number:'1.0-0' }}</span>
-              <span class="macro-unit">kcal</span>
-            </span>
-            <span class="col-protein">
-              <span class="macro-value">{{ item.protein | number: '1.0-0' }}</span>
-              <span class="macro-unit">g</span>
-            </span>
-            <span class="col-carbs">
-              <span class="macro-value">{{ item.carbs | number: '1.0-0' }}</span>
-              <span class="macro-unit">g</span>
-            </span>
-            <span class="col-fat">
-              <span class="macro-value">{{ item.fat | number: '1.0-0' }}</span>
-              <span class="macro-unit">g</span>
-            </span>
-          </div>
-          }
-          } @else {
-          <div class="meal-empty">
-            <p>
-              No foods logged for
-              {{ meal.mealType.toLowerCase() }} yet.
-            </p>
+            @for (item of meal.items; track $index) {
+              <div class="meal-table-row">
+                <span class="col-name">
+                  <span class="food-name">
+                    {{ item.brand ? item.brand + ' ' + item.name : item.name }}
+                  </span>
+                  <span class="food-quantity">
+                    {{ formatQuantity(item) }}
+                  </span>
+                </span>
+                <span class="col-calories">
+                  <span class="macro-value">{{ item.calories | number:'1.0-0' }}</span>
+                  <span class="macro-unit">kcal</span>
+                </span>
+                <span class="col-protein">
+                  <span class="macro-value">{{ item.protein | number: '1.2-2' }}</span>
+                  <span class="macro-unit">g</span>
+                </span>
+                <span class="col-carbs">
+                  <span class="macro-value">{{ item.carbs | number: '1.2-2' }}</span>
+                  <span class="macro-unit">g</span>
+                </span>
+                <span class="col-fat">
+                  <span class="macro-value">{{ item.fat | number: '1.2-2' }}</span>
+                  <span class="macro-unit">g</span>
+                </span>
+              </div>
+            }
+            } @else {
+              <div class="meal-empty">
+                <p>
+                  No foods logged for
+                  {{ meal.mealType.toLowerCase() }} yet.
+                </p>
 
-            <button mat-flat-button color="primary" type="button" (click)="onAddFood(meal)">
-              + Add Food
-            </button>
+                <button mat-flat-button color="primary" type="button" (click)="onAddFood(meal)">
+                  + Add Food
+                </button>
+              </div>
+            }
           </div>
-          }
         </div>
-      </div>
       }
     </mat-card>
     }

@@ -1,4 +1,3 @@
-using System;
 using API.Entities;
 using API.Interfaces;
 using API.ValueObjects;
@@ -7,18 +6,20 @@ namespace API.Services;
 
 public class NutritionCalculationService : INutritionCalculationService
 {
-    public NutritionResult CalculateNutrition(MealFood mealFood)
+    public NutritionResult CalculateNutritionForEntry(MealFood entry)
     {
-        var food = mealFood.Food ?? throw new ArgumentException("MealFood must have an associated Food entity.");
+        var food = entry.Food ?? throw new ArgumentException("Food item cannot be null", nameof(entry));
+        var unit = food.Units.Single(u => u.Code == entry.Unit);
 
-        double scale = mealFood.Quantity / food.BaseQuantity;
+        var totalBaseAmount = entry.Quantity * unit.ConversionFactor;
+        var ratio = totalBaseAmount / food.BaseQuantity;
         
         return new NutritionResult
         {
-            Calories = (int)Math.Round(food.Calories * scale),
-            Protein = food.Protein * scale,
-            Carbs = food.Carbs * scale,
-            Fat = food.Fat * scale
+            Calories = (int)Math.Round(food.Calories * ratio),
+            Protein = food.Protein * ratio,
+            Carbs = food.Carbs * ratio,
+            Fat = food.Fat * ratio
         };
     }
 }

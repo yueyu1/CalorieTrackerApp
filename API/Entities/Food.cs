@@ -7,10 +7,12 @@ public class Food
     public int Id { get; set; }
     public string Name { get; set; } = "";
     public string? Brand { get; set; }
+
     public int Calories { get; set; }
     public double Protein { get; set; }
     public double Carbs { get; set; }
     public double Fat { get; set; }
+
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
@@ -31,4 +33,6 @@ public class Food
 
     [JsonIgnore]
     public ICollection<MealFood> MealFoods { get; set; } = [];
+
+    public ICollection<FoodUnit> Units { get; set; } = [];
 }

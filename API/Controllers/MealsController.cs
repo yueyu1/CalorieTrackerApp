@@ -72,6 +72,7 @@ namespace API.Controllers
                 .Where(m => m.UserId == currentUserId && m.MealDate == date)
                 .Include(m => m.MealFoods)
                     .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.Units)
                 .ToListAsync();
 
             var mealsByType = meals.ToDictionary(m => m.Type);
@@ -229,7 +230,7 @@ namespace API.Controllers
         }
 
         [HttpPost("{mealId}/entries")]
-        public async Task<ActionResult<MealFood>> AddMealEntry(int mealId, CreateMealEntryDto dto)
+        public async Task<ActionResult> AddMealEntry(int mealId, CreateMealEntryDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
@@ -239,16 +240,20 @@ namespace API.Controllers
 
             if (meal == null) return NotFound();
 
-            var food = await db.Foods.FindAsync(dto.FoodId);
-            if (food == null)
-            {
+            var food = await db.Foods
+                .Include(f => f.Units)
+                .FirstOrDefaultAsync(f => f.Id == dto.FoodId);
+            if (food == null) 
                 return BadRequest($"Food with ID {dto.FoodId} does not exist.");
-            }
+
+            var unit = food.Units.FirstOrDefault(u => u.Code == dto.Unit);
+            if (unit == null) 
+                return BadRequest($"Food with ID {dto.FoodId} does not have unit '{dto.Unit}'.");
 
             var mealFood = new MealFood
             {
                 Quantity = dto.Quantity,
-                Unit = dto.Unit,
+                Unit = unit.Code,
                 MealId = mealId,
                 FoodId = dto.FoodId,
                 CreatedAt = DateTime.UtcNow
@@ -346,10 +351,13 @@ namespace API.Controllers
 
         private DailyMealItemDto MapMealFoodToItemDto(MealFood mealFood)
         {
-            var nutrition = nutritionCalculationService.CalculateNutrition(mealFood);
+            var nutrition = nutritionCalculationService.CalculateNutritionForEntry(mealFood);
 
             var food = mealFood.Food; // included via ThenInclude
 
+            var unit = food.Units.FirstOrDefault(u => u.Code == mealFood.Unit) 
+                ?? throw new Exception($"Food with ID {food.Id} does not have unit '{mealFood.Unit}'.");
+           
             return new DailyMealItemDto
             {
                 MealId = mealFood.MealId,
@@ -358,7 +366,9 @@ namespace API.Controllers
                 Brand = food.Brand,
                 Quantity = mealFood.Quantity,
                 Unit = mealFood.Unit,
-
+                UnitLabel = unit.Label,
+                ConversionFactor = unit.ConversionFactor,
+                UnitType = unit.UnitType,
                 Calories = nutrition.Calories,
                 Protein = nutrition.Protein,
                 Carbs = nutrition.Carbs,
