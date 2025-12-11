@@ -7,6 +7,8 @@ import { AddFoodDialog } from './add-food-dialog/add-food-dialog';
 import { MealsService } from '../../core/services/meals-service';
 import { tap } from 'rxjs';
 import { EditAmountDialog } from './edit-amount-dialog/edit-amount-dialog';
+import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
+import { ToastService } from '../../core/services/toast-service';
 
 @Component({
   selector: 'app-daily-log',
@@ -20,6 +22,7 @@ export class DailyLog implements OnInit {
   protected today = new Date().toLocaleDateString('en-CA');
   protected meals = this.mealsService.meals;
   private dialog = inject(MatDialog);
+  private toast = inject(ToastService);
 
   // ---- Lifecycle ----
 
@@ -174,19 +177,25 @@ export class DailyLog implements OnInit {
 
       this.mealsService.addFoodToMeal(mealId, mealType, mealDate, items).pipe(
         tap(() => {
-          // Reload meals for the date
           this.mealsService.loadDailyMeals(mealDate);
+          const count = items.length;
+          const message =
+            count === 1
+              ? `Food added to ${mealType}.`
+              : `${count} foods added to ${mealType}.`;
+
+          this.toast.success(message);
         })
       ).subscribe();
     });
   }
 
   onEditItem(item: MealItem): void {
-    const ref = this.dialog.open(EditAmountDialog,{
-        width: '640px',
-        maxWidth: '90vw',
-        data: item,
-      }
+    const ref = this.dialog.open(EditAmountDialog, {
+      width: '640px',
+      maxWidth: '90vw',
+      data: item,
+    }
     );
 
     ref.afterClosed().subscribe(result => {
@@ -196,19 +205,38 @@ export class DailyLog implements OnInit {
       this.mealsService.updateMealEntry(item.mealId, item.foodId, quantity, unitCode).pipe(
         tap(() => {
           this.mealsService.loadDailyMeals(this.today);
+          const displayName = item.brand
+            ? `${item.brand} ${item.name}`
+            : item.name;
+
+          this.toast.success(
+            `Updated amount for ${displayName}.`
+          );
         })
       ).subscribe();
     });
   }
 
   onDeleteItem(meal: Meal, item: MealItem): void {
-    const confirmed = window.confirm(
-      `Remove ${item.name} from ${meal.mealType}?`
-    );
-    if (!confirmed) return;
+    const displayName = item.brand ? `${item.brand} ${item.name}` : item.name;
+    const ref = this.dialog.open(ConfirmDeleteDialog, {
+      width: '420px',
+      maxWidth: '95vw',
+      data: {
+        itemName: displayName,
+        mealType: meal.mealType,
+      }
+    });
 
-    this.mealsService.deleteMealEntry(meal.id, item.foodId).pipe(
-      tap(() => this.mealsService.loadDailyMeals(meal.mealDate))
-    ).subscribe();
+    ref.afterClosed().subscribe(confirmed => {
+      if (!confirmed) return;
+
+      this.mealsService.deleteMealEntry(meal.id, item.foodId).pipe(
+        tap(() => {
+          this.mealsService.loadDailyMeals(meal.mealDate);
+          this.toast.success(`${displayName} removed from ${meal.mealType}.`);
+        })
+      ).subscribe();
+    });
   }
 }

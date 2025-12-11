@@ -1,0 +1,71 @@
+.confirm-dialog {
+  padding: 22px 26px 22px;
+  max-width: 420px;
+}
+
+/* Header layout */
+.confirm-dialog-header {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+/* Softer icon bubble */
+.confirm-dialog-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ffe5e5; /* softer red */
+  color: #dc2626;      /* clearer red */
+}
+
+.confirm-dialog-icon mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+/* Title */
+.confirm-dialog-text h2 {
+  margin: 0 0 6px;
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* Body text */
+.confirm-dialog-text p {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Subtitle / hint text */
+.confirm-dialog-sub {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #9ca3af;
+}
+
+/* Buttons */
+.confirm-dialog-actions {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* Make Delete button feel clickable */
+.confirm-dialog-actions button[color="warn"] {
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.confirm-dialog-actions button[color="warn"]:hover {
+  background-color: #ef4444; /* red-500 */
+  transform: translateY(-1px);
+}

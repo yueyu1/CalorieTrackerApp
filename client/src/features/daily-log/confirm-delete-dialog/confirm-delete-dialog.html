@@ -1,0 +1,27 @@
+<div class="confirm-dialog" role="alertdialog">
+    <div class="confirm-dialog-header">
+        <div class="confirm-dialog-icon">
+            <mat-icon fontIcon="delete"></mat-icon>
+        </div>
+        <div class="confirm-dialog-text">
+            <h2>Remove food?</h2>
+            <p>
+                Remove <strong>{{ data.itemName }}</strong>
+                from <strong>{{ data.mealType }}</strong>?
+            </p>
+            <p class="confirm-dialog-sub">
+                This action cannot be undone.
+            </p>
+        </div>
+    </div>
+
+    <div class="confirm-dialog-actions">
+        <button mat-stroked-button type="button" (click)="onCancel()">
+            Cancel
+        </button>
+
+        <button mat-flat-button color="warn" type="button" (click)="onConfirm()">
+            Delete
+        </button>
+    </div>
+</div>

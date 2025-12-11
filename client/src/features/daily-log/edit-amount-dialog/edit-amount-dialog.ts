@@ -12,7 +12,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-edit-amount-dialog',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     DecimalPipe,

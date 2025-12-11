@@ -352,7 +352,7 @@
   width: 100%;
   border: none;
   background: transparent;
-  padding: 18px 24px;
+  padding: 16px 22px;
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(0, 2.1fr) auto;
   align-items: center;
@@ -383,7 +383,7 @@
 
 .meal-name {
   margin: 0;
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.01em;
   line-height: 1.2;
