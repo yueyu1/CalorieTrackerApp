@@ -372,7 +372,14 @@ namespace API.Controllers
                 Calories = nutrition.Calories,
                 Protein = nutrition.Protein,
                 Carbs = nutrition.Carbs,
-                Fat = nutrition.Fat
+                Fat = nutrition.Fat,
+                Units = food.Units.Select(u => new FoodUnitDto
+                {
+                    Code = u.Code,
+                    Label = u.Label,
+                    ConversionFactor = u.ConversionFactor,
+                    UnitType = u.UnitType
+                }).ToList()
             };
         }
     }

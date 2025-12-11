@@ -196,7 +196,14 @@ export class AddFoodDialog implements OnInit {
     event?.stopPropagation();
     const group = this.foodsArray.at(index) as FormGroup;
     const current = group.get('quantity')!.value ?? 0;
-    group.get('quantity')!.setValue(Math.max(current - 1, 0));
+    const next = Math.max(current - 1, 0);
+    group.get('quantity')!.setValue(next);
+
+    // if quantity hits 0, unselect this food
+    const food = this.foods()[index];
+    if (next <= 0 && this.selectedIds.has(food.id)) {
+      this.selectedIds.delete(food.id);
+    }
   }
 
   onQtyBlur(index: number): void {

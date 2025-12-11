@@ -16,6 +16,8 @@ public class DailyMealItemDto
     public double ConversionFactor { get; set; } // 100
     public UnitType UnitType { get; set; }       // Weight / Volume / Piece
 
+    public ICollection<FoodUnitDto> Units { get; set; } = [];
+
     public int Calories { get; set; }
     public double Protein { get; set; }
     public double Carbs { get; set; }

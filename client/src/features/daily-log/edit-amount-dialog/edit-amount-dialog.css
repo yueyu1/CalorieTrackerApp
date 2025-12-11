@@ -1,0 +1,175 @@
+.edit-dialog {
+  min-width: 540px;
+  max-width: 640px;
+  padding: 24px 28px 20px;
+}
+
+.edit-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.edit-dialog-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-dialog-title {
+  margin-bottom: 2px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.edit-dialog-subtitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #4b5563;
+  margin-top: 0;
+}
+
+.close-btn {
+  margin-right: -8px;
+}
+
+.edit-dialog-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Quantity + unit row */
+.quantity-row {
+  display: grid;
+  grid-template-columns: 1fr 1.7fr;
+  gap: 20px;
+}
+
+.quantity-field,
+.unit-field {
+  width: 100%;
+}
+
+.preview-row {
+  font-size: 15px;
+  color: #6b7280;
+  display: flex;
+  gap: 4px;
+  align-items: baseline;
+  margin-top: 2px;
+}
+
+.preview-label {
+  opacity: 0.7;
+  color: #6b7280;
+  font-weight: 400;
+}
+
+.preview-value {
+  font-weight: 500;
+}
+
+/* Footer buttons */
+.edit-dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.secondary-btn {
+  min-width: 80px;
+}
+
+.primary-btn {
+  min-width: 96px;
+}
+
+.macros-row {
+  margin-top: 12px;
+}
+
+.macros-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.macros-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.macro-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  background-color: #f3f4f6;
+  color: #374151;
+}
+
+.macro-chip-name {
+  font-weight: 600;
+}
+
+.macro-chip-value {
+  font-weight: 600;
+}
+
+.macro-chip-unit {
+  opacity: 0.8;
+}
+
+.macro-chip--calories {
+  background-color: #fee2e2;
+  color: #b91c1c;
+}
+
+.macro-chip--protein {
+  background-color: #e0e7ff;
+  color: #4338ca;
+}
+
+.macro-chip--carbs {
+  background-color: #dbeafe;
+  color: #1d4ed8;
+}
+
+.macro-chip--fat {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+@media (max-width: 768px) {
+  .edit-dialog {
+    min-width: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-inline: 16px;
+  }
+
+  .quantity-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  .edit-dialog {
+    min-width: 0;
+    width: 100%;
+    padding-inline: 16px;
+  }
+
+  .quantity-row {
+    grid-template-columns: 1fr;
+  }
+}

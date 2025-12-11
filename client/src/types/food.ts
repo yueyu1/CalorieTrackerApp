@@ -1,14 +1,4 @@
-import { UnitOption } from "./unit";
-
-export type UnitType = 'Weight' | 'Volume' | 'Piece';
-
-export type FoodUnit = {
-  id: number;          
-  code: string;
-  label: string;
-  unitType: UnitType;
-  conversionFactor: number;
-}
+import { FoodUnit } from "./unit";
 
 export type Food = {
   id: number;

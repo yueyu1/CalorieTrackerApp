@@ -537,8 +537,8 @@
 .meal-table-header,
 .meal-table-row {
   display: grid;
-  /* Food | Calories | P | C | F */
-  grid-template-columns: 3fr 1.2fr 1fr 1fr 1fr;
+  /* Food | Calories | P | C | F | Actions */
+  grid-template-columns: 3fr 1.2fr 1fr 1fr 1fr auto;
   column-gap: 12px;
   align-items: center;
 }
@@ -554,19 +554,15 @@
   padding: 10px 0;
   font-size: 14px;
   border-top: 1px solid rgba(209, 213, 219, 0.8);
+  background: transparent;
 }
 
 .meal-table-row:first-of-type {
   border-top: none;
 }
 
-.col-calories,
-.col-protein,
-.col-carbs,
-.col-fat {
-  text-align: right;
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+.meal-table-row:hover {
+  background-color: #f3f4f6;
 }
 
 .col-calories,
@@ -577,6 +573,9 @@
   justify-content: flex-end;
   align-items: baseline;
   gap: 2px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
 }
 
 .col-calories .macro-value {
@@ -593,6 +592,36 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+}
+
+/* Actions column */
+.col-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+  padding-left: 16px;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.meal-table-row:hover .col-actions {
+  opacity: 1;
+}
+
+.row-action-btn {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-2px);
+}
+
+.row-action-btn mat-icon {
+  font-size: 18px;
+  line-height: 1;
+  margin-top: 8px;
 }
 
 .food-name {
@@ -658,6 +687,10 @@
 
   .meal-table-header,
   .meal-table-row {
-    grid-template-columns: 2.5fr 1.1fr 0.9fr 0.9fr 0.9fr;
+    grid-template-columns: 2.4fr 1.1fr 0.9fr 0.9fr 0.9fr auto;
+  }
+
+  col-actions {
+    opacity: 1;
   }
 }

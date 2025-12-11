@@ -269,6 +269,7 @@
               <span class="col-protein">Protein</span>
               <span class="col-carbs">Carbs</span>
               <span class="col-fat">Fat</span>
+              <span class="col-actions"></span> <!-- empty label, just space -->
             </div>
 
             @for (item of meal.items; track $index) {
@@ -296,6 +297,23 @@
                 <span class="col-fat">
                   <span class="macro-value">{{ item.fat | number: '1.2-2' }}</span>
                   <span class="macro-unit">g</span>
+                </span>
+                 <span class="col-actions" (click)="$event.stopPropagation()">
+                  <button
+                    mat-icon-button
+                    type="button"
+                    class="row-action-btn"
+                    (click)="onEditItem(item); $event.stopPropagation()">
+                    <mat-icon fontIcon="edit"></mat-icon>
+                  </button>
+                  <button
+                    mat-icon-button
+                    type="button"
+                    color="warn"
+                    class="row-action-btn"
+                    (click)="onDeleteItem(meal, item); $event.stopPropagation()">
+                    <mat-icon fontIcon="delete"></mat-icon>
+                  </button>
                 </span>
               </div>
             }

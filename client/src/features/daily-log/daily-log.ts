@@ -1,11 +1,12 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
-import { Meal, MealType } from '../../types/meal';
+import { Meal, MealItem, MealType } from '../../types/meal';
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { MATERIAL_IMPORTS } from '../../shared/material';
 import { MatDialog } from '@angular/material/dialog';
 import { AddFoodDialog } from './add-food-dialog/add-food-dialog';
 import { MealsService } from '../../core/services/meals-service';
 import { tap } from 'rxjs';
+import { EditAmountDialog } from './edit-amount-dialog/edit-amount-dialog';
 
 @Component({
   selector: 'app-daily-log',
@@ -16,16 +17,14 @@ import { tap } from 'rxjs';
 export class DailyLog implements OnInit {
   private mealsService = inject(MealsService);
   private readonly expandedMealTypes = signal<MealType[]>([]);
-  protected today = new Date();
+  protected today = new Date().toLocaleDateString('en-CA');
   protected meals = this.mealsService.meals;
   private dialog = inject(MatDialog);
 
   // ---- Lifecycle ----
 
   ngOnInit(): void {
-    const date = this.today.toLocaleDateString('en-CA');
-    this.mealsService.loadDailyMeals(date);
-    console.log('meal loaded', this.meals());
+    this.mealsService.loadDailyMeals(this.today);
   }
 
   // ---- Daily totals ----
@@ -180,5 +179,36 @@ export class DailyLog implements OnInit {
         })
       ).subscribe();
     });
+  }
+
+  onEditItem(item: MealItem): void {
+    const ref = this.dialog.open(EditAmountDialog,{
+        width: '640px',
+        maxWidth: '90vw',
+        data: item,
+      }
+    );
+
+    ref.afterClosed().subscribe(result => {
+      if (!result) return;
+
+      const { quantity, unitCode } = result;
+      this.mealsService.updateMealEntry(item.mealId, item.foodId, quantity, unitCode).pipe(
+        tap(() => {
+          this.mealsService.loadDailyMeals(this.today);
+        })
+      ).subscribe();
+    });
+  }
+
+  onDeleteItem(meal: Meal, item: MealItem): void {
+    const confirmed = window.confirm(
+      `Remove ${item.name} from ${meal.mealType}?`
+    );
+    if (!confirmed) return;
+
+    this.mealsService.deleteMealEntry(meal.id, item.foodId).pipe(
+      tap(() => this.mealsService.loadDailyMeals(meal.mealDate))
+    ).subscribe();
   }
 }

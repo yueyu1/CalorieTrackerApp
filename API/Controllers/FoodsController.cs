@@ -91,15 +91,9 @@ namespace API.Controllers
             var currentUserId = HttpContext.GetCurrentUserId();
 
             var food = await _db.Foods.FindAsync(id);
-            if (food == null)
-            {
-                return NotFound();
-            }
+            if (food == null) return NotFound();
 
-            if (food.UserId != null && food.UserId != currentUserId)
-            {
-                return Forbid();
-            }
+            if (food.UserId != null && food.UserId != currentUserId)  return Forbid();
 
             return Ok(food);
         }
