@@ -134,7 +134,7 @@ namespace API.Controllers
             {
                 return BadRequest("Invalid meal type");
             }
-            
+
             var currentUserId = HttpContext.GetCurrentUserId();
             var meal = new Meal
             {
@@ -243,11 +243,11 @@ namespace API.Controllers
             var food = await db.Foods
                 .Include(f => f.Units)
                 .FirstOrDefaultAsync(f => f.Id == dto.FoodId);
-            if (food == null) 
+            if (food == null)
                 return BadRequest($"Food with ID {dto.FoodId} does not exist.");
 
             var unit = food.Units.FirstOrDefault(u => u.Code == dto.Unit);
-            if (unit == null) 
+            if (unit == null)
                 return BadRequest($"Food with ID {dto.FoodId} does not have unit '{dto.Unit}'.");
 
             var mealFood = new MealFood
@@ -314,8 +314,12 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPost("{targetMealId}/copy-entries")]
-        public async Task<IActionResult> CopyMealEntries(int targetMealId, CopyMealEntriesDto dto)
+        /// <summary>
+        /// Appends all entries from source meal into target meal.
+        /// Duplicate foods are allowed.
+        /// </summary>
+        [HttpPost("{targetMealId}/copy-from/{sourceMealId}")]
+        public async Task<IActionResult> CopyMealEntries(int targetMealId, int sourceMealId)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
@@ -326,8 +330,8 @@ namespace API.Controllers
             if (targetMeal == null) return NotFound();
 
             var sourceMeal = await db.Meals
-                .Where(m => m.UserId == currentUserId && m.Id == dto.SourceMealId)
-                .Include(m => m.MealFoods)
+                .Where(m => m.UserId == currentUserId && m.Id == sourceMealId)
+                    .Include(m => m.MealFoods)
                 .FirstOrDefaultAsync();
 
             if (sourceMeal == null) return NotFound();
@@ -392,9 +396,9 @@ namespace API.Controllers
 
             var food = mealFood.Food; // included via ThenInclude
 
-            var unit = food.Units.FirstOrDefault(u => u.Code == mealFood.Unit) 
+            var unit = food.Units.FirstOrDefault(u => u.Code == mealFood.Unit)
                 ?? throw new Exception($"Food with ID {food.Id} does not have unit '{mealFood.Unit}'.");
-           
+
             return new DailyMealItemDto
             {
                 Id = mealFood.Id,

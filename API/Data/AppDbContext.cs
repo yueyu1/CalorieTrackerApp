@@ -16,9 +16,6 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<MealFood>()
-            .HasKey(mf => new { mf.MealId, mf.FoodId });
-
         modelBuilder.Entity<AppUser>()
             .HasMany(u => u.Meals)
             .WithOne(m => m.User)

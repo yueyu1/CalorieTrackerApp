@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251212222112_MealFoodEntityUpdated")]
+    [Migration("20251212230039_MealFoodEntityUpdated")]
     partial class MealFoodEntityUpdated
     {
         /// <inheritdoc />
@@ -155,16 +155,17 @@ namespace API.Data.Migrations
 
             modelBuilder.Entity("API.Entities.MealFood", b =>
                 {
-                    b.Property<int>("MealId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("FoodId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("Id")
+                    b.Property<int>("FoodId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MealId")
                         .HasColumnType("INTEGER");
 
                     b.Property<double>("Quantity")
@@ -177,9 +178,11 @@ namespace API.Data.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("TEXT");
 
-                    b.HasKey("MealId", "FoodId");
+                    b.HasKey("Id");
 
                     b.HasIndex("FoodId");
+
+                    b.HasIndex("MealId");
 
                     b.ToTable("MealFoods");
                 });
