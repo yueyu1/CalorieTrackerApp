@@ -83,8 +83,8 @@ export class MealsService {
     return this.http.delete<void>(`${this.apiUrl}/meals/${mealId}/entries/${foodId}`);
   }
 
-  updateMealEntry(mealId: number, foodId: number, quantity: number, unit: string): Observable<void> {
-    return this.http.put<void>(`${this.apiUrl}/meals/${mealId}/entries/${foodId}`, {
+  updateMealEntry(mealId: number, entryId: number, quantity: number, unit: string): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/meals/${mealId}/entries/${entryId}`, {
       quantity,
       unit: unit
     });

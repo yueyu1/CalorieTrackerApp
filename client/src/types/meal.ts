@@ -15,6 +15,7 @@ export type Meal = {
 }
 
 export type MealItem = {
+  id: number;
   mealId: number;
   foodId: number;
   name: string;

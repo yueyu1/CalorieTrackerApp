@@ -5,6 +5,7 @@ namespace API.Entities;
 
 public class MealFood
 {
+    public int Id { get; set; }
     public double Quantity { get; set; }
     public string Unit { get; set; } = "g";
     public DateTime CreatedAt { get; set; }

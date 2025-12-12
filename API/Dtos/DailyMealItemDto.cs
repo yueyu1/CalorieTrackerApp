@@ -4,6 +4,7 @@ namespace API.Dtos;
 
 public class DailyMealItemDto
 {
+    public int Id { get; set; }
     public int MealId { get; set; }
     public int FoodId { get; set; }
 

@@ -270,7 +270,7 @@ export class DailyLog implements OnInit {
       if (!result) return;
 
       const { quantity, unitCode } = result;
-      this.mealsService.updateMealEntry(item.mealId, item.foodId, quantity, unitCode).pipe(
+      this.mealsService.updateMealEntry(item.mealId, item.id, quantity, unitCode).pipe(
         tap(() => {
           this.mealsService.loadDailyMeals(this.today);
           const displayName = item.brand
@@ -299,7 +299,7 @@ export class DailyLog implements OnInit {
     ref.afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
 
-      this.mealsService.deleteMealEntry(meal.id, item.foodId).pipe(
+      this.mealsService.deleteMealEntry(meal.id, item.id).pipe(
         tap(() => {
           this.mealsService.loadDailyMeals(meal.mealDate);
           this.toast.success(`${displayName} removed from ${meal.mealType}.`);
