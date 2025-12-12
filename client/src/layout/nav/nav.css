@@ -1,5 +1,5 @@
-/* Logged-in header can feel more "app-like" */
 .public-header {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -122,4 +122,46 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+/* --- Top loading bar --- */
+
+.navbar {
+  position: relative;
+}
+
+.nav-loading-bar {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+
+  height: 3px;
+  width: 100%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #4f46e5,
+    transparent
+  );
+
+  background-size: 200% 100%;
+  animation: nav-loading 1.2s ease-in-out infinite;
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 120ms ease;
+}
+
+.nav-loading-bar.active {
+  opacity: 1;
+}
+
+@keyframes nav-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }

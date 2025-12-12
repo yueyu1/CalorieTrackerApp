@@ -7,6 +7,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { UpperCasePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
+import { LoadingService } from '../../core/services/loading-service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-nav',
@@ -18,6 +20,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatButtonModule,
     MatDividerModule,
     MatMenuModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './nav.html',
   styleUrl: './nav.css',
@@ -25,6 +28,7 @@ import { MatButtonModule } from '@angular/material/button';
 export class Nav {
   protected accountService = inject(AccountService);
   private router = inject(Router);
+  protected loading = inject(LoadingService);
 
   logout(): void {
     this.accountService.logout();

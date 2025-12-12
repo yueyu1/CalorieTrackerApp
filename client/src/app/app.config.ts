@@ -6,6 +6,7 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from '../core/interceptors/jwt-interceptor';
 import { errorInterceptor } from '../core/interceptors/error-interceptor';
 import { provideNativeDateAdapter } from '@angular/material/core';
+import { loadingInterceptor } from '../core/interceptors/loading-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,7 +14,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideNativeDateAdapter(),
     provideHttpClient(
-      withInterceptors([jwtInterceptor, errorInterceptor])
+      withInterceptors([jwtInterceptor, loadingInterceptor, errorInterceptor])
     )
   ]
 };

@@ -269,39 +269,33 @@ export class AddFoodDialog implements OnInit {
 
   private loadFoods(): void {
     const search = (this.searchCtrl.value ?? '').trim();
-
     const scope =
       this.activeFilter === 'myFoods' ? 'Mine' :
         'All';
-
     const sort =
       this.activeFilter === 'recent' ? 'RecentUsed' :
         'Relevance';
-
     const brandsOnly = this.activeFilter === 'brands';
-
     this.loading.set(true);
 
-    setTimeout(() => {
-      this.foodService.getFoods({
-        scope,
-        search,
-        sort,
-        take: 50,
-        brandsOnly
-      }).subscribe({
-        next: (foods) => {
-          this.foods.set(foods);
-          this.buildFormFromFoods();
-          this.loading.set(false);
-        },
-        error: () => {
-          this.foods.set([]);
-          this.buildFormFromFoods();
-          this.loading.set(false);
-        }
-      });
-    }, 1000);
+    this.foodService.getFoods({
+      scope,
+      search,
+      sort,
+      take: 50,
+      brandsOnly
+    }).subscribe({
+      next: (foods) => {
+        this.foods.set(foods);
+        this.buildFormFromFoods();
+        this.loading.set(false);
+      },
+      error: () => {
+        this.foods.set([]);
+        this.buildFormFromFoods();
+        this.loading.set(false);
+      }
+    });
   }
 
   /**

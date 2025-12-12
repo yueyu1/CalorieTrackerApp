@@ -91,6 +91,11 @@
         </button>
       </mat-menu>
     }
-
   </div>
+
+  <!-- Thin loading bar -->
+  <div
+    class="nav-loading-bar"
+    [class.active]="loading.isLoading()"
+  ></div>
 </mat-toolbar>
