@@ -111,7 +111,26 @@ namespace API.Controllers
                 Protein = foodDto.Protein,
                 Fat = foodDto.Fat,
                 CreatedAt = DateTime.UtcNow,
-                UserId = currentUserId
+                UserId = currentUserId,
+                BaseQuantity = foodDto.ServingAmount,
+                BaseUnit = foodDto.ServingUnit,
+                Units =
+                [
+                    new()
+                    {
+                        Code = "serving",
+                        Label = $"{foodDto.ServingDescription} ({foodDto.ServingAmount} {foodDto.ServingUnit})",
+                        UnitType = UnitType.Custom,
+                        ConversionFactor = foodDto.ServingAmount
+                    },
+                    new()
+                    {
+                        Code = foodDto.ServingUnit,
+                        Label = foodDto.ServingUnit,
+                        UnitType = UnitType.Custom,
+                        ConversionFactor = 1
+                    }
+                ]
             };
 
             _db.Foods.Add(food);

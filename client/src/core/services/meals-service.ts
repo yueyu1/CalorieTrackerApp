@@ -53,7 +53,6 @@ export class MealsService {
    * After success, it automatically reloads meals for the last loaded date.
    */
   addFoodToMeal(mealId: number, mealType: MealType, mealDate: string, items: MealEntryItem[]) {
-    console.log('Adding food to meal', mealId, mealType, mealDate, items);
     // CASE 1: real meal
     if (mealId > 0) {
       const entryRequest = items.map((item: MealEntryItem) =>

@@ -9,6 +9,7 @@ import { tap } from 'rxjs';
 import { EditAmountDialog } from './edit-amount-dialog/edit-amount-dialog';
 import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
 import { ToastService } from '../../core/services/toast-service';
+import { CustomFoodDialog } from './custom-food-dialog/custom-food-dialog';
 
 @Component({
   selector: 'app-daily-log',
@@ -171,7 +172,14 @@ export class DailyLog implements OnInit {
     });
 
     ref.afterClosed().subscribe(result => {
-      if (!result || !result.items?.length) return;
+      if (!result) return;
+
+      if (result.action === 'createCustomFood') {
+        this.openCustomFoodDialog(meal.id, meal.mealType, meal.mealDate);
+        return;
+      }
+
+      if (!result.items || result.items.length === 0) return;
 
       const { mealId, mealType, mealDate, items } = result;
 
@@ -235,6 +243,30 @@ export class DailyLog implements OnInit {
         tap(() => {
           this.mealsService.loadDailyMeals(meal.mealDate);
           this.toast.success(`${displayName} removed from ${meal.mealType}.`);
+        })
+      ).subscribe();
+    });
+  }
+
+  private openCustomFoodDialog(mealId: number, mealType: string, mealDate: string): void {
+    const ref = this.dialog.open(CustomFoodDialog, {
+      width: '800px',
+      maxWidth: '95vw',
+      data: {
+        mealTypeLabel: mealType,
+      }
+    });
+
+    ref.afterClosed().subscribe(result => {
+      if (!result || result.foodId == null) return;
+      this.mealsService.addFoodToMeal(mealId, mealType as MealType, mealDate, [{
+        foodId: result.foodId,
+        quantity: 1,
+        unit: result.unit,
+      }]).pipe(
+        tap(() => {
+          this.mealsService.loadDailyMeals(mealDate);
+          this.toast.success(`Custom food added to ${mealType}.`);
         })
       ).subscribe();
     });

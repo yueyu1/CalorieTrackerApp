@@ -141,7 +141,7 @@
 }
 
 .summary-card:nth-child(4):hover {
-  box-shadow: 0 14px 36px rgba(248, 113, 113, 0.18);
+  box-shadow: 0 14px 36px rgba(245, 158, 11, 0.22);
 }
 
 .summary-card-header {
@@ -260,13 +260,15 @@
 }
 
 .protein-fill {
-  background-color: #6366f1; /* indigo */
+  background-color: #4338ca;
 }
+
 .carbs-fill {
-  background-color: #0ea5e9; /* sky blue */
+  background-color: #1d4ed8;
 }
+
 .fat-fill {
-  background-color: #f87171; /* light red */
+  background-color: #b45309;
 }
 
 .summary-card--calories .summary-icon-badge {
@@ -285,16 +287,20 @@
 }
 
 .summary-card--fat .summary-icon-badge {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: #fef3c7;
+  color: #b45309;
+}
+
+.summary-card--protein .summary-percent {
+  color: #4338ca;
 }
 
 .summary-card--carbs .summary-percent {
-  color: #0284c7; /* slightly deeper blue */
+  color: #1d4ed8;
 }
 
 .summary-card--fat .summary-percent {
-  color: #dc2626; /* clearer red */
+  color: #b45309;
 }
 
 /* Meals */

@@ -239,6 +239,20 @@ export class AddFoodDialog implements OnInit {
   }
 
   /**
+   * Close this dialog with a special action so the caller
+   * can open a dedicated "Create custom food" flow.
+   */
+  openCustomFood(): void {
+    this.dialogRef.close({
+      action: 'createCustomFood',
+      mealId: this.data?.mealId,
+      mealType: this.data?.mealType,
+      mealDate: this.data?.mealDate,
+    });
+  }
+
+
+  /**
    * Build payload for the caller.
    * Send:
    *   quantity: user-entered value

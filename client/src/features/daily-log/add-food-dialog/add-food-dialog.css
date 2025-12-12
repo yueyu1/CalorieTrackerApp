@@ -259,3 +259,54 @@
 :host ::ng-deep .afd-unit-select .mat-mdc-select-value-text {
   font-size: 14px !important;   /* or 15px if you prefer */
 }
+
+/* FILTER ROW (chips + custom food button) ---------------------------- */
+
+.afd-filters-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  gap: 8px;
+}
+
+.afd-chips {
+  flex: 1 1 auto;
+}
+
+/* Custom food CTA button */
+.afd-custom-food-btn {
+  flex-shrink: 0;
+  height: 36px;
+  border-radius: 999px;
+  padding-inline: 14px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+
+  /* tonal feel (works great with stroked) */
+  background: rgba(37, 99, 235, 0.08);
+  border-color: rgba(37, 99, 235, 0.35);
+
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+  transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
+}
+
+.afd-custom-food-btn .mat-icon {
+  font-size: 18px;
+  height: 18px;
+  width: 18px;
+  margin-right: 4px;
+}
+
+.afd-custom-food-btn:hover {
+  background: rgba(37, 99, 235, 0.12);
+  box-shadow: 0 6px 14px -10px rgba(0, 0, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.afd-custom-food-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px -8px rgba(0, 0, 0, 0.35);
+}

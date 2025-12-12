@@ -6,5 +6,6 @@ public enum UnitType
 {
     Weight = 1, // g, oz
     Volume = 2, // ml, fl oz, cup
-    Piece = 3 // 1 piece, 1 slice, etc.
+    Piece = 3, // 1 piece, 1 slice, etc.
+    Custom = 99 // user-defined serving sizes
 }

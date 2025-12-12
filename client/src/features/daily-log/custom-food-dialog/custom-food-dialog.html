@@ -1,0 +1,153 @@
+<div class="cfd-container">
+  <!-- HEADER ------------------------------------------------------- -->
+  <header class="cfd-header">
+    <div class="cfd-header-text">
+      <h2 class="cfd-title">Create custom food</h2>
+      <p class="cfd-subtitle">
+        Custom foods are saved to <strong>My Foods</strong> and can be reused in any meal.
+      </p>
+    </div>
+
+    <button mat-icon-button type="button" (click)="close()" aria-label="Close">
+      <mat-icon fontIcon="close" />
+    </button>
+  </header>
+
+  <!-- FORM --------------------------------------------------------- -->
+  <form class="cfd-form" [formGroup]="form" (ngSubmit)="submit()">
+
+    <!-- BASIC INFO CARD -->
+    <section class="cfd-card">
+      <div class="cfd-card-header">
+        <span class="cfd-card-title">Basic info</span>
+      </div>
+
+      <div class="cfd-card-body cfd-two-column">
+        <mat-form-field appearance="outline">
+          <mat-label>Food name</mat-label>
+          <input matInput formControlName="name" placeholder="e.g. Homemade oatmeal" />
+          @if (form.get('name')?.hasError('required')) {
+            <mat-error>
+              Name is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Brand (optional)</mat-label>
+          <input matInput formControlName="brand" placeholder="e.g. Starbucks, Costco" />
+        </mat-form-field>
+      </div>
+    </section>
+
+    <!-- SERVING SIZE CARD -->
+    <section class="cfd-card">
+      <div class="cfd-card-header">
+        <span class="cfd-card-title">Serving size</span>
+      </div>
+
+      <div class="cfd-card-body cfd-serving-row">
+        <!-- Description (LEFT) -->
+        <mat-form-field appearance="outline" class="cfd-serving-desc">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="servingDescription" placeholder="e.g. 1 cup, 1 serving, 1 piece" />
+          @if (form.get('servingDescription')?.hasError('required')) {
+            <mat-error>
+              Description is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Amount -->
+        <mat-form-field appearance="outline" class="cfd-serving-amount">
+          <mat-label>Amount</mat-label>
+          <input matInput type="number" min="0.1" step="0.1" formControlName="servingAmount" />
+          @if (form.get('servingAmount')?.hasError('required')) {
+            <mat-error>
+              Amount is required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <!-- Unit -->
+        <mat-form-field appearance="outline" class="cfd-serving-unit">
+          <mat-label>Unit</mat-label>
+          <mat-select formControlName="servingUnit">
+            <mat-option value="g">g</mat-option>
+            <mat-option value="oz">oz</mat-option>
+            <mat-option value="ml">ml</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <p class="cfd-helper">
+        Nutrition below should be <strong>per this serving</strong>.
+        Example: <strong>1 cup</strong> (240 ml) or <strong>1 piece</strong> (100 g).
+      </p>
+    </section>
+
+    <!-- NUTRITION CARD -->
+    <section class="cfd-card">
+      <div class="cfd-card-header">
+        <span class="cfd-card-title">Nutrition per serving</span>
+      </div>
+
+      <div class="cfd-card-body cfd-macros-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Calories</mat-label>
+          <input matInput type="number" min="0" formControlName="calories" />
+          <span matSuffix class="cfd-suffix">kcal</span>
+          @if (form.get('calories')?.hasError('required')) {
+            <mat-error>
+              Calories required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Protein</mat-label>
+          <input matInput type="number" min="0" step="0.1" formControlName="protein" />
+          <span matSuffix class="cfd-suffix">g</span>
+          @if (form.get('protein')?.hasError('required')) {
+            <mat-error>
+              Protein required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Carbs</mat-label>
+          <input matInput type="number" min="0" step="0.1" formControlName="carbs" />
+          <span matSuffix class="cfd-suffix">g</span>
+          @if (form.get('carbs')?.hasError('required')) {
+            <mat-error>
+              Carbs required
+            </mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fat</mat-label>
+          <input matInput type="number" min="0" step="0.1" formControlName="fat" />
+          <span matSuffix class="cfd-suffix">g</span>
+          @if (form.get('fat')?.hasError('required')) {
+            <mat-error>
+              Fat required
+            </mat-error>
+          }
+        </mat-form-field>
+      </div>
+    </section>
+
+    <!-- ACTIONS -->
+    <footer class="cfd-actions">
+      <button mat-button type="button" (click)="close()">
+        Cancel
+      </button>
+
+      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isSaving()">
+        {{ primaryButtonLabel() }}
+      </button>
+    </footer>
+  </form>
+</div>

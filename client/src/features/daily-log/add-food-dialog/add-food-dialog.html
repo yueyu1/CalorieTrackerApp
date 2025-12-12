@@ -15,90 +15,98 @@
     <input matInput placeholder="Search food" formControlName="search" />
   </mat-form-field>
 
-  <!-- FILTER CHIPS -->
-  <mat-chip-listbox class="afd-chips" aria-label="Food filters">
-    <mat-chip-option [selected]="activeFilter === 'all'" (click)="setFilter('all')">
-      All
-    </mat-chip-option>
-    <mat-chip-option [selected]="activeFilter === 'myFoods'" (click)="setFilter('myFoods')">
-      My Foods
-    </mat-chip-option>
-    <mat-chip-option [selected]="activeFilter === 'recent'" (click)="setFilter('recent')">
-      Recent
-    </mat-chip-option>
-    <mat-chip-option [selected]="activeFilter === 'brands'" (click)="setFilter('brands')">
-      Brands
-    </mat-chip-option>
-  </mat-chip-listbox>
+  <!-- FILTER CHIPS + CUSTOM FOOD CTA -->
+  <div class="afd-filters-row">
+    <mat-chip-listbox class="afd-chips" aria-label="Food filters">
+      <mat-chip-option [selected]="activeFilter === 'all'" (click)="setFilter('all')">
+        All
+      </mat-chip-option>
+      <mat-chip-option [selected]="activeFilter === 'myFoods'" (click)="setFilter('myFoods')">
+        My Foods
+      </mat-chip-option>
+      <mat-chip-option [selected]="activeFilter === 'recent'" (click)="setFilter('recent')">
+        Recent
+      </mat-chip-option>
+      <mat-chip-option [selected]="activeFilter === 'brands'" (click)="setFilter('brands')">
+        Brands
+      </mat-chip-option>
+    </mat-chip-listbox>
+
+    <button mat-button type="button" class="afd-custom-food-btn" color="primary" (click)="openCustomFood()">
+      <mat-icon fontIcon="add" />
+      Custom food
+    </button>
+  </div>
 
   <!-- FOOD LIST -->
   <div class="afd-list" formArrayName="foods">
     @if (!this.loading()) {
-      @for (item of foods(); track item.id) {
-        <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected(item.id, $index)">
-          <!-- LEFT -->
-          <div class="afd-left">
-            <div class="afd-name">{{ item.name }}</div>
-            <div class="afd-brand">{{ item.brand }}</div>
-            <div class="afd-macros">
-              {{ getRowCalories($index) | number: '1.0-0' }} kcal ·
-              Protein {{ getRowProtein($index) | number: '1.2-2' }} g ·
-              Carbs {{ getRowCarbs($index) | number: '1.2-2' }} g ·
-              Fat {{ getRowFat($index) | number: '1.2-2' }} g
-            </div>
-          </div>
-
-          <!-- RIGHT: quantity + unit -->
-          <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
-            <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
-              <mat-icon>remove</mat-icon>
-            </button>
-
-            <mat-form-field appearance="outline" class="afd-qty-input">
-              <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()" (blur)="onQtyBlur($index)"/>
-            </mat-form-field>
-
-            <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
-              <mat-icon>add</mat-icon>
-            </button>
-
-            <mat-form-field appearance="outline" class="afd-unit-select">
-              <mat-select formControlName="unitId" (click)="onUnitClick($event)">
-                @for (unit of item.units; track unit.id) {
-                  <mat-option [value]="unit.id">
-                    {{ unit.label }}
-                  </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <!-- CHECKMARK -->
-          @if (isSelected(item.id)) {
-            <div class="afd-check">
-              <mat-icon>check_circle</mat-icon>
-            </div>
-          }
+    @for (item of foods(); track item.id) {
+    <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected(item.id, $index)">
+      <!-- LEFT -->
+      <div class="afd-left">
+        <div class="afd-name">{{ item.name }}</div>
+        <div class="afd-brand">{{ item.brand }}</div>
+        <div class="afd-macros">
+          {{ getRowCalories($index) | number: '1.0-0' }} kcal ·
+          Protein {{ getRowProtein($index) | number: '1.2-2' }} g ·
+          Carbs {{ getRowCarbs($index) | number: '1.2-2' }} g ·
+          Fat {{ getRowFat($index) | number: '1.2-2' }} g
         </div>
+      </div>
+
+      <!-- RIGHT: quantity + unit -->
+      <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
+        <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <mat-form-field appearance="outline" class="afd-qty-input">
+          <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
+            (blur)="onQtyBlur($index)" />
+        </mat-form-field>
+
+        <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
+          <mat-icon>add</mat-icon>
+        </button>
+
+        <mat-form-field appearance="outline" class="afd-unit-select">
+          <mat-select formControlName="unitId" (click)="onUnitClick($event)">
+            @for (unit of item.units; track unit.id) {
+            <mat-option [value]="unit.id">
+              {{ unit.label }}
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- CHECKMARK -->
+      @if (isSelected(item.id)) {
+      <div class="afd-check">
+        <mat-icon>check_circle</mat-icon>
+      </div>
       }
+    </div>
+    }
     }
     @else {
-      <!-- LOADING SKELETON -->
-      <div class="afd-list afd-skeleton-list">
-        @for (_ of [1, 2, 3, 4]; track _) {
-        <div class="afd-skeleton-row">
-          <div class="afd-skeleton-left">
-            <div class="afd-skeleton-line afd-skeleton-line-lg"></div>
-            <div class="afd-skeleton-line afd-skeleton-line-sm"></div>
-            <div class="afd-skeleton-line afd-skeleton-line-sm"></div>
-          </div>
-          <div class="afd-skeleton-right">
-            <div class="afd-skeleton-pill"></div>
-            <div class="afd-skeleton-pill"></div>
-          </div>
+    <!-- LOADING SKELETON -->
+    <div class="afd-list afd-skeleton-list">
+      @for (_ of [1, 2, 3, 4]; track _) {
+      <div class="afd-skeleton-row">
+        <div class="afd-skeleton-left">
+          <div class="afd-skeleton-line afd-skeleton-line-lg"></div>
+          <div class="afd-skeleton-line afd-skeleton-line-sm"></div>
+          <div class="afd-skeleton-line afd-skeleton-line-sm"></div>
         </div>
-        }
+        <div class="afd-skeleton-right">
+          <div class="afd-skeleton-pill"></div>
+          <div class="afd-skeleton-pill"></div>
+        </div>
       </div>
+      }
+    </div>
     }
   </div>
 
