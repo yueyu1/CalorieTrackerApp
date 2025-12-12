@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { MATERIAL_IMPORTS } from '../../shared/material'; 
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-not-found',
-  imports: [CommonModule, RouterModule, ...MATERIAL_IMPORTS],
+  imports: [RouterModule, MatIconModule, MatButtonModule],
   templateUrl: './not-found.html',
   styleUrl: './not-found.css',
 })

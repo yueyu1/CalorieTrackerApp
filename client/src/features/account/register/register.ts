@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
+import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
-import { MATERIAL_IMPORTS } from '../../../shared/material';
 import { AccountService } from '../../../core/services/account-service';
+import { MatButtonModule } from '@angular/material/button';
 
 function confirmPasswordValidator(matchTo: string): ValidatorFn {
   return (control: any): ValidationErrors | null => {
@@ -29,8 +29,8 @@ function confirmPasswordValidator(matchTo: string): ValidatorFn {
     RouterModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInput,
-    MATERIAL_IMPORTS
+    MatInputModule,
+    MatButtonModule
   ],
   templateUrl: './register.html',
   styleUrl: './register.css',

@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { MATERIAL_IMPORTS } from '../../shared/material';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [MATERIAL_IMPORTS],
+  imports: [MatCardModule, MatIconModule],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })

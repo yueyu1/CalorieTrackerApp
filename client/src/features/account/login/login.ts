@@ -1,7 +1,6 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { LayoutService } from '../../../core/services/layout-service';
-import { MATERIAL_IMPORTS } from '../../../shared/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,8 +15,7 @@ import { ToastService } from '../../../core/services/toast-service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
-    ...MATERIAL_IMPORTS,
+    MatButtonModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',

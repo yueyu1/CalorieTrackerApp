@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { MATERIAL_IMPORTS } from '../../shared/material';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-test-errors',
-  imports: [...MATERIAL_IMPORTS],
+  imports: [MatButtonModule],
   templateUrl: './test-errors.html',
   styleUrl: './test-errors.css',
 })
