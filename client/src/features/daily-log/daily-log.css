@@ -33,6 +33,7 @@
 .header-right {
   display: flex;
   align-items: center;
+  gap: 12px;
 }
 
 /* Date pill (Material button) */
@@ -48,14 +49,12 @@
   transition: box-shadow 0.16s ease, transform 0.16s ease;
 }
 
-/* Hover effect (consistent with your card style) */
 .date-pill:hover {
   background-color: #f9fafb;
   transform: translateY(-1px);
   box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
 }
 
-/* Left icon */
 .date-pill-icon {
   font-size: 20px;
   width: 20px;
@@ -63,23 +62,46 @@
   color: #4f46e5;
 }
 
-/* Text block with vertical layout */
 .date-pill-text-block {
+  position: relative;
   display: flex;
   flex-direction: column;
   line-height: 1.1;
+  min-height: 32px;
+  justify-content: center;
 }
 
-/* TODAY tag */
+.date-pill-hint {
+  position: absolute;
+  top: -14px;
+  left: 0;
+
+  font-size: 11px;
+  color: #9ca3af;
+
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 120ms ease, transform 120ms ease;
+
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.date-pill:hover .date-pill-hint,
+.date-pill:focus-visible .date-pill-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .date-pill-tag {
   font-size: 11px;
   font-weight: 600;
   color: #9ca3af;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+  height: 14px;
 }
 
-/* Actual date */
 .date-pill-date {
   font-size: 15px;
   font-weight: 700;
@@ -87,7 +109,6 @@
   white-space: nowrap;
 }
 
-/* Chevron */
 .date-pill-chevron {
   font-size: 18px;
   width: 18px;
@@ -95,10 +116,33 @@
   color: #9ca3af;
 }
 
+.date-pill-hidden-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.today-jump {
+  border-radius: 999px;
+  padding: 10px 16px;
+  border-color: #e5e7eb;
+  background: #ffffff;
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+  transition: box-shadow 0.16s ease, transform 0.16s ease, background-color 0.16s ease;
+}
+
+.today-jump:hover {
+  background-color: #f9fafb;
+  transform: translateY(-1px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.12);
+}
+
 /* Summary row wrapper (sticky) */
 .summary-wrapper {
   position: sticky;
-  top: 72px; /* adjust to account for your navbar height */
+  top: 72px;
   z-index: 5;
   padding-bottom: 16px;
   background: linear-gradient(

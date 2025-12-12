@@ -7,14 +7,31 @@
     </div>
 
     <div class="header-right">
-      <button mat-stroked-button class="date-pill" type="button">
+      @if (!isToday()) {
+      <button mat-stroked-button type="button" class="today-jump" (click)="goToday()" aria-label="Jump to today">
+        Today
+      </button>
+      }
+
+      <!-- TODAY pill (opens date picker) -->
+      <button mat-stroked-button class="date-pill" type="button" (click)="openDatePicker(picker)">
         <mat-icon class="date-pill-icon" fontIcon="event"></mat-icon>
         <div class="date-pill-text-block">
+          @if (isToday()) {
           <span class="date-pill-tag">TODAY</span>
-          <span class="date-pill-date">{{ today | date:'EEE, MMM d' }}</span>
+          }
+          <span class="date-pill-date">
+            {{ selectedDate() | date:'EEE, MMM d' }}
+          </span>
+          <span class="date-pill-hint">Pick a date</span>
         </div>
         <mat-icon iconPositionEnd class="date-pill-chevron" fontIcon="chevron_right"></mat-icon>
       </button>
+
+      <!-- Hidden input that the datepicker attaches to -->
+      <input class="date-pill-hidden-input" matInput [matDatepicker]="picker" [value]="selectedDate()"
+        (dateChange)="onDatePicked($event.value)" readonly />
+      <mat-datepicker #picker></mat-datepicker>
     </div>
   </div>
 
@@ -168,12 +185,10 @@
         <div class="meal-header-main">
           <div class="meal-title-row">
             <!-- Icon bubble -->
-            <div class="meal-icon" [ngClass]="{
-                  'meal-icon--breakfast': meal.mealType === 'Breakfast',
-                  'meal-icon--lunch': meal.mealType === 'Lunch',
-                  'meal-icon--dinner': meal.mealType === 'Dinner',
-                  'meal-icon--snacks': meal.mealType === 'Snacks'
-                }">
+            <div class="meal-icon" [class.meal-icon--breakfast]="meal.mealType === 'Breakfast'"
+              [class.meal-icon--lunch]="meal.mealType === 'Lunch'"
+              [class.meal-icon--dinner]="meal.mealType === 'Dinner'"
+              [class.meal-icon--snacks]="meal.mealType === 'Snacks'">
               @switch (meal.mealType) {
               @case ('Breakfast') { <mat-icon fontIcon="free_breakfast"></mat-icon> }
               @case ('Lunch') { <mat-icon fontIcon="lunch_dining"></mat-icon> }

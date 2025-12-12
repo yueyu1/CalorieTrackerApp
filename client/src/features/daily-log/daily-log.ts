@@ -1,7 +1,6 @@
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Meal, MealItem, MealType } from '../../types/meal';
-import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
-import { MATERIAL_IMPORTS } from '../../shared/material';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AddFoodDialog } from './add-food-dialog/add-food-dialog';
 import { MealsService } from '../../core/services/meals-service';
@@ -10,26 +9,87 @@ import { EditAmountDialog } from './edit-amount-dialog/edit-amount-dialog';
 import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
 import { ToastService } from '../../core/services/toast-service';
 import { CustomFoodDialog } from './custom-food-dialog/custom-food-dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatButtonModule } from '@angular/material/button';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-daily-log',
-  imports: [CommonModule, DatePipe, DecimalPipe, MATERIAL_IMPORTS],
+  imports: [
+    DatePipe,
+    DecimalPipe,
+
+    MatCardModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatDividerModule,
+    MatIconModule,
+    MatDatepickerModule
+  ],
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.css',
 })
 export class DailyLog implements OnInit {
   private mealsService = inject(MealsService);
-  private readonly expandedMealTypes = signal<MealType[]>([]);
+  private expandedMealTypes = signal<MealType[]>([]);
   protected today = new Date().toLocaleDateString('en-CA');
   protected meals = this.mealsService.meals;
   private dialog = inject(MatDialog);
   private toast = inject(ToastService);
-
-  // ---- Lifecycle ----
+  protected selectedDate = signal<Date>(new Date());
+  protected datePickerOpen = signal(false);
 
   ngOnInit(): void {
-    this.mealsService.loadDailyMeals(this.today);
+    this.loadForDate(this.selectedDate());
   }
+
+  // ---- Date picker helpers ----
+
+  openDatePicker(picker: MatDatepicker<Date>): void {
+    picker.open();
+    this.datePickerOpen.set(true);
+  }
+
+  onDatePicked(date: Date | null): void {
+    if (!date) return;
+    this.selectedDate.set(date);
+    this.loadForDate(date);
+  }
+
+  goToday(): void {
+    const d = new Date();
+    this.selectedDate.set(d);
+    this.loadForDate(d);
+  }
+
+  private loadForDate(d: Date): void {
+    this.mealsService.loadDailyMeals(this.toYmd(d));
+  }
+
+  private toYmd(d: Date): string {
+    // local date -> YYYY-MM-DD (avoids UTC shift issues from toISOString())
+    return d.toLocaleDateString('en-CA');
+  }
+
+  protected yesterdayDate = computed(() => {
+    const d = new Date(this.selectedDate());
+    d.setDate(d.getDate() - 1);
+    return d;
+  });
+
+  protected isToday = computed(() => {
+    const today = new Date();
+    const selected = this.selectedDate();
+
+    return (
+      today.getFullYear() === selected.getFullYear() &&
+      today.getMonth() === selected.getMonth() &&
+      today.getDate() === selected.getDate()
+    );
+  });
 
   // ---- Daily totals ----
 

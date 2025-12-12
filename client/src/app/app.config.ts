@@ -5,11 +5,13 @@ import { routes } from './app.routes';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { jwtInterceptor } from '../core/interceptors/jwt-interceptor';
 import { errorInterceptor } from '../core/interceptors/error-interceptor';
+import { provideNativeDateAdapter } from '@angular/material/core';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
+    provideNativeDateAdapter(),
     provideHttpClient(
       withInterceptors([jwtInterceptor, errorInterceptor])
     )
