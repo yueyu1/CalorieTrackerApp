@@ -265,8 +265,8 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpPut("{mealId}/entries/{foodId}")]
-        public async Task<IActionResult> UpdateMealEntry(int mealId, int foodId, UpdateMealEntryDto dto)
+        [HttpPut("{mealId}/entries/{entryId}")]
+        public async Task<IActionResult> UpdateMealEntry(int mealId, int entryId, UpdateMealEntryDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
@@ -277,7 +277,7 @@ namespace API.Controllers
             if (meal == null) return NotFound();
 
             var mealFood = await db.MealFoods
-                .Where(mf => mf.MealId == mealId && mf.FoodId == foodId)
+                .Where(mf => mf.MealId == mealId && mf.Id == entryId)
                 .FirstOrDefaultAsync();
 
             if (mealFood == null) return NotFound();
@@ -291,8 +291,8 @@ namespace API.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{mealId}/entries/{foodId}")]
-        public async Task<IActionResult> DeleteMealEntry(int mealId, int foodId)
+        [HttpDelete("{mealId}/entries/{entryId}")]
+        public async Task<IActionResult> DeleteMealEntry(int mealId, int entryId)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
@@ -303,12 +303,49 @@ namespace API.Controllers
             if (meal == null) return NotFound();
 
             var mealFood = await db.MealFoods
-                .Where(mf => mf.MealId == mealId && mf.FoodId == foodId)
+                .Where(mf => mf.MealId == mealId && mf.Id == entryId)
                 .FirstOrDefaultAsync();
 
             if (mealFood == null) return NotFound();
 
             db.MealFoods.Remove(mealFood);
+            await db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPost("{targetMealId}/copy-entries")]
+        public async Task<IActionResult> CopyMealEntries(int targetMealId, CopyMealEntriesDto dto)
+        {
+            var currentUserId = HttpContext.GetCurrentUserId();
+
+            var targetMeal = await db.Meals
+                .Where(m => m.UserId == currentUserId && m.Id == targetMealId)
+                .FirstOrDefaultAsync();
+
+            if (targetMeal == null) return NotFound();
+
+            var sourceMeal = await db.Meals
+                .Where(m => m.UserId == currentUserId && m.Id == dto.SourceMealId)
+                .Include(m => m.MealFoods)
+                .FirstOrDefaultAsync();
+
+            if (sourceMeal == null) return NotFound();
+
+            foreach (var entry in sourceMeal.MealFoods)
+            {
+                var newEntry = new MealFood
+                {
+                    MealId = targetMealId,
+                    FoodId = entry.FoodId,
+                    Quantity = entry.Quantity,
+                    Unit = entry.Unit,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                db.MealFoods.Add(newEntry);
+            }
+
             await db.SaveChangesAsync();
 
             return NoContent();
@@ -360,6 +397,7 @@ namespace API.Controllers
            
             return new DailyMealItemDto
             {
+                Id = mealFood.Id,
                 MealId = mealFood.MealId,
                 FoodId = mealFood.FoodId,
                 Name = food.Name,
