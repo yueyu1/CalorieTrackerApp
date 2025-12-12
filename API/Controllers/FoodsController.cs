@@ -15,50 +15,81 @@ namespace API.Controllers
         private readonly AppDbContext _db = db;
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<FoodDto>>> GetFoods(
-            [FromQuery] string scope = "all",
-            [FromQuery] string? q = null
-        )
+        public async Task<ActionResult<IEnumerable<FoodDto>>> GetFoods([FromQuery] FoodQuery query)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var foods = _db.Foods.Include(f => f.Units).AsQueryable();
+            // TO DO: implement pagination using skip and take
+            var take = Math.Clamp(query.Take, 1, FoodQuery.MaxTake);
 
-            scope = scope.ToLowerInvariant();
-            foods = scope switch
+            var foods = _db.Foods.AsNoTracking().AsQueryable();
+
+            // Apply scope filtering
+            foods = query.Scope switch
             {
-                "global" => foods
-                    .Where(f => f.UserId == null)
-                    .OrderBy(f => f.Name), // global foods alphabetically
-
-                "mine" => foods
-                    .Where(f => f.UserId == currentUserId)
-                    .OrderByDescending(f => f.CreatedAt), // my foods recent first
-
-                _ => foods // "all"
-                    .OrderByDescending(f => f.UserId == currentUserId) // my foods first
-                    .ThenByDescending(f => f.CreatedAt) // then my recent foods
-                    .ThenBy(f => f.Name) // then global alphabetically
+                FoodScope.Global => foods.Where(f => f.UserId == null),
+                FoodScope.Mine => foods.Where(f => f.UserId == currentUserId),
+                _ => foods // All
             };
 
-            if (!string.IsNullOrWhiteSpace(q))
+            // Apply brand filtering
+            if (query.BrandsOnly)
             {
-                var qLower = q.ToLowerInvariant().Trim();
-                foods = foods
-                    .Where(f =>
-                        f.Name.ToLower().Contains(qLower)) // filter by query
-                    .OrderByDescending(f =>
-                        f.Name.ToLower().StartsWith(qLower)) // prioritize starts with
-                    .ThenBy(f =>
-                        f.Name.ToLower().Contains(qLower)) // then contains
-                    .ThenByDescending(f =>
-                        f.UserId == currentUserId) // then my foods
-                    .ThenBy(f =>
-                        f.Name); // then alphabetically
+                foods = foods.Where(f => f.Brand != null && f.Brand.Trim() != "");
             }
 
-            var result = await foods
-                .Include(f => f.Units)
+            // Apply search filtering
+            var q = query.Search?.Trim();
+            var hasSearch = !string.IsNullOrWhiteSpace(q);
+            if (hasSearch)
+            {
+                var qLower = q!.ToLowerInvariant();
+                foods = foods.Where(f =>
+                    f.Name.ToLower().Contains(qLower) ||
+                    (f.Brand != null && f.Brand.ToLower().Contains(qLower)));
+            }
+
+            // Apply ordering
+            IOrderedQueryable<Food> ordered;
+
+            if (hasSearch && query.Sort == FoodSort.Relevance)
+            {
+                var qLower = q!.ToLowerInvariant();
+
+                // Relevance: starts-with first, then "Mine", then name.
+                ordered = foods
+                    .OrderByDescending(f => f.Name.StartsWith(q!))
+                    .ThenByDescending(f => f.UserId == currentUserId)
+                    .ThenBy(f => f.Name);
+            }
+
+            else
+            {
+                if (!hasSearch && query.BrandsOnly)
+                {
+                    ordered = foods
+                        .OrderBy(f => f.Brand)
+                        .ThenBy(f => f.Name);
+                }
+
+                else
+                {
+                    ordered = query.Scope switch
+                    {
+                        FoodScope.Global => foods.OrderBy(f => f.Name),
+                        FoodScope.Mine => foods
+                            .OrderByDescending(f => f.CreatedAt)
+                            .ThenBy(f => f.Name),
+                        _ => foods
+                            .OrderByDescending(f => f.UserId == currentUserId) // Mine first
+                            .ThenBy(f => f.CreatedAt) // then newest
+                            .ThenBy(f => f.Name)
+                    };
+                }
+            }
+
+            var result = await ordered
+                .Take(take)
                 .Select(f => new FoodDto
                 {
                     Id = f.Id,
@@ -93,13 +124,13 @@ namespace API.Controllers
             var food = await _db.Foods.FindAsync(id);
             if (food == null) return NotFound();
 
-            if (food.UserId != null && food.UserId != currentUserId)  return Forbid();
+            if (food.UserId != null && food.UserId != currentUserId) return Forbid();
 
             return Ok(food);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Food>> CreateFood(CreateFoodDto foodDto)
+        public async Task<ActionResult<FoodDto>> CreateFood(CreateFoodDto foodDto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
             var food = new Food
@@ -136,7 +167,7 @@ namespace API.Controllers
             _db.Foods.Add(food);
             await _db.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetFood), new { id = food.Id }, food);
+            return CreatedAtAction(nameof(GetFood), new { id = food.Id }, MapToFoodDto(food));
         }
 
         [HttpPut("{id}")]
@@ -197,6 +228,29 @@ namespace API.Controllers
 
             return Ok(new { Count = foods.Count });
         }
+
+        private FoodDto MapToFoodDto(Food food) => new()
+        {
+            Id = food.Id,
+            Name = food.Name,
+            Brand = food.Brand,
+            Calories = food.Calories,
+            Protein = food.Protein,
+            Carbs = food.Carbs,
+            Fat = food.Fat,
+            BaseQuantity = food.BaseQuantity,
+            BaseUnit = food.BaseUnit,
+            Units = food.Units
+                    .OrderBy(u => u.Id)
+                    .Select(u => new FoodUnitDto
+                    {
+                        Id = u.Id,
+                        Code = u.Code,
+                        Label = u.Label,
+                        ConversionFactor = u.ConversionFactor,
+                        UnitType = u.UnitType
+                    }).ToList()
+        };
 
         [HttpGet("debug")]
         public async Task<IActionResult> DebugFoodUnits()

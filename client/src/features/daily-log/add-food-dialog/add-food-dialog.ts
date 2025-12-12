@@ -1,6 +1,5 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, inject, OnInit, signal } from '@angular/core';
-import { MATERIAL_IMPORTS } from '../../../shared/material';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
@@ -10,20 +9,24 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MealType } from '../../../types/meal';
 import { FoodService } from '../../../core/services/food-service';
-import { tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Subscription, tap } from 'rxjs';
 import { Food } from '../../../types/food';
 import { MealEntryItem } from '../../../types/meal-entry-item';
 import { DecimalPipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-add-food-dialog',
   imports: [
     ReactiveFormsModule,
     DecimalPipe,
-    MATERIAL_IMPORTS,
+
     MatDialogModule,
     MatFormFieldModule,
     MatInputModule,
+    MatButtonModule,
+    MatIconModule,
     MatChipsModule,
     MatSelectModule,
     MatOptionModule],
@@ -33,6 +36,7 @@ import { DecimalPipe } from '@angular/common';
 export class AddFoodDialog implements OnInit {
   /* ---------- injections + signals ---------- */
   private foodService = inject(FoodService);
+  private searchSub: Subscription | undefined;
   protected loading = signal(true);
   protected form!: FormGroup;
   private fb = inject(FormBuilder);
@@ -42,6 +46,7 @@ export class AddFoodDialog implements OnInit {
   };
   protected selectedIds = new Set<number>();
   protected foods = signal<Food[]>([]);
+  protected activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
 
   /* ---------- constructor ---------- */
   constructor() {
@@ -60,34 +65,58 @@ export class AddFoodDialog implements OnInit {
     return this.form.get('foods') as FormArray;
   }
 
-  /* ---------- filtering ---------- */
-  activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
+  get showMyFoodsEmptyState(): boolean {
+    return (
+      !this.loading() &&
+      this.activeFilter === 'myFoods' &&
+      this.foods().length === 0
+    );
+  }
+
+  get myFoodsEmptyTitle(): string {
+    const q = (this.searchCtrl.value ?? '').trim();
+    return q
+      ? 'No matching custom foods'
+      : 'No custom foods yet';
+  }
+
+  get myFoodsEmptySubtitle(): string {
+    const q = (this.searchCtrl.value ?? '').trim();
+    return q
+      ? `You don't have any custom foods matching “${q}”.`
+      : 'Create your own foods to quickly add them to meals.';
+  }
+
 
   /* ---------- lifecycle + form setup ---------- */
   ngOnInit(): void {
-    setTimeout(() => {
-      this.foodService.getFoods().pipe(
-        tap(foods => {
-          this.foods.set(foods);
-          this.buildFormFromFoods();
-          this.loading.set(false);
-        })
-      ).subscribe();
-    }, 1000);
+    this.loadFoods();
+
+    // react to search changes
+    this.searchCtrl.valueChanges.pipe(
+      debounceTime(250),
+      distinctUntilChanged(),
+      tap(() => {
+        console.log('search changed, loading foods...');
+        this.loadFoods();
+      })
+    ).subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.searchSub?.unsubscribe();
   }
 
   private buildFormFromFoods(): void {
-    this.form = this.fb.group({
-      search: [''],
-      foods: this.fb.array(
-        this.foods().map((food) =>
-          this.fb.group({
-            quantity: [1],
-            unitId: [food.units[0].id ?? null],
-          })
-        )
-      ),
-    });
+    const foodsArray = this.fb.array(
+      this.foods().map((food) =>
+        this.fb.group({
+          quantity: [1],
+          unitId: [food.units[0].id ?? null],
+        })
+      )
+    )
+    this.form.setControl('foods', foodsArray);
   }
 
   /* ---------- per-row computed values ---------- */
@@ -235,7 +264,44 @@ export class AddFoodDialog implements OnInit {
 
   setFilter(filter: typeof this.activeFilter): void {
     this.activeFilter = filter;
-    // hook your filtering logic into visibleFoods if you want
+    this.loadFoods();
+  }
+
+  private loadFoods(): void {
+    const search = (this.searchCtrl.value ?? '').trim();
+
+    const scope =
+      this.activeFilter === 'myFoods' ? 'Mine' :
+        'All';
+
+    const sort =
+      this.activeFilter === 'recent' ? 'RecentUsed' :
+        'Relevance';
+
+    const brandsOnly = this.activeFilter === 'brands';
+
+    this.loading.set(true);
+
+    setTimeout(() => {
+      this.foodService.getFoods({
+        scope,
+        search,
+        sort,
+        take: 50,
+        brandsOnly
+      }).subscribe({
+        next: (foods) => {
+          this.foods.set(foods);
+          this.buildFormFromFoods();
+          this.loading.set(false);
+        },
+        error: () => {
+          this.foods.set([]);
+          this.buildFormFromFoods();
+          this.loading.set(false);
+        }
+      });
+    }, 1000);
   }
 
   /**

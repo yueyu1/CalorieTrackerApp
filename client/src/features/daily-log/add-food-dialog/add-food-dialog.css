@@ -280,7 +280,7 @@
   height: 36px;
   border-radius: 999px;
   padding-inline: 14px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0;
@@ -309,4 +309,29 @@
 .afd-custom-food-btn:active {
   transform: translateY(0);
   box-shadow: 0 2px 8px -8px rgba(0, 0, 0, 0.35);
+}
+
+.mat-mdc-chip.mat-mdc-chip-disabled.mat-mdc-chip-selected {
+  opacity: 1;
+  pointer-events: none;
+}
+
+.afd-empty {
+  border: 1px dashed #e5e7eb;
+  border-radius: 14px;
+  padding: 18px;
+  margin: 10px 6px 0 0;
+  background: #fafafa;
+}
+
+.afd-empty-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.afd-empty-sub {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
 }
