@@ -8,76 +8,72 @@
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
       <mat-form-field appearance="outline" class="auth-field">
         <mat-label>Email</mat-label>
-        <input
-          matInput
-          type="email"
-          formControlName="email"
-          placeholder="you@example.com"
-        />
+        <input matInput type="email" formControlName="email" placeholder="you@example.com" />
         @if (email?.hasError('required')) {
-            <mat-error>Email is required.</mat-error>
+        <mat-error>Email is required.</mat-error>
         }
         @if (email?.hasError('email') && !email?.hasError('required')) {
-            <mat-error>Please enter a valid email address.</mat-error>
+        <mat-error>Please enter a valid email address.</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="auth-field">
         <mat-label>Display name</mat-label>
-        <input
-          matInput
-          type="text"
-          formControlName="displayName"
-          placeholder="How should we call you?"
-        />
+        <input matInput type="text" formControlName="displayName" placeholder="How should we call you?" />
         @if (displayName?.hasError('required')) {
-            <mat-error>Display name is required.</mat-error>
+        <mat-error>Display name is required.</mat-error>
         }
         @if (displayName?.hasError('minlength') && !displayName?.hasError('required')) {
-            <mat-error>Display name must be at least 2 characters.</mat-error>
+        <mat-error>Display name must be at least 2 characters.</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="auth-field">
         <mat-label>Password</mat-label>
-        <input
-          matInput
-          type="password"
-          formControlName="password"
-        />
+
+        <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
+
+        <button mat-icon-button matSuffix type="button" (click)="togglePassword()" (mousedown)="$event.preventDefault()"
+          [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'">
+          <mat-icon>
+            {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+        </button>
+
         @if (password?.hasError('required')) {
-            <mat-error>Password is required.</mat-error>
+        <mat-error>Password is required.</mat-error>
         }
         @if (password?.hasError('minlength') && !password?.hasError('required')) {
-            <mat-error>Password must be at least 6 characters.</mat-error>
+        <mat-error>Password must be at least 6 characters.</mat-error>
         }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="auth-field">
         <mat-label>Confirm password</mat-label>
-        <input
-          matInput
-          type="password"
-          formControlName="confirmPassword"
-        />
-        @if (confirmPassword?.hasError('required')) {
-            <mat-error>Please confirm your password.</mat-error>
-        }
 
-        @if (confirmPassword?.hasError('passwordMismatch') && 
-          !confirmPassword?.hasError('required')) {
-            <mat-error>Passwords do not match.</mat-error>
+        <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'" formControlName="confirmPassword" />
+
+        <button mat-icon-button matSuffix type="button" (click)="toggleConfirmPassword()"
+          (mousedown)="$event.preventDefault()"
+          [attr.aria-label]="hideConfirmPassword() ? 'Show password' : 'Hide password'">
+          <mat-icon>
+            {{ hideConfirmPassword() ? 'visibility' : 'visibility_off' }}
+          </mat-icon>
+        </button>
+
+        @if (confirmPassword?.hasError('required')) {
+        <mat-error>Please confirm your password.</mat-error>
+        }
+        @if (
+        confirmPassword?.hasError('passwordMismatch') &&
+        !confirmPassword?.hasError('required')
+        ) {
+        <mat-error>Passwords do not match.</mat-error>
         }
       </mat-form-field>
 
       <div class="auth-actions">
-        <button
-          mat-flat-button
-          color="primary"
-          type="submit"
-          class="primary-btn"
-          [disabled]="isSubmitting"
-        >
+        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="isSubmitting">
           {{ isSubmitting ? 'Creating account…' : 'Create account' }}
         </button>
       </div>

@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AccountService } from '../../../core/services/account-service';
 import { ToastService } from '../../../core/services/toast-service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ import { ToastService } from '../../../core/services/toast-service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -28,6 +30,7 @@ export class Login implements OnInit {
   private fb = inject(FormBuilder);
   protected loginForm: FormGroup;
   protected isSubmitting = signal(false);
+  protected hidePassword = signal(true);
 
   constructor() {
     this.loginForm = this.fb.group({
@@ -50,6 +53,10 @@ export class Login implements OnInit {
 
   ngOnDestroy(): void {
     this.layoutService.showNavBar();
+  }
+
+  togglePasswordVisibility(): void {
+    this.hidePassword.set(!this.hidePassword());
   }
 
   onSubmit(): void {

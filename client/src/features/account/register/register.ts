@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../core/services/account-service';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 function confirmPasswordValidator(matchTo: string): ValidatorFn {
   return (control: any): ValidationErrors | null => {
@@ -30,7 +31,8 @@ function confirmPasswordValidator(matchTo: string): ValidatorFn {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule
+    MatButtonModule,
+    MatIconModule
   ],
   templateUrl: './register.html',
   styleUrl: './register.css',
@@ -41,6 +43,8 @@ export class Register implements OnInit {
   protected isSubmitting = false;
   private router = inject(Router);
   private accountService = inject(AccountService);
+  protected hidePassword = signal(true);
+  protected hideConfirmPassword = signal(true);
 
   constructor() {
     this.registerForm = this.fb.group({
@@ -71,6 +75,14 @@ export class Register implements OnInit {
 
   get confirmPassword() {
     return this.registerForm.get('confirmPassword');
+  }
+
+  protected togglePassword(): void {
+    this.hidePassword.update(v => !v);
+  }
+
+  protected toggleConfirmPassword(): void {
+    this.hideConfirmPassword.update(v => !v);
   }
 
   onSubmit() {

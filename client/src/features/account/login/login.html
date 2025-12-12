@@ -1,53 +1,49 @@
 <div class="auth-wrapper">
-    <div class="auth-card">
-        <div class="auth-header">
-            <h1>Welcome back</h1>
-            <p>Log in to track your calories and stay on target.</p>
-        </div>
-
-        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-            <mat-form-field appearance="outline" class="auth-field">
-                <mat-label>Email</mat-label>
-                <input matInput 
-                    type="email" 
-                    formControlName="email" 
-                    placeholder="you@example.com" />
-                @if (email?.hasError('required')) {
-                    <mat-error>Email is required.</mat-error>
-                }
-                @if (email?.hasError('email') && !email?.hasError('required')) {
-                    <mat-error>Please enter a valid email address.</mat-error>
-                }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="auth-field">
-                <mat-label>Password</mat-label>
-                <input matInput 
-                    type="password" 
-                    formControlName="password" />
-                @if (password?.hasError('required')) {
-                    <mat-error>Password is required.</mat-error>
-                }
-            </mat-form-field>
-
-            <div class="auth-actions">
-                <button mat-flat-button 
-                    color="primary" 
-                    type="submit" 
-                    class="primary-btn" 
-                    [disabled]="isSubmitting()">
-                    {{ isSubmitting() ? 'Logging in…' : 'Login' }}
-                </button>
-            </div>
-
-            <button routerLink="/" class="cancel-button">
-                Cancel
-            </button>
-        </form>
-
-        <div class="auth-footer">
-            <span>Don’t have an account?</span>
-            <a routerLink="/account/register">Get started</a>
-        </div>
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Welcome back</h1>
+      <p>Log in to track your calories and stay on target.</p>
     </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="auth-field">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" placeholder="you@example.com" />
+        @if (email?.hasError('required')) {
+        <mat-error>Email is required.</mat-error>
+        }
+        @if (email?.hasError('email') && !email?.hasError('required')) {
+        <mat-error>Please enter a valid email address.</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="auth-field">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password" />
+        <button mat-icon-button matSuffix type="button"
+          [attr.aria-label]="hidePassword() ? 'Show password' : 'Hide password'" [attr.aria-pressed]="!hidePassword()"
+          (click)="togglePasswordVisibility()" (mousedown)="$event.preventDefault()">
+          <mat-icon>{{ hidePassword() ? 'visibility' : 'visibility_off' }}</mat-icon>
+        </button>
+        @if (password?.hasError('required')) {
+        <mat-error>Password is required.</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="auth-actions">
+        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Logging in…' : 'Login' }}
+        </button>
+      </div>
+
+      <button routerLink="/" class="cancel-button">
+        Cancel
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <span>Don’t have an account?</span>
+      <a routerLink="/account/register">Get started</a>
+    </div>
+  </div>
 </div>
