@@ -1,0 +1,141 @@
+.dialog-header {
+  padding: 16px 16px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.dialog-body {
+  padding: 0 16px 16px;
+}
+
+.date-field {
+  width: 100%;
+}
+
+.section {
+  margin-top: 12px;
+}
+
+.section-title {
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.75;
+  margin: 10px 0 8px;
+}
+
+.hint {
+  font-size: 13px;
+  opacity: 0.7;
+  padding: 10px 0;
+}
+
+.meal-list {
+  display: grid;
+  gap: 8px;
+}
+
+.meal-row {
+  width: 100%;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.meal-row:hover {
+  background: rgba(0,0,0,0.02);
+}
+
+.meal-row--disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.meal-row--disabled .arrow {
+  opacity: 0.35;
+}
+
+.meal-type {
+  font-weight: 700;
+}
+
+.meal-meta {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.arrow {
+  opacity: 0.75;
+}
+
+.meal-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.arrow--open {
+  transform: rotate(180deg);
+}
+
+.meal-expand {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-top: none;
+  background: rgba(0,0,0,0.02);
+  padding: 12px;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.items-title {
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0.7;
+  margin-bottom: 8px;
+}
+
+.item-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+  margin-bottom: 8px;
+}
+
+.item-name {
+  font-weight: 600;
+}
+
+.item-meta {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.copy-action {
+  width: 100%;
+  border-radius: 999px;
+  height: 40px;
+  margin-top: 6px;
+  cursor: pointer;
+}
+
+.copy-action:hover {
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.12);
+}
+
+.copy-action:active {
+  box-shadow: 0 1px 3px rgba(79, 70, 229, 0.18);
+}

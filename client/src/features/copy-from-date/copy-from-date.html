@@ -1,0 +1,87 @@
+<div class="dialog-header">
+  <div class="title">Copy from another day</div>
+  <button mat-icon-button (click)="close()" type="button" aria-label="Close">
+    <mat-icon fontIcon="close" />
+  </button>
+</div>
+
+<div class="dialog-body">
+  <mat-form-field appearance="outline" class="date-field">
+    <mat-label>Date</mat-label>
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [matDatepickerFilter]="dateFilter"
+      (dateChange)="onDateChanged($event.value)"
+      placeholder="Pick a date"
+      readonly
+    />
+    <mat-datepicker-toggle matSuffix [for]="picker" />
+    <mat-datepicker #picker />
+  </mat-form-field>
+
+  <div class="section">
+    <div class="section-title">Meals with entries</div>
+
+    <div *ngIf="loading()" class="hint">Loading…</div>
+
+    <div *ngIf="!loading() && sourceMeals().length === 0" class="hint">
+      Pick a date to see available meals.
+    </div>
+
+    <div class="meal-list" *ngIf="!loading() && sourceMeals().length > 0">
+      <div class="meal-card" *ngFor="let m of sourceMeals()">
+        <!-- header row = expand -->
+        <button
+          type="button"
+          class="meal-row"
+          (click)="toggleMeal(m)"
+          [disabled]="!isEligible(m)"
+          [class.meal-row--disabled]="!isEligible(m)"
+        >
+          <div class="meal-left">
+            <div class="meal-type">{{ m.mealType }}</div>
+
+            <div class="meal-meta">
+              <ng-container *ngIf="m.id === 0">Not created yet</ng-container>
+              <ng-container *ngIf="m.id > 0 && m.items.length === 0">No entries</ng-container>
+              <ng-container *ngIf="m.id > 0 && m.items.length > 0">
+                {{ m.items.length }} item{{ m.items.length === 1 ? '' : 's' }}
+              </ng-container>
+            </div>
+          </div>
+
+          <mat-icon
+            class="arrow"
+            [class.arrow--open]="expandedMealId() === m.id"
+            fontIcon="expand_more"
+          ></mat-icon>
+        </button>
+
+        <!-- expanded panel = item preview + copy action -->
+        <div class="meal-expand" *ngIf="expandedMealId() === m.id">
+          <div class="items-title">Items</div>
+
+          <div class="item-row" *ngFor="let it of m.items">
+            <div class="item-name">
+              {{ it.name }}
+            </div>
+            <div class="item-meta">
+              {{ formatQuantity(it) }}
+            </div>
+          </div>
+
+          <button
+            mat-raised-button
+            color="primary"
+            type="button"
+            class="copy-action"
+            (click)="copyMeal(m)"
+          >
+            Copy this meal
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

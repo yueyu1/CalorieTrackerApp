@@ -1,0 +1,32 @@
+<button
+  mat-stroked-button
+  type="button"
+  class="copy-from-btn"
+  (click)="$event.stopPropagation()"
+  [matMenuTriggerFor]="menu"
+>
+  Copy from
+  <mat-icon class="copy-from-icon" fontIcon="expand_more"></mat-icon>
+</button>
+
+<mat-menu #menu="matMenu" class="copy-menu">
+  <!-- Quick picks -->
+  <ng-container *ngFor="let pick of quickPicks">
+    <button
+      mat-menu-item
+      class="menu-item"
+      (click)="requestCopy(pick.sourceMealId)"
+      [disabled]="pick.disabled"
+      type="button"
+    >
+      <span class="menu-title">{{ pick.label }}</span>
+    </button>
+  </ng-container>
+
+  <mat-divider></mat-divider>
+
+  <!-- Choose date -->
+  <button mat-menu-item class="menu-item choose-date" (click)="openChooseDate()" type="button">
+    <span class="menu-title">Choose date…</span>
+  </button>
+</mat-menu>

@@ -1,0 +1,65 @@
+.copy-from-btn {
+  border-radius: 999px;
+  padding: 6px 12px;
+  height: 36px;
+
+  font-weight: 500;
+  font-size: 14px;
+
+  border-color: rgba(17, 24, 39, 0.14);
+  color: rgba(17, 24, 39, 0.78);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  background-color: rgba(15, 23, 42, 0.02);
+
+  transition:
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  cursor: pointer;
+}
+
+.copy-from-btn:hover {
+  background-color: rgba(15, 23, 42, 0.05);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+}
+
+.copy-from-btn:active {
+  background-color: rgba(15, 23, 42, 0.07);
+  box-shadow: none;
+}
+
+.copy-from-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: rgba(107, 114, 128, 0.9);
+}
+
+:host ::ng-deep .copy-menu {
+  padding: 6px 0;
+  border-radius: 14px;
+  min-width: 320px;
+}
+
+.menu-item {
+  height: 44px;
+  line-height: 44px;
+}
+
+.menu-title {
+  font-weight: 600;
+}
+
+.subtle .menu-title {
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.choose-date .menu-title {
+  font-weight: 500;
+  color: #4338ca; /* same family as Add Food */
+}

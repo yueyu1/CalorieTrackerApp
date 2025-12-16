@@ -266,6 +266,11 @@
             + Add Food
           </button>
 
+          <app-copy-from
+            [quickPicks]="copyQuickPicksFor(meal)"
+            (copyRequested)="onCopyRequested(meal, $event)"
+          ></app-copy-from>
+
           <mat-icon class="chevron-icon" [class.chevron-icon--open]="isMealExpanded(meal)"
             fontIcon="expand_more"></mat-icon>
         </div>

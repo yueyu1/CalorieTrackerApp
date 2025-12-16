@@ -10,7 +10,7 @@ import { MealEntryItem } from '../../types/meal-entry-item';
 @Injectable({
   providedIn: 'root',
 })
-export class MealsService {
+export class MealService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
   public readonly meals = signal<Meal[]>([]);
@@ -88,5 +88,9 @@ export class MealsService {
       quantity,
       unit: unit
     });
+  }
+
+  copyMealEntries(sourceMealId: number, targetMealId: number, mode: 'append' | 'replace' = 'append'): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/meals/${targetMealId}/copy-from/${sourceMealId}`, {});
   }
 }

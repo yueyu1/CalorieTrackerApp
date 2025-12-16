@@ -561,7 +561,19 @@
 
 .add-food-btn {
   border-radius: 999px;
-  padding-inline: 14px;
+  padding-inline: 16px;
+
+  transition:
+    background-color 0.14s ease,
+    box-shadow 0.14s ease;
+}
+
+.add-food-btn:hover {
+  box-shadow: 0 6px 18px rgba(79, 70, 229, 0.22);
+}
+
+.add-food-btn:active {
+  box-shadow: 0 3px 10px rgba(79, 70, 229, 0.26);
 }
 
 /* Chevron icon rotate */

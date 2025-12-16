@@ -3,8 +3,7 @@ import { Meal, MealItem, MealType } from '../../types/meal';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { AddFoodDialog } from './add-food-dialog/add-food-dialog';
-import { MealsService } from '../../core/services/meals-service';
-import { tap } from 'rxjs';
+import { MealService } from '../../core/services/meal-service';
 import { EditAmountDialog } from './edit-amount-dialog/edit-amount-dialog';
 import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
 import { ToastService } from '../../core/services/toast-service';
@@ -15,32 +14,38 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { CopySourceQuickPick } from '../../types/copy';
+import { CopyFrom } from "../copy-from/copy-from";
+import { tap } from 'rxjs';
+import { formatQuantity } from '../../shared/formatters/quantity-formatter';
 
 @Component({
   selector: 'app-daily-log',
   imports: [
     DatePipe,
     DecimalPipe,
-
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
     MatDividerModule,
     MatIconModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    CopyFrom
   ],
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.css',
 })
 export class DailyLog implements OnInit {
-  private mealsService = inject(MealsService);
+  private mealsService = inject(MealService);
   private expandedMealTypes = signal<MealType[]>([]);
   protected today = new Date().toLocaleDateString('en-CA');
   protected meals = this.mealsService.meals;
+  protected yesterdayMeals = signal<Meal[]>([]);
   private dialog = inject(MatDialog);
   private toast = inject(ToastService);
   protected selectedDate = signal<Date>(new Date());
   protected datePickerOpen = signal(false);
+  protected formatQuantity = formatQuantity;
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
@@ -67,6 +72,12 @@ export class DailyLog implements OnInit {
 
   private loadForDate(d: Date): void {
     this.mealsService.loadDailyMeals(this.toYmd(d));
+
+    this.mealsService.getDailyMeals(this.toYmd(this.yesterdayDate())).pipe(
+      tap((meals) => {
+        this.yesterdayMeals.set(meals);
+      })
+    ).subscribe();
   }
 
   private toYmd(d: Date): string {
@@ -175,48 +186,6 @@ export class DailyLog implements OnInit {
     }
     this.expandedMealTypes.set(Array.from(current));
   }
-
-  formatQuantity(item: any): string {
-    const qty = item.quantity;               // e.g., 1.5
-    const unit = item.unit;                  // e.g., "serving"
-    const label = item.unitLabel;            // e.g., "1 serving (100 g)" OR "g"
-    const cf = item.conversionFactor;        // e.g., 100, 1, 28.35
-
-    // ---------------------------------------------
-    // CASE A: Simple units like "g", "oz", "ml"
-    // ---------------------------------------------
-    // If label contains no parentheses, it’s a simple unit
-    if (!label.includes('(')) {
-      // Just scale quantity:
-      // 1.5 quantity + "g" label => "1.5 g"
-      // 2 quantity + "oz" label => "2 oz"
-      return `${qty} ${label}`;
-    }
-
-    // ---------------------------------------------
-    // CASE B: Serving-based unit like "1 serving (100 g)"
-    // ---------------------------------------------
-    // Extract the gram part from "(100 g)"
-    const match = label.match(/\(([^)]+)\)/);      // extract "100 g"
-    const gramsPart = match ? match[1] : null;
-    if (!gramsPart) return `${qty} ${unit}`;
-
-    // The number inside "100 g"
-    const baseNumberMatch = gramsPart.match(/^\d+(\.\d+)?/);
-    const baseNumber = baseNumberMatch ? Number(baseNumberMatch[0]) : cf;
-
-    // Scale it
-    const scaled = qty * baseNumber;
-
-    // Extract unit suffix (e.g., "g" from "100 g")
-    const unitSuffix = gramsPart.replace(/^\d+(\.\d+)?\s*/, '');
-
-    // Pluralize "serving" -> "servings" when needed
-    const pluralUnit = qty === 1 ? unit : `${unit}s`;
-
-    return `${qty} ${pluralUnit}, ${scaled} ${unitSuffix}`;
-  }
-
 
   // ---- Actions ----
   onAddFood(meal: Meal): void {
@@ -330,5 +299,135 @@ export class DailyLog implements OnInit {
         })
       ).subscribe();
     });
+  }
+
+  private getMeal(type: MealType): Meal | undefined {
+    return this.meals().find(m => m.mealType === type);
+  }
+
+  private getYesterdayMeal(type: MealType): Meal | undefined {
+    return this.yesterdayMeals().find(m => m.mealType === type);
+  }
+
+  private isCopySourceEligible(meal?: Meal): boolean {
+    return !!meal && meal.id > 0 && meal.items.length > 0;
+  }
+
+  protected breakfastCopyQuickPicks = computed<CopySourceQuickPick[]>(() => {
+    const lunch = this.getMeal('Lunch');
+    const yesterdayBreakfast = this.getYesterdayMeal('Breakfast');
+    return [
+      {
+        label: 'Today • Lunch',
+        sourceMealId: this.isCopySourceEligible(lunch) ? lunch!.id : 0,
+        disabled: !this.isCopySourceEligible(lunch)
+      },
+      {
+        label: 'Yesterday • Breakfast',
+        sourceMealId: this.isCopySourceEligible(yesterdayBreakfast) ? yesterdayBreakfast!.id : 0,
+        disabled: !this.isCopySourceEligible(yesterdayBreakfast)
+      },
+    ];
+  });
+
+  protected lunchCopyQuickPicks = computed<CopySourceQuickPick[]>(() => {
+    const breakfast = this.getMeal('Breakfast');
+    const yesterdayLunch = this.getYesterdayMeal('Lunch');
+    return [
+      {
+        label: 'Today • Breakfast',
+        sourceMealId: this.isCopySourceEligible(breakfast) ? breakfast!.id : 0,
+        disabled: !this.isCopySourceEligible(breakfast)
+      },
+      {
+        label: 'Yesterday • Lunch',
+        sourceMealId: this.isCopySourceEligible(yesterdayLunch) ? yesterdayLunch!.id : 0,
+        disabled: !this.isCopySourceEligible(yesterdayLunch)
+      },
+    ];
+  });
+
+  protected dinnerCopyQuickPicks = computed<CopySourceQuickPick[]>(() => {
+    const lunch = this.getMeal('Lunch');
+    const breakfast = this.getMeal('Breakfast');
+    const yesterdayDinner = this.getYesterdayMeal('Dinner');
+    return [
+      {
+        label: 'Today • Lunch',
+        sourceMealId: this.isCopySourceEligible(lunch) ? lunch!.id : 0,
+        disabled: !this.isCopySourceEligible(lunch)
+      },
+      {
+        label: 'Today • Breakfast',
+        sourceMealId: this.isCopySourceEligible(breakfast) ? breakfast!.id : 0,
+        disabled: !this.isCopySourceEligible(breakfast)
+      },
+      {
+        label: 'Yesterday • Dinner',
+        sourceMealId: this.isCopySourceEligible(yesterdayDinner) ? yesterdayDinner!.id : 0,
+        disabled: !this.isCopySourceEligible(yesterdayDinner)
+      },
+    ];
+  });
+
+  protected snacksCopyQuickPicks = computed<CopySourceQuickPick[]>(() => {
+    const lunch = this.getMeal('Lunch');
+    const dinner = this.getMeal('Dinner');
+    const yesterdaySnacks = this.getYesterdayMeal('Snacks');
+    return [
+      {
+        label: 'Today • Lunch',
+        sourceMealId: this.isCopySourceEligible(lunch) ? lunch!.id : 0,
+        disabled: !this.isCopySourceEligible(lunch)
+      },
+      {
+        label: 'Today • Dinner',
+        sourceMealId: this.isCopySourceEligible(dinner) ? dinner!.id : 0,
+        disabled: !this.isCopySourceEligible(dinner)
+      },
+      {
+        label: 'Yesterday • Snacks',
+        sourceMealId: this.isCopySourceEligible(yesterdaySnacks) ? yesterdaySnacks!.id : 0,
+        disabled: !this.isCopySourceEligible(yesterdaySnacks)
+      },
+    ];
+  });
+
+  copyQuickPicksFor(meal: Meal): CopySourceQuickPick[] {
+    switch (meal.mealType) {
+      case 'Breakfast':
+        return this.breakfastCopyQuickPicks();
+      case 'Lunch':
+        return this.lunchCopyQuickPicks();
+      case 'Dinner':
+        return this.dinnerCopyQuickPicks();
+      case 'Snacks':
+        return this.snacksCopyQuickPicks();
+      default:
+        return [];
+    }
+  }
+
+  onCopyRequested(meal: Meal, $event: { sourceMealId: number; mode: "append" | "replace"; }) {
+    const { sourceMealId, mode } = $event;
+    console.log('Copy requested:', sourceMealId, 'to', meal.id, 'mode:', mode);
+    if (!sourceMealId || sourceMealId <= 0) return;
+    if (meal.id <= 0) {
+      this.mealsService.createMeal(meal.mealType, meal.mealDate).pipe(
+        tap((createdMeal: Meal) => {
+          this.copyEntriesToMeal(sourceMealId, createdMeal, mode);
+        })).subscribe();
+    } else {
+      this.copyEntriesToMeal(sourceMealId, meal, mode);
+    }
+  }
+
+  copyEntriesToMeal(sourceMealId: number, targetMeal: Meal, mode: 'append' | 'replace') {
+    this.mealsService.copyMealEntries(sourceMealId, targetMeal.id, mode).pipe(
+      tap(() => {
+        this.mealsService.loadDailyMeals(targetMeal.mealDate);
+        this.toast.success(`Entries copied to ${targetMeal.mealType}.`);
+      })
+    ).subscribe();
   }
 }
