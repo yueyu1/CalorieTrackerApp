@@ -15,9 +15,9 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CopySourceQuickPick } from '../../types/copy';
-import { CopyFrom } from "../copy-from/copy-from";
 import { tap } from 'rxjs';
 import { formatQuantity } from '../../shared/formatters/quantity-formatter';
+import { CopyFrom } from "./copy-from/copy-from";
 
 @Component({
   selector: 'app-daily-log',
@@ -31,7 +31,7 @@ import { formatQuantity } from '../../shared/formatters/quantity-formatter';
     MatIconModule,
     MatDatepickerModule,
     CopyFrom
-  ],
+],
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.css',
 })

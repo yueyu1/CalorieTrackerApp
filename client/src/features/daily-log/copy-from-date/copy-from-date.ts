@@ -1,14 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Meal } from '../../types/meal';
-import { MealService } from '../../core/services/meal-service';
+import { Meal } from '../../../types/meal';
+import { MealService } from '../../../core/services/meal-service';
 import { tap } from 'rxjs/internal/operators/tap';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormField } from '@angular/material/form-field';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { formatQuantity } from '../../shared/formatters/quantity-formatter';
+import { formatQuantity } from '../../../shared/formatters/quantity-formatter';
 
 @Component({
   selector: 'app-copy-from-date',
