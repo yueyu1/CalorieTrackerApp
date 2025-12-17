@@ -742,6 +742,63 @@
   white-space: nowrap;
 }
 
+/* ---------------------------
+   Skeleton shimmer
+---------------------------- */
+
+.sk-card,
+.sk-meal {
+  position: relative;
+  overflow: hidden;
+}
+
+.sk-line,
+.sk-bar {
+  border-radius: 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(15,23,42,0.06),
+    rgba(15,23,42,0.03),
+    rgba(15,23,42,0.06)
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.sk-line::after,
+.sk-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-60%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.75), transparent);
+  animation: sk-shimmer 1.15s ease-in-out infinite;
+}
+
+@keyframes sk-shimmer {
+  0% { transform: translateX(-60%); }
+  100% { transform: translateX(60%); }
+}
+
+/* Summary skeleton layout */
+.sk-head { height: 18px; width: 55%; }
+.sk-value { height: 30px; width: 45%; margin-top: 14px; }
+.sk-sub { height: 14px; width: 60%; margin-top: 10px; }
+.sk-bar { height: 6px; width: 100%; margin-top: 14px; border-radius: 999px; }
+
+/* Meal skeleton layout */
+.sk-meal-inner {
+  padding: 16px 22px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 220px;
+  gap: 18px;
+  align-items: center;
+}
+
+.sk-meal-title { height: 18px; width: 160px; }
+.sk-meal-sub { height: 14px; width: 220px; }
+.sk-meal-actions { height: 40px; width: 220px; border-radius: 999px; }
+
 /* Responsive */
 @media (max-width: 768px) {
   .daily-log-header {
@@ -780,5 +837,9 @@
 
   col-actions {
     opacity: 1;
+  }
+
+  .sk-meal-inner {
+    grid-template-columns: 1fr;
   }
 }

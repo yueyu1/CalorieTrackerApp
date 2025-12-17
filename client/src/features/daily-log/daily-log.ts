@@ -39,17 +39,19 @@ import { GoalSettingsService } from '../../core/services/goal-settings-service';
 })
 export class DailyLog implements OnInit {
   private mealsService = inject(MealService);
+  protected goalSettingsService = inject(GoalSettingsService);
+  private toast = inject(ToastService);
+  private router = inject(Router);
   private expandedMealTypes = signal<MealType[]>([]);
   protected today = new Date().toLocaleDateString('en-CA');
   protected meals = this.mealsService.meals;
   protected yesterdayMeals = signal<Meal[]>([]);
   private dialog = inject(MatDialog);
-  private toast = inject(ToastService);
   protected selectedDate = signal<Date>(new Date());
   protected datePickerOpen = signal(false);
   protected formatQuantity = formatQuantity;
-  private router = inject(Router);
-  protected goalSettingsService = inject(GoalSettingsService);
+  protected pageLoading = computed(() => this.mealsService.mealsLoading() 
+    || this.goalSettingsService.goalsLoading());
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());

@@ -39,7 +39,6 @@ export class GoalSettings implements OnInit {
   protected activePreset = signal<GoalPreset | null>('maintain');
   protected goalSettingsService = inject(GoalSettingsService);
   private toast = inject(ToastService);
-  protected loading = signal<boolean>(false);
   private initial = signal<GoalSettingsDto>({
     calories: 2200,
     macroMode: 'percent',
@@ -64,7 +63,6 @@ export class GoalSettings implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loading.set(true);
     this.goalSettingsService.getSettings().pipe(
       tap(() => {
         if (this.goalSettingsService.isSet()) {
@@ -76,7 +74,6 @@ export class GoalSettings implements OnInit {
         }
         this.form.markAsPristine();
         this.form.markAsUntouched();
-        this.loading.set(false);
       })
     ).subscribe();
   }

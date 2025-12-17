@@ -14,12 +14,15 @@ export class MealService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
   public readonly meals = signal<Meal[]>([]);
+  readonly mealsLoading = signal<boolean>(false);
 
   /** Load meals (with totals and items) for a specific date */
   loadDailyMeals(date: string): void {
+    this.mealsLoading.set(true);
     this.getDailyMeals(date).pipe(
       tap((meals) => {
         this.meals.set(meals);
+        this.mealsLoading.set(false);
     })).subscribe();
   }
 

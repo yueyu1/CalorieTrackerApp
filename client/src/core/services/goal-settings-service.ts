@@ -12,6 +12,7 @@ export class GoalSettingsService {
   private apiUrl = environment.apiUrl;
   readonly goalSettings = signal<GoalSettingsDto | null>(null);
   readonly isSet = signal<boolean>(false);
+  readonly goalsLoading = signal<boolean>(false);
 
   save(dto: GoalSettingsDto) {
     return this.http.post<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`, dto).pipe(
@@ -23,6 +24,7 @@ export class GoalSettingsService {
   }
 
   getSettings() {
+    this.goalsLoading.set(true);
     return this.http.get<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`).pipe(
       tap((dto) => {
         if (dto.isSet) {
@@ -32,6 +34,7 @@ export class GoalSettingsService {
           this.isSet.set(false);
           this.goalSettings.set(null);
         }
+        this.goalsLoading.set(false);
       })
     );
   }

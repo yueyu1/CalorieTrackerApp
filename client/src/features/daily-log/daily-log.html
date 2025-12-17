@@ -36,6 +36,7 @@
   </div>
 
   <!-- Sticky summary row -->
+  @if (!pageLoading()) {
   <div class="summary-wrapper">
     <div class="daily-log-summary">
       <!-- Calories -->
@@ -171,29 +172,39 @@
       </mat-card>
     </div>
   </div>
+  }
 
-  @if (!goalSettingsService.isSet()) {
-    <div class="goals-inline-cta">
-      <span class="goals-inline-text">
-        No goals set yet. Set targets to enable progress and percentages.
-      </span>
+  @else {
+  <div class="daily-log-summary">
+    @for (i of [0,1,2,3]; track $index) {
+    <mat-card class="summary-card sk-card">
+      <div class="sk-line sk-head"></div>
+      <div class="sk-line sk-value"></div>
+      <div class="sk-line sk-sub"></div>
+      <div class="sk-bar"></div>
+    </mat-card>
+    }
+  </div>
+  }
 
-      <button
-        mat-stroked-button
-        color="primary"
-        type="button"
-        class="goals-inline-btn"
-        (click)="goToGoals()"
-      >
-        Set goals
-      </button>
-    </div>
+  <!-- Goals CTA -->
+  @if (!pageLoading() && !goalSettingsService.isSet()) {
+  <div class="goals-inline-cta">
+    <span class="goals-inline-text">
+      No goals set yet. Set targets to enable progress and percentages.
+    </span>
+
+    <button mat-stroked-button color="primary" type="button" class="goals-inline-btn" (click)="goToGoals()">
+      Set goals
+    </button>
+  </div>
   }
 
   <!-- Meals -->
   <section class="meals-section">
     <h2 class="meals-title">Today's Meals</h2>
 
+    @if (!pageLoading()) {
     @for (meal of meals(); track $index) {
     <mat-card class="meal-card" [class.meal-card--expanded]="isMealExpanded(meal)">
       <!-- Meal header button -->
@@ -284,10 +295,8 @@
             + Add Food
           </button>
 
-          <app-copy-from
-            [quickPicks]="copyQuickPicksFor(meal)"
-            (copyRequested)="onCopyRequested(meal, $event)"
-          ></app-copy-from>
+          <app-copy-from [quickPicks]="copyQuickPicksFor(meal)"
+            (copyRequested)="onCopyRequested(meal, $event)"></app-copy-from>
 
           <mat-icon class="chevron-icon" [class.chevron-icon--open]="isMealExpanded(meal)"
             fontIcon="expand_more"></mat-icon>
@@ -365,5 +374,19 @@
       }
     </mat-card>
     }
+    }
+
+    @else {
+      @for (i of [0,1,2,3]; track $index) {
+        <mat-card class="meal-card sk-meal">
+          <div class="sk-meal-inner">
+            <div class="sk-line sk-meal-title"></div>
+            <div class="sk-line sk-meal-sub"></div>
+            <div class="sk-line sk-meal-actions"></div>
+          </div>
+        </mat-card>
+      }
+    }
+
   </section>
 </div>
