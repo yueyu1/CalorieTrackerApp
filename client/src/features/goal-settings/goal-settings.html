@@ -1,4 +1,5 @@
 <div class="page">
+  @if (!loading()) {
   <!-- Header -->
   <header class="page-header">
     <div class="page-header-left">
@@ -19,34 +20,47 @@
 
       <div class="hero-meta">
         @if (macroModeControl?.value === 'percent') {
-          <span class="pill">Protein: {{ proteinControl?.value }}%</span>
-          <span class="pill">Carbs: {{ carbsControl?.value }}%</span>
-          <span class="pill">Fat: {{ fatControl?.value }}%</span>
-          <span class="sum-pill" [class.sum-pill--warn]="percentInvalid">
-            Total: {{ percentSum }}%
-          </span>
+        <span class="pill">Protein: {{ proteinControl?.value }}%</span>
+        <span class="pill">Carbs: {{ carbsControl?.value }}%</span>
+        <span class="pill">Fat: {{ fatControl?.value }}%</span>
+        <span class="sum-pill" [class.sum-pill--warn]="percentInvalid">
+          Total: {{ percentSum }}%
+        </span>
         } @else {
-          <span class="pill">Protein: {{ proteinControl?.value }} g</span>
-          <span class="pill">Carbs: {{ carbsControl?.value }} g</span>
-          <span class="pill">Fat: {{ fatControl?.value }} g</span>
-          @if (macroCaloriesPreview !== null) {
-            <span class="sum-pill">
-              ~{{ macroCaloriesPreview }} kcal from macros
-            </span>
-          }
+        <span class="pill">Protein: {{ proteinControl?.value }} g</span>
+        <span class="pill">Carbs: {{ carbsControl?.value }} g</span>
+        <span class="pill">Fat: {{ fatControl?.value }} g</span>
+        @if (macroCaloriesPreview !== null) {
+        <span class="sum-pill">
+          ~{{ macroCaloriesPreview }} kcal from macros
+        </span>
+        }
         }
       </div>
     </div>
 
     <div class="hero-side">
-      <div class="status-chip">
-        <mat-icon fontIcon="check_circle" class="status-icon"></mat-icon>
-        Applied to Daily Log
+      <div class="status-chip" [class.status-chip--pending]="showPendingChip"
+        [class.status-chip--warn]="showInvalidChip" [class.status-chip--neutral]="showNotSetChip">
+        <mat-icon [fontIcon]="chipIcon" class="status-icon"></mat-icon>
+        {{ chipText }}
       </div>
 
       <div class="hero-note">
+        @if (showNotSetChip) {
+        Set your goals and hit Save to apply them to the Daily Log.
+        }
+        @else if (showPendingChip) {
+        Save changes to apply them to today’s Daily Log.
+        }
+        @else if (showInvalidChip) {
+        Fix macro total to 100% to apply changes.
+        }
+        @else {
         Your goals drive Daily Log progress bars and macro percentages.
+        }
       </div>
+
     </div>
   </section>
 
@@ -71,16 +85,16 @@
 
               <mat-form-field appearance="outline" class="calories-field">
                 <mat-label>Calories</mat-label>
-                <input matInput type="number" formControlName="calories" />
+                <input matInput type="number" formControlName="calories" (blur)="onCaloriesBlur()" />
                 <span matTextSuffix>kcal</span>
                 @if (this.caloriesControl?.hasError('min')) {
-                  <mat-error>Too low</mat-error>
+                <mat-error>Too low</mat-error>
                 }
                 @if (this.caloriesControl?.hasError('max')) {
-                  <mat-error>Too high</mat-error>
+                <mat-error>Too high</mat-error>
                 }
-                @if (this.caloriesControl?.hasError('required')) {
-                  <mat-error>Required</mat-error>
+                @if (this.caloriesControl?.hasError('calories required')) {
+                <mat-error>Required</mat-error>
                 }
               </mat-form-field>
 
@@ -97,22 +111,22 @@
                 <mat-button-toggle value="percent">Percent</mat-button-toggle>
                 <mat-button-toggle value="grams">Grams</mat-button-toggle>
               </mat-button-toggle-group>
-              
+
               @if (macroModeControl?.value === 'percent') {
-                <div class="micro-hint">
-                  Total must equal 100%.
-                  @if (percentInvalid) {
-                    <span class="warn">
-                      Currently {{ percentSum }}%.
-                    </span>
-                  }
-                </div>
+              <div class="micro-hint">
+                Total must equal 100%.
+                @if (percentInvalid) {
+                <span class="warn">
+                  Currently {{ percentSum }}%.
+                </span>
+                }
+              </div>
               }
-              
+
               @if (macroModeControl?.value === 'grams') {
-                <div class="micro-hint">
-                  Tip: grams use the 4/4/9 calorie rule for preview.
-                </div>
+              <div class="micro-hint">
+                Tip: grams use the 4/4/9 calorie rule for preview.
+              </div>
               }
             </div>
           </div>
@@ -148,25 +162,25 @@
 
             <div class="macro-footer">
               @if (macroModeControl?.value === 'percent') {
-                <div class="macro-footer-left">
-                  <span class="badge" [class.badge--warn]="percentInvalid">
-                    Total: {{ percentSum }}%
-                  </span>
-                  @if (!percentInvalid) {
-                    <span class="muted">Looks good.</span>
-                  }
-                </div>
+              <div class="macro-footer-left">
+                <span class="badge" [class.badge--warn]="percentInvalid">
+                  Total: {{ percentSum }}%
+                </span>
+                @if (!percentInvalid) {
+                <span class="muted">Looks good.</span>
+                }
+              </div>
               }
 
               @if (macroModeControl?.value === 'grams') {
-                <div class="macro-footer-left">
-                  @if (macroCaloriesPreview !== null) {
-                    <span class="badge">
-                      ~{{ macroCaloriesPreview }} kcal from macros
-                    </span>
-                  }
-                  <span class="muted">Calories and macro kcal don’t have to match exactly.</span>
-                </div>
+              <div class="macro-footer-left">
+                @if (macroCaloriesPreview !== null) {
+                <span class="badge">
+                  ~{{ macroCaloriesPreview }} kcal from macros
+                </span>
+                }
+                <span class="muted">Calories and macro kcal don’t have to match exactly.</span>
+              </div>
               }
 
               <div class="macro-footer-right">
@@ -227,14 +241,14 @@
             <div class="helper-sub">
               <ul class="tip-list">
                 @if (macroModeControl?.value === 'percent') {
-                  <li>
-                    Keep macros at <strong>100%</strong> for accurate progress.
-                  </li>
+                <li>
+                  Keep macros at <strong>100%</strong> for accurate progress.
+                </li>
                 }
                 @if (macroModeControl?.value === 'grams') {
-                  <li>
-                    Macro preview uses the <strong>4/4/9</strong> rule.
-                  </li>
+                <li>
+                  Macro preview uses the <strong>4/4/9</strong> rule.
+                </li>
                 }
                 <li>
                   You can update goals anytime — Daily Log adjusts automatically.
@@ -254,7 +268,7 @@
       <div class="card-head">
         <div>
           <div class="card-title">Presets</div>
-          <div class="card-sub">Quick starting points — fine-tune afterward.</div>
+          <div class="card-sub">Quick starting points — adjust anytime.</div>
         </div>
       </div>
 
@@ -331,4 +345,80 @@
       </button>
     </div>
   </div>
+  }
+
+  @else {
+  <header class="page-header">
+    <div class="page-header-left">
+      <div class="sk-line sk-title"></div>
+      <div class="sk-line sk-sub"></div>
+    </div>
+  </header>
+
+  <section class="hero sk-hero">
+    <div class="sk-hero-main">
+      <div class="sk-line sk-kicker"></div>
+      <div class="sk-line sk-hero-number"></div>
+      <div class="sk-pill-row">
+        <span class="sk-pill"></span>
+        <span class="sk-pill"></span>
+        <span class="sk-pill"></span>
+        <span class="sk-pill sk-pill--strong"></span>
+      </div>
+    </div>
+    <div class="sk-hero-side">
+      <div class="sk-line sk-chip"></div>
+      <div class="sk-line sk-note"></div>
+      <div class="sk-line sk-note sk-note--short"></div>
+    </div>
+  </section>
+
+  <div class="layout">
+    <section class="stack">
+      <mat-card class="card card--panel sk-card">
+        <div class="sk-line sk-card-title"></div>
+        <div class="sk-line sk-card-sub"></div>
+
+        <div class="sk-grid">
+          <div class="sk-field"></div>
+          <div class="sk-field"></div>
+        </div>
+
+        <div class="sk-panel"></div>
+      </mat-card>
+    </section>
+
+    <aside class="stack">
+      <mat-card class="card card--panel sk-card">
+        <div class="sk-line sk-card-title"></div>
+        <div class="sk-line sk-card-sub"></div>
+
+        <div class="sk-row"></div>
+        <div class="sk-row"></div>
+      </mat-card>
+
+      <mat-card class="card card--panel sk-card">
+        <div class="sk-line sk-card-title"></div>
+        <div class="sk-line sk-card-sub"></div>
+        <div class="sk-paragraph">
+          <div class="sk-line"></div>
+          <div class="sk-line"></div>
+          <div class="sk-line sk-line--short"></div>
+        </div>
+      </mat-card>
+    </aside>
+
+    <mat-card class="card card--panel sk-card presets-full">
+      <div class="sk-line sk-card-title"></div>
+      <div class="sk-line sk-card-sub"></div>
+
+      <div class="preset-grid">
+        <div class="sk-preset"></div>
+        <div class="sk-preset"></div>
+        <div class="sk-preset"></div>
+      </div>
+    </mat-card>
+  </div>
+  }
+
 </div>

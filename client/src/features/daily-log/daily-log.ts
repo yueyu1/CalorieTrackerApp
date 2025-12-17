@@ -19,6 +19,7 @@ import { tap } from 'rxjs';
 import { formatQuantity } from '../../shared/formatters/quantity-formatter';
 import { CopyFrom } from "./copy-from/copy-from";
 import { Router } from '@angular/router';
+import { GoalSettingsService } from '../../core/services/goal-settings-service';
 
 @Component({
   selector: 'app-daily-log',
@@ -48,9 +49,11 @@ export class DailyLog implements OnInit {
   protected datePickerOpen = signal(false);
   protected formatQuantity = formatQuantity;
   private router = inject(Router);
+  protected goalSettingsService = inject(GoalSettingsService);
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
+    this.goalSettingsService.getSettings().subscribe();
   }
 
   // ---- Daily totals ----
@@ -432,10 +435,6 @@ export class DailyLog implements OnInit {
       today.getDate() === selected.getDate()
     );
   });
-
-  protected hasGoals(): boolean {
-    return false;
-  }
 
   protected goToGoals(): void {
     this.router.navigate(['/goal-settings']);

@@ -11,12 +11,12 @@ export class GoalSettingsService {
   private http = inject(HttpClient);
   private apiUrl = environment.apiUrl;
   readonly goalSettings = signal<GoalSettingsDto | null>(null);
-  readonly goalsSet = signal<boolean>(false);
+  readonly isSet = signal<boolean>(false);
 
   save(dto: GoalSettingsDto) {
     return this.http.post<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`, dto).pipe(
       tap((dto) => {
-        this.goalsSet.set(true);
+        this.isSet.set(true);
         this.goalSettings.set(dto.settings);
       })
     );
@@ -26,10 +26,10 @@ export class GoalSettingsService {
     return this.http.get<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`).pipe(
       tap((dto) => {
         if (dto.isSet) {
-          this.goalsSet.set(true);
+          this.isSet.set(true);
           this.goalSettings.set(dto.settings);
         } else {
-          this.goalsSet.set(false);
+          this.isSet.set(false);
           this.goalSettings.set(null);
         }
       })

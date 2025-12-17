@@ -172,7 +172,7 @@
     </div>
   </div>
 
-  @if (!hasGoals()) {
+  @if (!goalSettingsService.isSet()) {
     <div class="goals-inline-cta">
       <span class="goals-inline-text">
         No goals set yet. Set targets to enable progress and percentages.

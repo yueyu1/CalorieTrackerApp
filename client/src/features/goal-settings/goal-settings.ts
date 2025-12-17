@@ -39,7 +39,7 @@ export class GoalSettings implements OnInit {
   protected activePreset = signal<GoalPreset | null>('maintain');
   protected goalSettingsService = inject(GoalSettingsService);
   private toast = inject(ToastService);
-
+  protected loading = signal<boolean>(false);
   private initial = signal<GoalSettingsDto>({
     calories: 2200,
     macroMode: 'percent',
@@ -49,6 +49,7 @@ export class GoalSettings implements OnInit {
     weightUnit: 'g',
     showMacroPercent: true,
   });
+  protected baseCalories = signal<number>(this.initial().calories);
 
   constructor() {
     this.form = this.fb.group({
@@ -63,15 +64,19 @@ export class GoalSettings implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading.set(true);
     this.goalSettingsService.getSettings().pipe(
-      tap(() =>{
-        if (this.goalSettingsService.goalsSet()) {
-          this.form.setValue(this.goalSettingsService.goalSettings()!)
-          this.form.markAsPristine();
+      tap(() => {
+        if (this.goalSettingsService.isSet()) {
+          this.baseCalories.set(this.goalSettingsService.goalSettings()!.calories);
+          this.initial.set(this.goalSettingsService.goalSettings()!);
+          this.form.setValue(this.goalSettingsService.goalSettings()!, { emitEvent: false });
         } else {
-          this.form.setValue(this.initial());
-          this.form.markAsPristine();
+          this.form.setValue(this.initial(), { emitEvent: false });
         }
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
+        this.loading.set(false);
       })
     ).subscribe();
   }
@@ -79,16 +84,16 @@ export class GoalSettings implements OnInit {
   applyPreset(preset: GoalPreset) {
     this.activePreset.set(preset);
 
-    const calories = this.caloriesControl?.value;
+    const base = this.baseCalories();
 
     if (preset === 'maintain') {
-      this.form.patchValue({ calories, macroMode: 'percent', protein: 30, carbs: 40, fat: 30 });
+      this.form.patchValue({ calories: base, macroMode: 'percent', protein: 30, carbs: 40, fat: 30 });
     }
     if (preset === 'cut') {
-      this.form.patchValue({ calories: Math.max(1200, Math.round(calories * 0.85)), macroMode: 'percent', protein: 35, carbs: 35, fat: 30 });
+      this.form.patchValue({ calories: Math.max(1200, Math.round(base * 0.85)), macroMode: 'percent', protein: 35, carbs: 35, fat: 30 });
     }
     if (preset === 'bulk') {
-      this.form.patchValue({ calories: Math.min(8000, Math.round(calories * 1.10)), macroMode: 'percent', protein: 30, carbs: 45, fat: 25 });
+      this.form.patchValue({ calories: Math.min(8000, Math.round(base * 1.10)), macroMode: 'percent', protein: 30, carbs: 45, fat: 25 });
     }
   }
 
@@ -98,16 +103,26 @@ export class GoalSettings implements OnInit {
       return;
     }
 
-    const dto = this.currentDto();
-    this.goalSettingsService.save(dto).pipe(
-      tap(() => {
-        this.form.markAsPristine();
-      })
-    ).subscribe();
+    if (this.macroModeControl?.value === 'percent' && this.percentInvalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
 
-    this.initial.set(dto);
-    this.form.markAsPristine();
-    this.toast.success('Goals saved');
+    const dto = this.currentDto();
+
+    this.goalSettingsService.save(dto).subscribe({
+      next: () => {
+        this.initial.set(dto);
+        this.baseCalories.set(dto.calories);
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
+        this.toast.success('Goals saved');
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.error('Failed to save goals');
+      }
+    });
   }
 
   cancel() {
@@ -116,7 +131,37 @@ export class GoalSettings implements OnInit {
     this.form.markAsPristine();
   }
 
-  /* Private helpers */
+  get showNotSetChip(): boolean {
+    // First-time user AND no unsaved edits yet
+    return !this.goalSettingsService.isSet() && !this.isDirty;
+  }
+
+  get showAppliedChip(): boolean {
+    // Applied only when the user has saved goals at least once:
+    return this.goalSettingsService.isSet() && !this.isDirty;
+  }
+
+  get showPendingChip(): boolean {
+    return this.isDirty && !this.percentInvalid;
+  }
+
+  get showInvalidChip(): boolean {
+    return this.isDirty && this.percentInvalid;
+  }
+
+  get chipText(): string {
+    if (this.showInvalidChip) return 'Cannot apply (total ≠ 100%)';
+    if (this.showPendingChip) return 'Changes not applied';
+    if (this.showNotSetChip) return 'Not set yet';
+    return 'Applied to Daily Log';
+  }
+
+  get chipIcon(): string {
+    if (this.showInvalidChip) return 'error';
+    if (this.showPendingChip) return 'hourglass_top';
+    if (this.showNotSetChip) return 'info';
+    return 'check_circle';
+  }
 
   private currentDto(): GoalSettingsDto {
     return {
@@ -130,7 +175,15 @@ export class GoalSettings implements OnInit {
     };
   }
 
-  // /* Getters for template */
+  onCaloriesBlur() {
+    const v = Number(this.caloriesControl?.value);
+
+    if (Number.isFinite(v) && v > 0) {
+      this.baseCalories.set(v);
+    }
+  }
+
+  /* Getters for template */
 
   get caloriesControl() {
     return this.form.get('calories');
