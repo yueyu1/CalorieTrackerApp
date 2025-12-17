@@ -51,10 +51,30 @@
           </div>
         </div>
 
+        @if (goalSettingsService.isSet()) {
+        <div class="summary-main-value">
+          {{ totalCalories() | number:'1.0-0' }}
+          /
+          {{ goalCalories() | number:'1.0-0' }}
+          <span class="summary-unit">kcal</span>
+        </div>
+
+        <div class="summary-meta">
+          @if (caloriesRemaining() >= 0) {
+          {{ caloriesRemaining() | number:'1.0-0' }} remaining
+          } @else {
+          +{{ caloriesRemaining() * -1 | number:'1.0-0' }} over
+          }
+        </div>
+        }
+
+        @else {
         <div class="summary-main-value">
           {{ totalCalories() | number: '1.0-0' }}
           <span class="summary-unit">kcal</span>
         </div>
+        }
+
       </mat-card>
 
       <!-- Protein -->
@@ -79,16 +99,31 @@
           <!-- Right: % + bar -->
           <div class="summary-side">
             <div class="summary-meta">
+              @if (goalSettingsService.isSet()) {
+              <span class="summary-percent">
+                {{ proteinProgress() * 100 | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of goal reached</span>
+              }
+              @else {
               <span class="summary-percent">
                 {{ proteinCaloriePercent() | number:'1.0-0' }}%
               </span>
               <span class="summary-meta-label">of calories</span>
+              }
             </div>
 
             <div class="summary-bar-wrapper summary-bar-wrapper--inline">
               <div class="summary-bar-bg">
+                @if (goalSettingsService.isSet()) {
+                <div class="summary-bar-fill protein-fill" [style.transform]="'scaleX(' + proteinProgress() + ')'">
+                </div>
+                }
+                @else {
                 <div class="summary-bar-fill protein-fill"
-                  [style.transform]="'scaleX(' + (proteinCaloriePercent() / 100) + ')'"></div>
+                  [style.transform]="'scaleX(' + (proteinCaloriePercent() / 100) + ')'">
+                </div>
+                }
               </div>
             </div>
           </div>
@@ -117,16 +152,31 @@
           <!-- Right (% + bar) -->
           <div class="summary-side">
             <div class="summary-meta">
+              @if (goalSettingsService.isSet()) {
+              <span class="summary-percent">
+                {{ carbsProgress() * 100 | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of goal reached</span>
+              }
+              @else {
               <span class="summary-percent">
                 {{ carbsCaloriePercent() | number:'1.0-0' }}%
               </span>
               <span class="summary-meta-label">of calories</span>
+              }
             </div>
 
             <div class="summary-bar-wrapper summary-bar-wrapper--inline">
               <div class="summary-bar-bg">
+                @if (goalSettingsService.isSet()) {
+                <div class="summary-bar-fill carbs-fill" [style.transform]="'scaleX(' + carbsProgress() + ')'">
+                </div>
+                }
+                @else {
                 <div class="summary-bar-fill carbs-fill"
-                  [style.transform]="'scaleX(' + (carbsCaloriePercent() / 100) + ')'"></div>
+                  [style.transform]="'scaleX(' + (carbsCaloriePercent() / 100) + ')'">
+                </div>
+                }
               </div>
             </div>
           </div>
@@ -155,16 +205,31 @@
           <!-- Right (% + bar) -->
           <div class="summary-side">
             <div class="summary-meta">
+              @if (goalSettingsService.isSet()) {
+              <span class="summary-percent">
+                {{ fatProgress() * 100 | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of goal reached</span>
+              }
+              @else {
               <span class="summary-percent">
                 {{ fatCaloriePercent() | number:'1.0-0' }}%
               </span>
               <span class="summary-meta-label">of calories</span>
+              }
             </div>
 
             <div class="summary-bar-wrapper summary-bar-wrapper--inline">
               <div class="summary-bar-bg">
+                @if (goalSettingsService.isSet()) {
+                <div class="summary-bar-fill fat-fill" [style.transform]="'scaleX(' + fatProgress() + ')'">
+                </div>
+                }
+                @else {
                 <div class="summary-bar-fill fat-fill"
-                  [style.transform]="'scaleX(' + (fatCaloriePercent() / 100) + ')'"></div>
+                  [style.transform]="'scaleX(' + (fatCaloriePercent() / 100) + ')'">
+                </div>
+                }
               </div>
             </div>
           </div>
@@ -377,15 +442,15 @@
     }
 
     @else {
-      @for (i of [0,1,2,3]; track $index) {
-        <mat-card class="meal-card sk-meal">
-          <div class="sk-meal-inner">
-            <div class="sk-line sk-meal-title"></div>
-            <div class="sk-line sk-meal-sub"></div>
-            <div class="sk-line sk-meal-actions"></div>
-          </div>
-        </mat-card>
-      }
+    @for (i of [0,1,2,3]; track $index) {
+    <mat-card class="meal-card sk-meal">
+      <div class="sk-meal-inner">
+        <div class="sk-line sk-meal-title"></div>
+        <div class="sk-line sk-meal-sub"></div>
+        <div class="sk-line sk-meal-actions"></div>
+      </div>
+    </mat-card>
+    }
     }
 
   </section>

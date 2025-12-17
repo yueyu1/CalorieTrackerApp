@@ -42,21 +42,92 @@ export class DailyLog implements OnInit {
   protected goalSettingsService = inject(GoalSettingsService);
   private toast = inject(ToastService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
   private expandedMealTypes = signal<MealType[]>([]);
   protected today = new Date().toLocaleDateString('en-CA');
   protected meals = this.mealsService.meals;
   protected yesterdayMeals = signal<Meal[]>([]);
-  private dialog = inject(MatDialog);
   protected selectedDate = signal<Date>(new Date());
   protected datePickerOpen = signal(false);
   protected formatQuantity = formatQuantity;
-  protected pageLoading = computed(() => this.mealsService.mealsLoading() 
+  protected pageLoading = computed(() => this.mealsService.mealsLoading()
     || this.goalSettingsService.goalsLoading());
+  protected goal = this.goalSettingsService.goalSettings;
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
     this.goalSettingsService.getSettings().subscribe();
   }
+
+  // ---- Goal targets ----
+
+  protected goalCalories = computed(() => this.goal()?.calories ?? 0);
+
+  protected proteinTarget = computed(() => {
+    const g = this.goal();
+    if (!g) return 0;
+
+    if (g.macroMode === 'grams') return g.protein;
+
+    return (g.calories * (g.protein / 100)) / 4;
+  });
+
+  protected carbsTarget = computed(() => {
+    const g = this.goal();
+    if (!g) return 0;
+
+    if (g.macroMode === 'grams') return g.carbs;
+
+    return (g.calories * (g.carbs / 100)) / 4;
+  });
+
+  protected fatTarget = computed(() => {
+    const g = this.goal();
+    if (!g) return 0;
+
+    if (g.macroMode === 'grams') return g.fat;
+
+    return (g.calories * (g.fat / 100)) / 9;
+  });
+
+  protected caloriesRemaining = computed(() =>
+    this.goalCalories() - this.totalCalories()
+  );
+
+  protected proteinRemaining = computed(() =>
+    this.proteinTarget() - this.totalProtein()
+  );
+
+  protected carbsRemaining = computed(() =>
+    this.carbsTarget() - this.totalCarbs()
+  );
+
+  protected fatRemaining = computed(() =>
+    this.fatTarget() - this.totalFat()
+  );
+
+  protected caloriesProgress = computed(() =>
+    this.goalCalories() > 0
+      ? this.totalCalories() / this.goalCalories()
+      : 0
+  );
+
+  protected proteinProgress = computed(() =>
+    this.proteinTarget() > 0
+      ? this.totalProtein() / this.proteinTarget()
+      : 0
+  );
+  protected carbsProgress = computed(() =>
+    this.carbsTarget() > 0
+      ? this.totalCarbs() / this.carbsTarget()
+      : 0
+  );
+
+  protected fatProgress = computed(() =>
+    this.fatTarget() > 0
+      ? this.totalFat() / this.fatTarget()
+      : 0
+  );
 
   // ---- Daily totals ----
 
@@ -366,7 +437,6 @@ export class DailyLog implements OnInit {
 
   onCopyRequested(meal: Meal, $event: { sourceMealId: number; mode: "append" | "replace"; }) {
     const { sourceMealId, mode } = $event;
-    console.log('Copy requested:', sourceMealId, 'to', meal.id, 'mode:', mode);
     if (!sourceMealId || sourceMealId <= 0) return;
     if (meal.id <= 0) {
       this.mealsService.createMeal(meal.mealType, meal.mealDate).pipe(
