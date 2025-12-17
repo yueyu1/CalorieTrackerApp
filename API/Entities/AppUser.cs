@@ -10,4 +10,5 @@ public class AppUser
     
     public ICollection<Meal> Meals { get; set; } = [];
     public ICollection<Food> Foods { get; set; } = [];
+    public UserGoalSettings? GoalSettings { get; set; }
 }

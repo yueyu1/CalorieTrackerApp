@@ -1,7 +1,7 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { GoalPreset, GoalsSettingsDto } from '../../types/goals';
-import { CommonModule } from '@angular/common';
+import { GoalPreset, GoalSettingsDto } from '../../types/goals';
+import { DecimalPipe } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,12 +11,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
+import { GoalSettingsService } from '../../core/services/goal-settings-service';
+import { tap } from 'rxjs/internal/operators/tap';
+import { ToastService } from '../../core/services/toast-service';
 
 @Component({
   selector: 'app-goals-settings',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
+    DecimalPipe,
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
@@ -27,15 +30,17 @@ import { MatIconModule } from '@angular/material/icon';
     MatChipsModule,
     MatIconModule,
   ],
-  templateUrl: './goals-settings.html',
-  styleUrl: './goals-settings.css',
+  templateUrl: './goal-settings.html',
+  styleUrl: './goal-settings.css',
 })
-export class GoalsSettings {
+export class GoalSettings implements OnInit {
   private fb = inject(FormBuilder);
   protected form: FormGroup;
-  activePreset = signal<GoalPreset | null>('maintain');
+  protected activePreset = signal<GoalPreset | null>('maintain');
+  protected goalSettingsService = inject(GoalSettingsService);
+  private toast = inject(ToastService);
 
-  private initial = signal<GoalsSettingsDto>({
+  private initial = signal<GoalSettingsDto>({
     calories: 2200,
     macroMode: 'percent',
     protein: 30,
@@ -57,9 +62,23 @@ export class GoalsSettings {
     })
   }
 
+  ngOnInit(): void {
+    this.goalSettingsService.getSettings().pipe(
+      tap(() =>{
+        if (this.goalSettingsService.goalsSet()) {
+          this.form.setValue(this.goalSettingsService.goalSettings()!)
+          this.form.markAsPristine();
+        } else {
+          this.form.setValue(this.initial());
+          this.form.markAsPristine();
+        }
+      })
+    ).subscribe();
+  }
+
   applyPreset(preset: GoalPreset) {
     this.activePreset.set(preset);
-    
+
     const calories = this.caloriesControl?.value;
 
     if (preset === 'maintain') {
@@ -80,14 +99,15 @@ export class GoalsSettings {
     }
 
     const dto = this.currentDto();
+    this.goalSettingsService.save(dto).pipe(
+      tap(() => {
+        this.form.markAsPristine();
+      })
+    ).subscribe();
 
-    // TODO: call API
-    // this.goalsService.save(dto).subscribe(() => ...)
-
-    // simulate save
     this.initial.set(dto);
     this.form.markAsPristine();
-    // TODO: toast "Goals updated"
+    this.toast.success('Goals saved');
   }
 
   cancel() {
@@ -98,13 +118,13 @@ export class GoalsSettings {
 
   /* Private helpers */
 
-  private currentDto(): GoalsSettingsDto {
+  private currentDto(): GoalSettingsDto {
     return {
-      calories: this.form.get('calories')?.value,
-      macroMode: this.form.get('macroMode')?.value,
-      protein: this.form.get('protein')?.value,
-      carbs: this.form.get('carbs')?.value,
-      fat: this.form.get('fat')?.value,
+      calories: this.caloriesControl?.value,
+      macroMode: this.macroModeControl?.value,
+      protein: this.proteinControl?.value,
+      carbs: this.carbsControl?.value,
+      fat: this.fatControl?.value,
       weightUnit: this.form.get('weightUnit')?.value,
       showMacroPercent: this.form.get('showMacroPercent')?.value,
     };

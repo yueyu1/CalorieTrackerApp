@@ -719,6 +719,29 @@
   color: #6b7280;
 }
 
+.goals-inline-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  margin: 12px 4px 24px;
+  padding: 12px 16px;
+
+  border-radius: 12px;
+  background: #f8f9ff;
+  border: 1px solid #e6e9ff;
+}
+
+.goals-inline-text {
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.goals-inline-btn {
+  white-space: nowrap;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .daily-log-header {

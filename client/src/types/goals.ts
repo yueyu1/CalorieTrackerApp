@@ -2,7 +2,7 @@ export type MacroMode = 'percent' | 'grams';
 export type GoalPreset = 'maintain' | 'cut' | 'bulk';
 export type WeightUnit = 'g' | 'oz';
 
-export type GoalsSettingsDto = {
+export type GoalSettingsDto = {
   calories: number;
   macroMode: MacroMode;
   protein: number;
@@ -10,4 +10,9 @@ export type GoalsSettingsDto = {
   fat: number;
   weightUnit: WeightUnit;
   showMacroPercent: boolean;
+}
+
+export type GoalSettingsResponseDto = {
+  isSet: boolean;
+  settings: GoalSettingsDto | null;
 }

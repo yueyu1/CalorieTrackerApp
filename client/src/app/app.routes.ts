@@ -6,7 +6,7 @@ import { TestErrors } from '../features/test-errors/test-errors';
 import { NotFound } from '../features/not-found/not-found';
 import { Register } from '../features/account/register/register';
 import { DailyLog } from '../features/daily-log/daily-log';
-import { GoalsSettings } from '../features/goals-settings/goals-settings';
+import { GoalSettings } from '../features/goal-settings/goal-settings';
 
 export const routes: Routes = [
     { path: '', component: Home},
@@ -14,7 +14,7 @@ export const routes: Routes = [
     { path: 'account/register', component: Register},
     { path: 'daily-log', component: DailyLog },
     { path: 'dashboard', component: Dashboard },
-    { path: 'goals-settings', component: GoalsSettings },
+    { path: 'goal-settings', component: GoalSettings },
     { path: 'test-errors', component: TestErrors },
     { path: '**', component: NotFound }
 ];

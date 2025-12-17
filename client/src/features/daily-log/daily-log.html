@@ -172,6 +172,24 @@
     </div>
   </div>
 
+  @if (!hasGoals()) {
+    <div class="goals-inline-cta">
+      <span class="goals-inline-text">
+        No goals set yet. Set targets to enable progress and percentages.
+      </span>
+
+      <button
+        mat-stroked-button
+        color="primary"
+        type="button"
+        class="goals-inline-btn"
+        (click)="goToGoals()"
+      >
+        Set goals
+      </button>
+    </div>
+  }
+
   <!-- Meals -->
   <section class="meals-section">
     <h2 class="meals-title">Today's Meals</h2>

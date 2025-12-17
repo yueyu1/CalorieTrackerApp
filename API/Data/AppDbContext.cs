@@ -11,6 +11,7 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
     public DbSet<Food> Foods { get; set; }
     public DbSet<MealFood> MealFoods { get; set; }
     public DbSet<FoodUnit> FoodUnits { get; set; }
+    public DbSet<UserGoalSettings> UserGoalSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,6 +27,12 @@ public class AppDbContext(DbContextOptions options) : DbContext(options)
             .HasMany(u => u.Foods)
             .WithOne(f => f.User)
             .HasForeignKey(f => f.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<AppUser>()
+            .HasOne(u => u.GoalSettings)
+            .WithOne(gs => gs.User)
+            .HasForeignKey<UserGoalSettings>(gs => gs.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<Meal>()

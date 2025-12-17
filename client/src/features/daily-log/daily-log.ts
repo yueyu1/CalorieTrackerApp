@@ -18,6 +18,7 @@ import { CopySourceQuickPick } from '../../types/copy';
 import { tap } from 'rxjs';
 import { formatQuantity } from '../../shared/formatters/quantity-formatter';
 import { CopyFrom } from "./copy-from/copy-from";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-daily-log',
@@ -31,7 +32,7 @@ import { CopyFrom } from "./copy-from/copy-from";
     MatIconModule,
     MatDatepickerModule,
     CopyFrom
-],
+  ],
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.css',
 })
@@ -46,61 +47,11 @@ export class DailyLog implements OnInit {
   protected selectedDate = signal<Date>(new Date());
   protected datePickerOpen = signal(false);
   protected formatQuantity = formatQuantity;
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
   }
-
-  // ---- Date picker helpers ----
-
-  openDatePicker(picker: MatDatepicker<Date>): void {
-    picker.open();
-    this.datePickerOpen.set(true);
-  }
-
-  onDatePicked(date: Date | null): void {
-    if (!date) return;
-    this.selectedDate.set(date);
-    this.loadForDate(date);
-  }
-
-  goToday(): void {
-    const d = new Date();
-    this.selectedDate.set(d);
-    this.loadForDate(d);
-  }
-
-  private loadForDate(d: Date): void {
-    this.mealsService.loadDailyMeals(this.toYmd(d));
-
-    this.mealsService.getDailyMeals(this.toYmd(this.yesterdayDate())).pipe(
-      tap((meals) => {
-        this.yesterdayMeals.set(meals);
-      })
-    ).subscribe();
-  }
-
-  private toYmd(d: Date): string {
-    // local date -> YYYY-MM-DD (avoids UTC shift issues from toISOString())
-    return d.toLocaleDateString('en-CA');
-  }
-
-  protected yesterdayDate = computed(() => {
-    const d = new Date(this.selectedDate());
-    d.setDate(d.getDate() - 1);
-    return d;
-  });
-
-  protected isToday = computed(() => {
-    const today = new Date();
-    const selected = this.selectedDate();
-
-    return (
-      today.getFullYear() === selected.getFullYear() &&
-      today.getMonth() === selected.getMonth() &&
-      today.getDate() === selected.getDate()
-    );
-  });
 
   // ---- Daily totals ----
 
@@ -429,5 +380,64 @@ export class DailyLog implements OnInit {
         this.toast.success(`Entries copied to ${targetMeal.mealType}.`);
       })
     ).subscribe();
+  }
+
+  // ---- Date picker helpers ----
+
+  openDatePicker(picker: MatDatepicker<Date>): void {
+    picker.open();
+    this.datePickerOpen.set(true);
+  }
+
+  onDatePicked(date: Date | null): void {
+    if (!date) return;
+    this.selectedDate.set(date);
+    this.loadForDate(date);
+  }
+
+  goToday(): void {
+    const d = new Date();
+    this.selectedDate.set(d);
+    this.loadForDate(d);
+  }
+
+  private loadForDate(d: Date): void {
+    this.mealsService.loadDailyMeals(this.toYmd(d));
+
+    this.mealsService.getDailyMeals(this.toYmd(this.yesterdayDate())).pipe(
+      tap((meals) => {
+        this.yesterdayMeals.set(meals);
+      })
+    ).subscribe();
+  }
+
+  private toYmd(d: Date): string {
+    // local date -> YYYY-MM-DD (avoids UTC shift issues from toISOString())
+    return d.toLocaleDateString('en-CA');
+  }
+
+  protected yesterdayDate = computed(() => {
+    const d = new Date(this.selectedDate());
+    d.setDate(d.getDate() - 1);
+    return d;
+  });
+
+  protected isToday = computed(() => {
+    const today = new Date();
+    const selected = this.selectedDate();
+
+    return (
+      today.getFullYear() === selected.getFullYear() &&
+      today.getMonth() === selected.getMonth() &&
+      today.getDate() === selected.getDate()
+    );
+  });
+
+  protected hasGoals(): boolean {
+    return false;
+  }
+
+  protected goToGoals(): void {
+    this.router.navigate(['/goal-settings']);
   }
 }

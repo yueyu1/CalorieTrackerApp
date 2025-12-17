@@ -169,16 +169,7 @@
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
 }
 
-.card--compact {
-  padding: 14px 16px;
-}
-
-.card--helper {
-  align-self: flex-start;
-}
-
 .tip-list {
-  margin: 6px 0 0;
   padding-left: 16px;
   color: #6b7280;
   font-size: 12px;
@@ -210,10 +201,6 @@
 
 .card--prefs .card-head {
   margin-bottom: 24px;
-}
-
-.card--prefs .card-title {
-  font-size: 16px;
 }
 
 .card--prefs .card-sub {
@@ -344,7 +331,19 @@
 .preset-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: 18px;
+}
+
+.presets-full {
+  grid-column: 1 / -1;
+}
+
+.preset-grid--wide {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.preset-grid--wide .preset-card {
+  padding: 16px;
 }
 
 .preset-card {
@@ -368,6 +367,7 @@
   border-color: rgba(79, 70, 229, 0.45);
   box-shadow: 0 18px 44px rgba(15, 23, 42, 0.12);
   transform: translateY(-1px);
+  background: linear-gradient(180deg, rgba(79,70,229,0.05), #ffffff 60%);
 }
 
 .preset-card.is-active::after {
@@ -387,7 +387,8 @@
 .preset-top {
   display: flex;
   gap: 12px;
-  align-items: center;
+  align-items: flex-start;
+  padding-right: 72px;
 }
 
 .preset-icon {
