@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GoalPreset, GoalSettingsDto } from '../../types/goals';
 import { DecimalPipe } from '@angular/common';
@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { GoalSettingsService } from '../../core/services/goal-settings-service';
 import { tap } from 'rxjs/internal/operators/tap';
 import { ToastService } from '../../core/services/toast-service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-goals-settings',
@@ -39,6 +40,7 @@ export class GoalSettings implements OnInit {
   protected activePreset = signal<GoalPreset | null>('maintain');
   protected goalSettingsService = inject(GoalSettingsService);
   private toast = inject(ToastService);
+  private destroyRef = inject(DestroyRef);
   private initial = signal<GoalSettingsDto>({
     calories: 2200,
     macroMode: 'percent',
@@ -72,15 +74,20 @@ export class GoalSettings implements OnInit {
         } else {
           this.form.setValue(this.initial(), { emitEvent: false });
         }
+        this.activePreset.set(this.detectPreset(this.currentDto()));
         this.form.markAsPristine();
         this.form.markAsUntouched();
       })
     ).subscribe();
+
+    this.form.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.activePreset.set(this.detectPreset(this.currentDto()));
+      });
   }
 
   applyPreset(preset: GoalPreset) {
-    this.activePreset.set(preset);
-
     const base = this.baseCalories();
 
     if (preset === 'maintain') {
@@ -126,6 +133,18 @@ export class GoalSettings implements OnInit {
     const dto = this.initial();
     this.form.patchValue(dto, { emitEvent: false });
     this.form.markAsPristine();
+  }
+
+  private detectPreset(dto: GoalSettingsDto): GoalPreset | null {
+    // Presets only apply in percent mode
+    if (dto.macroMode !== 'percent') return null;
+
+    // Match by macro split only (ignore calories)
+    if (dto.protein === 30 && dto.carbs === 40 && dto.fat === 30) return 'maintain';
+    if (dto.protein === 35 && dto.carbs === 35 && dto.fat === 30) return 'cut';
+    if (dto.protein === 30 && dto.carbs === 45 && dto.fat === 25) return 'bulk';
+
+    return null;
   }
 
   get showNotSetChip(): boolean {

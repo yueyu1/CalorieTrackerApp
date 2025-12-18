@@ -7,6 +7,16 @@
     </div>
 
     <div class="header-right">
+      @if (!pageLoading()) {
+      @if (goalSettingsService.isSet()) {
+      <button 
+        mat-stroked-button type="button" class="goal-chip" (click)="goToGoals()" [matTooltip]="goalTooltip()"
+        matTooltipPosition="below" aria-label="Open goals and settings">
+        <mat-icon class="goal-chip-icon" fontIcon="track_changes"></mat-icon>
+        <span class="goal-chip-text">{{ goalChipText() }}</span>
+      </button>
+      }
+
       @if (!isToday()) {
       <button mat-stroked-button type="button" class="today-jump" (click)="goToday()" aria-label="Jump to today">
         Today
@@ -32,6 +42,10 @@
       <input class="date-pill-hidden-input" matInput [matDatepicker]="picker" [value]="selectedDate()"
         (dateChange)="onDatePicked($event.value)" readonly />
       <mat-datepicker #picker></mat-datepicker>
+      }
+      @else {
+      <div class="sk-line sk-date-pill"></div>
+      }
     </div>
   </div>
 
@@ -98,32 +112,35 @@
 
           <!-- Right: % + bar -->
           <div class="summary-side">
+            @if (goalSettingsService.isSet()) {
             <div class="summary-meta">
-              @if (goalSettingsService.isSet()) {
               <span class="summary-percent">
                 {{ proteinProgress() * 100 | number:'1.0-0' }}%
               </span>
-              <span class="summary-meta-label">of goal reached</span>
-              }
-              @else {
+              <span class="summary-meta-label">of goal</span>
+            </div>
+
+            <div class="summary-meta summary-meta--secondary">
+              <span class="summary-percent summary-percent--muted">
+                {{ proteinCaloriePercent() | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of calories</span>
+            </div>
+            } @else {
+            <div class="summary-meta">
               <span class="summary-percent">
                 {{ proteinCaloriePercent() | number:'1.0-0' }}%
               </span>
               <span class="summary-meta-label">of calories</span>
-              }
             </div>
+            }
 
             <div class="summary-bar-wrapper summary-bar-wrapper--inline">
               <div class="summary-bar-bg">
-                @if (goalSettingsService.isSet()) {
-                <div class="summary-bar-fill protein-fill" [style.transform]="'scaleX(' + proteinProgress() + ')'">
+                <div class="summary-bar-fill protein-fill" [style.transform]="goalSettingsService.isSet() 
+                    ? 'scaleX(' + proteinProgressClamped() + ')'
+                    : 'scaleX(' + (proteinCaloriePercent() / 100) + ')'">
                 </div>
-                }
-                @else {
-                <div class="summary-bar-fill protein-fill"
-                  [style.transform]="'scaleX(' + (proteinCaloriePercent() / 100) + ')'">
-                </div>
-                }
               </div>
             </div>
           </div>
@@ -151,35 +168,38 @@
 
           <!-- Right (% + bar) -->
           <div class="summary-side">
+            @if (goalSettingsService.isSet()) {
             <div class="summary-meta">
-              @if (goalSettingsService.isSet()) {
               <span class="summary-percent">
                 {{ carbsProgress() * 100 | number:'1.0-0' }}%
               </span>
-              <span class="summary-meta-label">of goal reached</span>
-              }
-              @else {
+              <span class="summary-meta-label">of goal</span>
+            </div>
+
+            <div class="summary-meta summary-meta--secondary">
+              <span class="summary-percent summary-percent--muted">
+                {{ carbsCaloriePercent() | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of calories</span>
+            </div>
+            } @else {
+            <div class="summary-meta">
               <span class="summary-percent">
                 {{ carbsCaloriePercent() | number:'1.0-0' }}%
               </span>
               <span class="summary-meta-label">of calories</span>
-              }
             </div>
+            }
 
             <div class="summary-bar-wrapper summary-bar-wrapper--inline">
               <div class="summary-bar-bg">
-                @if (goalSettingsService.isSet()) {
-                <div class="summary-bar-fill carbs-fill" [style.transform]="'scaleX(' + carbsProgress() + ')'">
-                </div>
-                }
-                @else {
-                <div class="summary-bar-fill carbs-fill"
-                  [style.transform]="'scaleX(' + (carbsCaloriePercent() / 100) + ')'">
-                </div>
-                }
+                <div class="summary-bar-fill carbs-fill" [style.transform]="goalSettingsService.isSet()
+                  ? 'scaleX(' + carbsProgressClamped() + ')'
+                  : 'scaleX(' + (carbsCaloriePercent() / 100) + ')'"></div>
               </div>
             </div>
           </div>
+
         </div>
       </mat-card>
 
@@ -204,32 +224,34 @@
 
           <!-- Right (% + bar) -->
           <div class="summary-side">
+            @if (goalSettingsService.isSet()) {
             <div class="summary-meta">
-              @if (goalSettingsService.isSet()) {
               <span class="summary-percent">
                 {{ fatProgress() * 100 | number:'1.0-0' }}%
               </span>
-              <span class="summary-meta-label">of goal reached</span>
-              }
-              @else {
+              <span class="summary-meta-label">of goal</span>
+            </div>
+
+            <div class="summary-meta summary-meta--secondary">
+              <span class="summary-percent summary-percent--muted">
+                {{ fatCaloriePercent() | number:'1.0-0' }}%
+              </span>
+              <span class="summary-meta-label">of calories</span>
+            </div>
+            } @else {
+            <div class="summary-meta">
               <span class="summary-percent">
                 {{ fatCaloriePercent() | number:'1.0-0' }}%
               </span>
               <span class="summary-meta-label">of calories</span>
-              }
             </div>
+            }
 
             <div class="summary-bar-wrapper summary-bar-wrapper--inline">
               <div class="summary-bar-bg">
-                @if (goalSettingsService.isSet()) {
-                <div class="summary-bar-fill fat-fill" [style.transform]="'scaleX(' + fatProgress() + ')'">
-                </div>
-                }
-                @else {
-                <div class="summary-bar-fill fat-fill"
-                  [style.transform]="'scaleX(' + (fatCaloriePercent() / 100) + ')'">
-                </div>
-                }
+                <div class="summary-bar-fill fat-fill" [style.transform]="goalSettingsService.isSet()
+                  ? 'scaleX(' + fatProgressClamped() + ')'
+                  : 'scaleX(' + (fatCaloriePercent() / 100) + ')'"></div>
               </div>
             </div>
           </div>
@@ -237,9 +259,7 @@
       </mat-card>
     </div>
   </div>
-  }
-
-  @else {
+  } @else {
   <div class="daily-log-summary">
     @for (i of [0,1,2,3]; track $index) {
     <mat-card class="summary-card sk-card">
@@ -311,11 +331,13 @@
               <div class="macro-label">Protein</div>
               <div class="macro-values-row">
                 <span class="macro-chip">
-                  {{ meal.totalProtein | number: '1.2-2' }} g
+                  {{ formatGrams(meal.totalProtein) }}
                 </span>
+                @if (this.goalSettingsService.goalSettings()?.showMacroPercent) {
                 <span class="macro-percent">
-                  {{ mp.protein | number: '1.0-0' }}%
+                  {{ formatMacroPercent(mp.protein) }}
                 </span>
+                }
               </div>
             </div>
 
@@ -324,11 +346,13 @@
               <div class="macro-label">Carbs</div>
               <div class="macro-values-row">
                 <span class="macro-chip">
-                  {{ meal.totalCarbs | number: '1.2-2' }} g
+                  {{ formatGrams(meal.totalCarbs) }}
                 </span>
+                @if (this.goalSettingsService.goalSettings()?.showMacroPercent) {
                 <span class="macro-percent">
-                  {{ mp.carbs | number: '1.0-0' }}%
+                  {{ formatMacroPercent(mp.carbs) }}
                 </span>
+                }
               </div>
             </div>
 
@@ -337,11 +361,13 @@
               <div class="macro-label">Fat</div>
               <div class="macro-values-row">
                 <span class="macro-chip">
-                  {{ meal.totalFat | number: '1.2-2' }} g
+                  {{ formatGrams(meal.totalFat) }}
                 </span>
+                @if (this.goalSettingsService.goalSettings()?.showMacroPercent) {
                 <span class="macro-percent">
-                  {{ mp.fat | number: '1.0-0' }}%
+                  {{ formatMacroPercent(mp.fat) }}
                 </span>
+                }
               </div>
             </div>
           </div>

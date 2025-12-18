@@ -20,6 +20,7 @@ import { formatQuantity } from '../../shared/formatters/quantity-formatter';
 import { CopyFrom } from "./copy-from/copy-from";
 import { Router } from '@angular/router';
 import { GoalSettingsService } from '../../core/services/goal-settings-service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-daily-log',
@@ -32,6 +33,7 @@ import { GoalSettingsService } from '../../core/services/goal-settings-service';
     MatDividerModule,
     MatIconModule,
     MatDatepickerModule,
+    MatTooltipModule,
     CopyFrom
   ],
   templateUrl: './daily-log.html',
@@ -117,10 +119,19 @@ export class DailyLog implements OnInit {
       ? this.totalProtein() / this.proteinTarget()
       : 0
   );
+
+  protected proteinProgressClamped = computed(() =>
+    Math.min(1, Math.max(0, this.proteinProgress()))
+  );
+
   protected carbsProgress = computed(() =>
     this.carbsTarget() > 0
       ? this.totalCarbs() / this.carbsTarget()
       : 0
+  );
+
+  protected carbsProgressClamped = computed(() =>
+    Math.min(1, Math.max(0, this.carbsProgress()))
   );
 
   protected fatProgress = computed(() =>
@@ -128,6 +139,44 @@ export class DailyLog implements OnInit {
       ? this.totalFat() / this.fatTarget()
       : 0
   );
+
+  protected fatProgressClamped = computed(() =>
+    Math.min(1, Math.max(0, this.fatProgress()))
+  );
+
+  protected goalChipText = computed(() => {
+    const g = this.goal();
+    if (!g) return 'No goals set';
+    const calories = g.calories.toLocaleString() ?? '-';
+    const preset = this.goalPresetName();
+    return `Target: ${calories} kcal${preset ? ' · ' + preset : ''}`;
+  });
+
+  protected goalTooltip = computed(() => {
+    const g = this.goalSettingsService.goalSettings();
+    if (!g) return 'Set a calorie target and macro split.';
+    if (g.macroMode === 'percent') {
+      return `Protein ${g.protein}% · Carbs ${g.carbs}% · Fat ${g.fat}%`;
+    }
+    return `Protein ${g.protein}g · Carbs ${g.carbs}g · Fat ${g.fat}g`;
+  });
+
+  private goalPresetName(): string | null {
+    const g = this.goalSettingsService.goalSettings();
+    if (!g) return null;
+
+    // Only meaningful when percent mode; otherwise it's “Custom”
+    if (g.macroMode !== 'percent') return 'Custom split';
+
+    const p = g.protein, c = g.carbs, f = g.fat;
+
+    // Match your preset patterns (from your Goals page)
+    if (p === 30 && c === 40 && f === 30) return 'Maintain';
+    if (p === 35 && c === 35 && f === 30) return 'Cut';
+    if (p === 30 && c === 45 && f === 25) return 'Bulk';
+
+    return 'Custom';
+  }
 
   // ---- Daily totals ----
 
@@ -196,6 +245,17 @@ export class DailyLog implements OnInit {
       carbs: (carbCalories / macroCalories) * 100,
       fat: (fatCalories / macroCalories) * 100,
     };
+  }
+
+  formatMacroPercent(value: number): string {
+    if (value > 0 && value < 1) return '<1%';
+    return `${Math.round(value)}%`;
+  }
+
+  formatGrams(value: number): string {
+    console.log('formatGrams', value);
+    if (value > 0 && value < 1) return '<1 g';
+    return `${Math.round(value)} g`;
   }
 
   // ---- UI state helpers ----

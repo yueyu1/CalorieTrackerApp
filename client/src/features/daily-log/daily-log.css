@@ -36,6 +36,34 @@
   gap: 12px;
 }
 
+/* Goal chip */
+.goal-chip {
+  border-radius: 999px;
+  height: 44px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.goal-chip:hover {
+  background-color: rgba(0, 0, 0, 0.03);
+}
+
+.goal-chip-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  opacity: 0.9;
+}
+
+.goal-chip-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+}
+
 /* Date pill (Material button) */
 .date-pill {
   display: inline-flex;
@@ -250,9 +278,24 @@
   font-size: 14px;
 }
 
+.summary-meta--secondary {
+  margin-top: 2px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.summary-percent--muted {
+  font-weight: 650;
+  color: #9ca3af;
+}
+
 .summary-percent {
   font-weight: 700;
   color: #4f46e5;
+}
+
+.summary-meta--secondary .summary-percent {
+  font-weight: 500;
 }
 
 .summary-meta-label {
@@ -750,6 +793,12 @@
 .sk-meal {
   position: relative;
   overflow: hidden;
+}
+
+.sk-date-pill {
+  height: 44px;
+  width: 180px;
+  border-radius: 999px;
 }
 
 .sk-line,
