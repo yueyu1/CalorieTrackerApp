@@ -270,11 +270,11 @@ export class AddFoodDialog implements OnInit {
   private loadFoods(): void {
     const search = (this.searchCtrl.value ?? '').trim();
     const scope =
-      this.activeFilter === 'myFoods' ? 'Mine' :
-        'All';
+      this.activeFilter === 'myFoods' ? 'mine' :
+        'all';
     const sort =
-      this.activeFilter === 'recent' ? 'RecentUsed' :
-        'Relevance';
+      this.activeFilter === 'recent' ? 'recentUsed' :
+        'relevance';
     const brandsOnly = this.activeFilter === 'brands';
     this.loading.set(true);
 

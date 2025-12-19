@@ -110,7 +110,9 @@ namespace API.Controllers
                             Label = u.Label,
                             ConversionFactor = u.ConversionFactor,
                             UnitType = u.UnitType
-                        }).ToList()
+                        }).ToList(),
+                    IsArchived = f.IsArchived,
+                    UpdatedAt = f.UpdatedAt
                 }).ToListAsync();
 
             return Ok(result);
@@ -208,6 +210,42 @@ namespace API.Controllers
                 return Forbid(); // can’t delete global or other users' foods
 
             _db.Foods.Remove(food);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{id}/archive")]
+        public async Task<IActionResult> ArchiveFood(int id)
+        {
+            var currentUserId = HttpContext.GetCurrentUserId();
+
+            var food = await _db.Foods.FindAsync(id);
+
+            if (food == null) return NotFound();
+
+            if (food.UserId != currentUserId)
+                return Forbid(); // can’t archive global or other users' foods
+
+            food.IsArchived = true;
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<IActionResult> RestoreFood(int id)
+        {
+            var currentUserId = HttpContext.GetCurrentUserId();
+
+            var food = await _db.Foods.FindAsync(id);
+
+            if (food == null) return NotFound();
+
+            if (food.UserId != currentUserId)
+                return Forbid(); // can’t restore global or other users' foods
+
+            food.IsArchived = false;
             await _db.SaveChangesAsync();
 
             return NoContent();

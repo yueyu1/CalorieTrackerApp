@@ -1,0 +1,234 @@
+<div class="page">
+  <header class="page-header">
+    <h1 class="page-title">My Foods</h1>
+    <p class="page-subtitle">
+      Manage your custom foods for fast, consistent logging.
+    </p>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="kicker">
+        <span class="kicker-icon" aria-hidden="true">
+          <mat-icon fontIcon="inventory_2"></mat-icon>
+        </span>
+        <span class="kicker-text">Food Library</span>
+
+        <span class="kicker-dot"></span>
+
+        <span class="kicker-meta">
+          {{ visibleFoods().length }} visible
+          <span *ngIf="showArchived()">· archived included</span>
+        </span>
+      </div>
+
+      <p class="hero-headline">
+        Your personal food library for fast, consistent logging
+      </p>
+
+      <p class="hero-subtitle">
+        Your personal catalog for quick logging — create, edit, archive, and keep things clean.
+      </p>
+
+      <div class="hero-chips" aria-label="Highlights">
+        <span class="hchip">
+          <mat-icon fontIcon="bolt"></mat-icon>
+          Fast add
+        </span>
+        <span class="hchip">
+          <mat-icon fontIcon="edit_note"></mat-icon>
+          Custom units
+        </span>
+        <span class="hchip">
+          <mat-icon fontIcon="verified"></mat-icon>
+          Brand aware
+        </span>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-actions">
+        <button mat-raised-button class="btn-primary" type="button" (click)="onCreateFood()">
+          <mat-icon fontIcon="add"></mat-icon>
+          Create Food
+        </button>
+
+        <button mat-icon-button class="btn-split" type="button" [matMenuTriggerFor]="createMenu" aria-label="More">
+          <mat-icon fontIcon="expand_more"></mat-icon>
+        </button>
+
+        <mat-menu #createMenu="matMenu">
+          <button mat-menu-item type="button" (click)="onCreateFood()">
+            <mat-icon fontIcon="restaurant_menu"></mat-icon>
+            Create custom food
+          </button>
+          <button mat-menu-item type="button" disabled>
+            <mat-icon fontIcon="content_copy"></mat-icon>
+            Duplicate (soon)
+          </button>
+        </mat-menu>
+      </div>
+
+      <div class="hero-mini">
+        <div class="mini-row">
+          <mat-icon fontIcon="search"></mat-icon>
+          <span>Search & sort your catalog</span>
+        </div>
+        <div class="mini-row">
+          <mat-icon fontIcon="inventory_2"></mat-icon>
+          <span>Archive instead of deleting</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <form [formGroup]="form">
+      <mat-form-field appearance="outline" class="search">
+        <mat-icon matPrefix fontIcon="search"></mat-icon>
+        <input matInput placeholder="Search my foods..." formControlName="search" />
+        <button *ngIf="searchCtrl.value" mat-icon-button matSuffix type="button" aria-label="Clear"
+          (click)="searchCtrl.setValue('')">
+          <mat-icon fontIcon="close"></mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="field">
+        <mat-icon matPrefix fontIcon="sort"></mat-icon>
+        <mat-select panelClass="panel-soft" formControlName="sort">
+          <mat-option value="recent">Sort: Recent</mat-option>
+          <mat-option value="name">Sort: Name</mat-option>
+          <mat-option value="calories">Sort: Calories</mat-option>
+          <mat-option value="protein">Sort: Protein</mat-option>
+          <mat-option value="carbs">Sort: Carbs</mat-option>
+          <mat-option value="fat">Sort: Fat</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </form>
+
+    <div class="spacer"></div>
+
+    <button mat-icon-button class="tool-btn" type="button" (click)="toggleArchived()"
+      [matTooltip]="showArchived() ? 'Hide archived' : 'Show archived'">
+      <mat-icon fontIcon="inventory_2"></mat-icon>
+    </button>
+  </div>
+
+  <!-- Meta -->
+  <div class="meta">
+    <span>{{ visibleFoods().length }} foods</span>
+    <span class="hint" *ngIf="showArchived()">Showing archived items</span>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <!-- Header row -->
+    <div class="grid header">
+      <div class="col-select">
+        <mat-checkbox [checked]="allVisibleSelected" [indeterminate]="someVisibleSelected"
+          (change)="toggleAllVisible($event.checked)" aria-label="Select all visible">
+        </mat-checkbox>
+      </div>
+
+      <div class="col-food">Food</div>
+      <div class="col-kcal">Calories</div>
+      <div class="col-macros">Macros</div>
+      <div class="col-actions">Actions</div>
+    </div>
+
+    <!-- Rows -->
+    <div class="grid row" *ngFor="let f of visibleFoods()">
+      <div class="col-select">
+        <mat-checkbox [checked]="isSelected(f.id)" (change)="toggleRow(f.id)" aria-label="Select row"></mat-checkbox>
+      </div>
+
+      <div class="col-food">
+        <div class="food-cell">
+          <div class="food-name">
+            {{ f.name }}
+            <span class="archived" *ngIf="f.isArchived">Archived</span>
+          </div>
+
+          <div class="food-sub">
+            <span *ngIf="f.brand" class="brand">{{ f.brand }}</span>
+            <span class="dot" *ngIf="f.brand"></span>
+            <span>{{ primaryUnitLabel(f) }}</span>
+            <span class="dot"></span>
+            <span class="base">{{ baseLine(f) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-kcal">
+        <div class="kcal">
+          <span class="kcal-value">{{ f.calories }}</span>
+          <span class="kcal-unit">kcal</span>
+        </div>
+      </div>
+
+      <div class="col-macros">
+        <div class="macro-chips">
+          <mat-chip class="chip chip-p">P·{{ f.protein }}g</mat-chip>
+          <mat-chip class="chip chip-c">C·{{ f.carbs }}g</mat-chip>
+          <mat-chip class="chip chip-f">F·{{ f.fat }}g</mat-chip>
+        </div>
+      </div>
+
+      <div class="col-actions">
+        <button mat-icon-button class="row-action" type="button" (click)="onEdit(f)" aria-label="Edit">
+          <mat-icon fontIcon="edit"></mat-icon>
+        </button>
+
+        <button mat-icon-button class="row-action" type="button" [matMenuTriggerFor]="rowMenu"
+          aria-label="More actions">
+          <mat-icon fontIcon="more_horiz"></mat-icon>
+        </button>
+
+        <mat-menu #rowMenu="matMenu">
+          <button mat-menu-item type="button" (click)="onEdit(f)">
+            <mat-icon fontIcon="edit"></mat-icon>
+            Edit
+          </button>
+          
+          <button mat-menu-item type="button" *ngIf="!f.isArchived" (click)="onArchive(f)">
+            <mat-icon fontIcon="inventory_2"></mat-icon>
+            Archive
+          </button>
+
+          <button mat-menu-item type="button" *ngIf="f.isArchived" (click)="onRestore(f)">
+            <mat-icon fontIcon="restore"></mat-icon>
+            Restore
+          </button>
+
+          <mat-divider></mat-divider>
+
+          <button mat-menu-item class="danger" type="button" (click)="onDelete(f)">
+            <mat-icon fontIcon="delete"></mat-icon>
+            Delete
+          </button>
+        </mat-menu>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div class="empty" *ngIf="visibleFoods().length === 0">
+      <div class="empty-title">No foods found</div>
+      <div class="empty-sub">Try a different search, or create a custom food to get started.</div>
+      <button mat-raised-button class="btn-primary" type="button" (click)="onCreateFood()">
+        <mat-icon fontIcon="add"></mat-icon>
+        Create Food
+      </button>
+    </div>
+
+    <!-- Bulk bar -->
+    <div class="bulk" *ngIf="this.selectedIds().size > 0">
+      <div class="bulk-left">{{ this.selectedIds().size }} selected</div>
+      <div class="bulk-actions">
+        <button mat-stroked-button class="btn-danger" type="button" (click)="onBulkDelete()">Delete</button>
+        <button mat-stroked-button type="button" (click)="clearSelection()">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>

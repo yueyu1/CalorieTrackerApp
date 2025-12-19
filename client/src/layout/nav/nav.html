@@ -45,11 +45,12 @@
         </a>
 
         <a
-          routerLink="/reports"
+          routerLink="/my-foods"
           routerLinkActive="nav-link-active"
+          [routerLinkActiveOptions]="{ exact: true }"
           class="nav-link"
         >
-          Reports
+          My Foods
         </a>
       </div>
 

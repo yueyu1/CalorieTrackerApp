@@ -2,9 +2,9 @@
   <!-- HEADER ------------------------------------------------------- -->
   <header class="cfd-header">
     <div class="cfd-header-text">
-      <h2 class="cfd-title">Create custom food</h2>
+      <h2 class="cfd-title">{{mode() === 'edit' ? 'Edit' : 'Create'}} custom food</h2>
       <p class="cfd-subtitle">
-        Custom foods are saved to <strong>My Foods</strong> and can be reused in any meal.
+        {{mode() === 'edit' ? 'Changes will apply wherever this food is used going forward.' : 'Custom foods are saved to My Foods and can be reused in any meal.'}}
       </p>
     </div>
 
@@ -145,7 +145,7 @@
         Cancel
       </button>
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || isSaving()">
+      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || saving()">
         {{ primaryButtonLabel() }}
       </button>
     </footer>

@@ -16,4 +16,7 @@ public class FoodDto
     public double BaseQuantity { get; set; } // e.g. 100
     public required string BaseUnit { get; set; } // "g", "ml", "piece", etc.
     public ICollection<FoodUnitDto> Units { get; set; } = [];
+
+    public bool IsArchived { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

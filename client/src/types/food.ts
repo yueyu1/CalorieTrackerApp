@@ -11,4 +11,6 @@ export type Food = {
   baseQuantity: number;
   baseUnit: string;
   units: FoodUnit[];
+  isArchived: boolean;
+  updatedAt?: string;
 };

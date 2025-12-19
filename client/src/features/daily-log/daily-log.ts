@@ -7,7 +7,7 @@ import { MealService } from '../../core/services/meal-service';
 import { EditAmountDialog } from './edit-amount-dialog/edit-amount-dialog';
 import { ConfirmDeleteDialog } from './confirm-delete-dialog/confirm-delete-dialog';
 import { ToastService } from '../../core/services/toast-service';
-import { CustomFoodDialog } from './custom-food-dialog/custom-food-dialog';
+import { CustomFoodDialog } from '../my-foods/dialogs/custom-food-dialog/custom-food-dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatCardModule } from '@angular/material/card';
@@ -21,6 +21,7 @@ import { CopyFrom } from "./copy-from/copy-from";
 import { Router } from '@angular/router';
 import { GoalSettingsService } from '../../core/services/goal-settings-service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { CustomFoodDialogResult } from '../../types/custom-food';
 
 @Component({
   selector: 'app-daily-log',
@@ -253,7 +254,6 @@ export class DailyLog implements OnInit {
   }
 
   formatGrams(value: number): string {
-    console.log('formatGrams', value);
     if (value > 0 && value < 1) return '<1 g';
     return `${Math.round(value)} g`;
   }
@@ -373,12 +373,12 @@ export class DailyLog implements OnInit {
       }
     });
 
-    ref.afterClosed().subscribe(result => {
+    ref.afterClosed().subscribe((result: CustomFoodDialogResult | null) => {
       if (!result || result.foodId == null) return;
       this.mealsService.addFoodToMeal(mealId, mealType as MealType, mealDate, [{
         foodId: result.foodId,
         quantity: 1,
-        unit: result.unit,
+        unit: result.unitCode,
       }]).pipe(
         tap(() => {
           this.mealsService.loadDailyMeals(mealDate);

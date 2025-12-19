@@ -26,6 +26,9 @@ public class Food
     /// </summary>
     public string BaseUnit { get; set; } = "g";
 
+    public bool IsArchived { get; set; }
+    public DateTime? ArchivedAt { get; set; }
+
     // Navigation properties
     public string? UserId { get; set; }
     [JsonIgnore]

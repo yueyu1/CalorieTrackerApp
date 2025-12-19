@@ -18,4 +18,8 @@ export class UnitService {
     ];
   }
 
+  extractServingDescription(label: string): string {
+    const idx = label.indexOf('(');
+    return idx >= 0 ? label.slice(0, idx).trim() : label.trim();
+  }
 }

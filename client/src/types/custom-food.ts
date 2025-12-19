@@ -9,3 +9,8 @@ export type CreateCustomFoodRequest = {
   carbs: number;
   fat: number;
 }
+
+export type CustomFoodDialogResult = {
+  foodId: number;
+  unitCode: string;
+};
