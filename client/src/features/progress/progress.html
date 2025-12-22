@@ -1,0 +1,243 @@
+<div class="page">
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h1 class="title">Progress</h1>
+      <p class="subtitle">A quick look at today, trends, and consistency.</p>
+    </div>
+
+    <div class="header-right">
+      <button class="range-pill" type="button">
+        <span class="range-icon">📅</span>
+        <span class="range-text">Last 7 Days</span>
+        <span class="range-chevron">▾</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Layout -->
+  <div class="layout">
+    <!-- Left: Today snapshot -->
+    <section class="card card--today">
+      <div class="card-head">
+        <h2 class="card-title">Today's Snapshot</h2>
+        @if (hasGoal()) {
+        <span class="chip chip--soft">{{ caloriesPct() }}% to target</span>
+        }
+        @else {
+        <span class="chip chip--preview">Preview</span>
+        }
+      </div>
+
+      <!-- Calories (always show) -->
+      <div class="calories-block">
+        <div class="calories-top">
+          <div class="label">Calories</div>
+
+          <div class="numbers">
+            <span class="big">{{ todayCalories() | number:'1.0-0' }}</span>
+            @if (hasGoal()) {
+            <span class="slash">/</span>
+            <span class="goal">{{ targetCalories() | number:'1.0-0' }}</span>
+            }
+            <span class="unit">kcal</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Calorie goal row (only when goal set) -->
+      @if (hasGoal()) {
+      <div class="today-slot today-slot--goal">
+        <div class="today-slot-main">
+          <div class="today-slot-title">{{ caloriesDeltaLabel() }}</div>
+          <div class="today-slot-sub">Target {{ targetCalories() | number:'1.0-0' }} kcal</div>
+        </div>
+
+        <div class="today-slot-side">
+          <div class="today-slot-pct">{{ caloriesPct() }}%</div>
+          <div class="mini-bar mini-bar--cal" aria-hidden="true">
+            <div class="mini-fill mini-fill--cal" [style.width.%]="caloriesPct()"></div>
+          </div>
+        </div>
+      </div>
+      }
+
+      <!-- Goals CTA row (only when no goal) -->
+      @else {
+      <div class="today-cta">
+        <div class="today-cta-text">
+          Set a calorie goal to see today's progress.
+        </div>
+        <button class="today-cta-btn" type="button" (click)="goToGoals()">
+          Set goals
+        </button>
+      </div>
+      }
+
+      <!-- Macros -->
+      <div class="macro-list">
+        @for (m of todayMacros(); track m.key) {
+        <div class="macro-row" [class]="'macro-row--' + m.key" [class.macro-row--preview]="!hasGoal()">
+          <div class="macro-left">
+            <div class="icon-badge" [class]="'icon-badge--' + m.key">
+              <span class="icon-dot"></span>
+            </div>
+            <div class="macro-meta">
+              <div class="macro-name">{{ m.label }}</div>
+              <div class="macro-sub">{{hasGoal() ? "Daily goal" : "Logged today" }}</div>
+            </div>
+          </div>
+
+          <div class="macro-right">
+            <!-- With goals: value / goal + progress bar -->
+            @if (hasGoal()) {
+            <div class="macro-values">
+              <span class="macro-value">{{ m.value | number:'1.0-0' }}</span>
+              <span class="macro-slash">/</span>
+              <span class="macro-goal">{{ m.goal | number:'1.0-0' }}</span>
+              <span class="macro-unit">g</span>
+            </div>
+
+            <div class="bar bar--macro">
+              <div class="bar-fill" [class]="'bar-fill--' + m.key" [style.width.%]="macroPct(m)"></div>
+            </div>
+            }
+
+            <!-- Preview: grams only, lighter -->
+            @else {
+            <div class="macro-values macro-values--preview">
+              <span class="macro-value">{{ m.value | number:'1.0-0' }}</span>
+              <span class="macro-unit">g</span>
+            </div>
+
+            <div class="bar bar--macro bar--preview">
+              <div class="bar-fill bar-fill--preview" [style.width.%]="clamp100((m.value / 200) * 100)"></div>
+            </div>
+            }
+          </div>
+        </div>
+        }
+      </div>
+    </section>
+
+    <!-- Right: 7-day trend -->
+    <section class="card card--chart">
+      <div class="card-head chart-head">
+        <div>
+          <h2 class="card-title">Weekly Trend</h2>
+          <p class="card-subtitle">Calories per day vs your target.</p>
+        </div>
+
+        <div class="legend">
+          <span class="legend-dot"></span>
+          <span class="legend-label">Calories</span>
+          @if (hasGoal()) {
+          <span class="legend-sep">—</span>
+          <span class="legend-target">Target {{ targetCalories() | number:'1.0-0' }} kcal</span>
+          }
+          @else {
+          <span class="legend-note">
+            Set a calorie goal to see how you compare
+            <button type="button" class="inline-link" (click)="goToGoals()">Set goals</button>
+          </span>
+          }
+        </div>
+      </div>
+
+      <div class="chart-shell">
+        <!-- Grid labels -->
+        <div class="y-labels">
+          <div class="y-label">{{ yMax() | number:'1.0-0' }}</div>
+          <div class="y-label">{{ ((yMax() + yMin()) / 2) | number:'1.0-0' }}</div>
+          <div class="y-label">{{ yMin() | number:'1.0-0' }}</div>
+        </div>
+
+        <div class="chart">
+          <!-- Bars -->
+          <div class="bars">
+            @for (d of week(); track d.label + d.calories) {
+            <div class="bar-col">
+              <div class="bar-rect" [style.height.%]="barHeightPct(d.calories)"></div>
+              <div class="x-label">{{ d.label }}</div>
+            </div>
+            }
+          </div>
+
+          <!-- Overlay SVG line + target -->
+          <svg class="overlay" viewBox="0 0 700 220" preserveAspectRatio="none" aria-hidden="true">
+            <!-- target line -->
+            @if (hasGoal()) {
+            <line x1="36" x2="664" [attr.y1]="targetY()" [attr.y2]="targetY()" class="target-line" />
+            }
+
+            <!-- line -->
+            <path [attr.d]="linePath()" class="cal-line"></path>
+
+            <!-- points -->
+            @for (p of pointDots(); track $index) {
+            <circle [attr.cx]="p.x" [attr.cy]="p.y" r="7.5" class="pt-ring"></circle>
+            <circle [attr.cx]="p.x" [attr.cy]="p.y" r="4.2" class="pt-dot"></circle>
+            }
+          </svg>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom: Consistency / adherence -->
+    <section class="card card--streak">
+      <div class="card-head">
+        <div class="streak-title">
+          <div class="trophy">🏆</div>
+          <div>
+            <h2 class="card-title">Consistency</h2>
+            <p class="card-subtitle">How often you're landing near your goal.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="streak-grid">
+        <div class="stat-tile">
+          <div class="stat-label">Days hit calorie goal</div>
+          @if (hasGoal()) {
+          <div class="stat-value">
+            <span class="stat-strong">{{ daysHitGoal() }}</span>
+            <span class="stat-muted">/ {{ week().length }}</span>
+          </div>
+          <div class="mini-bar">
+            <div class="mini-fill" [style.width.%]="(daysHitGoal() / week().length) * 100"></div>
+          </div>
+          }
+          @else {
+          <div class="stat-value">
+            <span class="stat-strong stat-strong--muted">—</span>
+            <span class="stat-muted">/ 7</span>
+          </div>
+
+          <div class="mini-bar mini-bar--preview">
+            <div class="mini-fill mini-fill--preview" style="width: 35%"></div>
+          </div>
+
+          <div class="preview-note">
+            Set a goal to calculate adherence.
+            <button type="button" class="inline-link" (click)="goToGoals()">Set goals</button>
+          </div>
+          }
+        </div>
+
+        <div class="stat-tile">
+          <div class="stat-label">Average calories</div>
+          <div class="stat-value">
+            <span class="stat-strong">{{ avgCalories() | number:'1.0-0' }}</span>
+            <span class="stat-muted">kcal</span>
+          </div>
+          @if (hasGoal()) {
+          <div class="pill-note">Trend looks stable</div>
+          }
+          @else {
+          <div class="pill-note pill-note--preview">Add a goal for comparison</div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

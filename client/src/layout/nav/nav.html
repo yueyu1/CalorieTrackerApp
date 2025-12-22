@@ -27,21 +27,12 @@
         </a>
         
         <a
-          routerLink="/dashboard"
+          routerLink="/progress"
           routerLinkActive="nav-link-active"
           [routerLinkActiveOptions]="{ exact: true }"
           class="nav-link"
         >
-          Dashboard
-        </a>
-
-        <a
-          routerLink="/goal-settings"
-          routerLinkActive="nav-link-active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link"
-        >
-          Goals & Settings
+          Progress
         </a>
 
         <a
@@ -51,6 +42,15 @@
           class="nav-link"
         >
           My Foods
+        </a>
+
+        <a
+          routerLink="/goal-settings"
+          routerLinkActive="nav-link-active"
+          [routerLinkActiveOptions]="{ exact: true }"
+          class="nav-link"
+        >
+          Goals & Settings
         </a>
       </div>
 
@@ -70,19 +70,14 @@
 
       <!-- DROPDOWN MENU -->
       <mat-menu #userMenu="matMenu">
-        <button mat-menu-item routerLink="/dashboard">
-          <mat-icon>dashboard</mat-icon>
-          <span>Dashboard</span>
+        <button mat-menu-item routerLink="/progress">
+          <mat-icon>insights</mat-icon>
+          <span>Progress</span>
         </button>
 
-        <button mat-menu-item routerLink="/profile">
-          <mat-icon>person</mat-icon>
-          <span>Profile</span>
-        </button>
-
-        <button mat-menu-item routerLink="/settings">
+        <button mat-menu-item routerLink="/goal-settings">
           <mat-icon>settings</mat-icon>
-          <span>Settings</span>
+          <span>Goals & Settings</span>
         </button>
 
         <mat-divider></mat-divider>
