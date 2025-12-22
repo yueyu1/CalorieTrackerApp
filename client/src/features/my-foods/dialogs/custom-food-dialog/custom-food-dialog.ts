@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { CreateCustomFoodRequest, CustomFoodDialogResult } from '../../../../types/custom-food';
+import { UpsertCustomFoodRequest, CustomFoodDialogResult } from '../../../../types/custom-food';
 import { FoodService } from '../../../../core/services/food-service';
 import { Food } from '../../../../types/food';
 import { UnitService } from '../../../../core/services/unit-service';
@@ -43,7 +43,7 @@ export class CustomFoodDialog {
     { value: 'oz', label: 'oz' },
     { value: 'ml', label: 'ml' },
   ];
-  
+
   protected primaryButtonLabel = computed(() => {
     if (this.saving()) {
       return 'Saving...';
@@ -58,7 +58,7 @@ export class CustomFoodDialog {
 
   constructor() {
     const food: Food = this.data?.food;
-    const servingDescription = food && food.units && food.units.length > 0 ? 
+    const servingDescription = food && food.units && food.units.length > 0 ?
       this.unitService.extractServingDescription(food.units[0].label) : '';
 
     this.form = this.fb.group({
@@ -86,7 +86,7 @@ export class CustomFoodDialog {
       return;
     }
 
-    const payload: CreateCustomFoodRequest = {
+    const payload: UpsertCustomFoodRequest = {
       name: this.form.value.name!.trim(),
       brand: this.form.value.brand?.trim() || null,
       servingDescription: this.form.value.servingDescription!.trim(),
@@ -98,17 +98,28 @@ export class CustomFoodDialog {
       fat: this.form.value.fat!
     };
 
-    this.foodService.createCustomFood(payload).subscribe({
-      next: (createdFood: Food) => {
-        const result: CustomFoodDialogResult = {
-          foodId: createdFood.id,
-          unitCode: createdFood.units[0].code,
-        };
-        this.dialogRef.close(result);
-      },
-      error: (err) => {
-        console.error(err);
-      }
-    });
+    if (this.mode() === 'edit' && this.data?.food) {
+      this.foodService.editCustomFood(this.data.food.id, payload).subscribe({
+        next: () => {
+          this.dialogRef.close(true);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    } else { // Create mode
+      this.foodService.createCustomFood(payload).subscribe({
+        next: (createdFood: Food) => {
+          const result: CustomFoodDialogResult = {
+            foodId: createdFood.id,
+            unitCode: createdFood.units[0].code,
+          };
+          this.dialogRef.close(result);
+        },
+        error: (err) => {
+          console.error(err);
+        }
+      });
+    }
   }
 }

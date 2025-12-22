@@ -132,34 +132,34 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<FoodDto>> CreateFood(CreateFoodDto foodDto)
+        public async Task<ActionResult<FoodDto>> CreateFood(UpsertFoodDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
             var food = new Food
             {
-                Name = foodDto.Name,
-                Brand = foodDto.Brand,
-                Calories = foodDto.Calories,
-                Carbs = foodDto.Carbs,
-                Protein = foodDto.Protein,
-                Fat = foodDto.Fat,
+                Name = dto.Name,
+                Brand = dto.Brand,
+                Calories = dto.Calories,
+                Carbs = dto.Carbs,
+                Protein = dto.Protein,
+                Fat = dto.Fat,
                 CreatedAt = DateTime.UtcNow,
                 UserId = currentUserId,
-                BaseQuantity = foodDto.ServingAmount,
-                BaseUnit = foodDto.ServingUnit,
+                BaseQuantity = dto.ServingAmount,
+                BaseUnit = dto.ServingUnit,
                 Units =
                 [
                     new()
                     {
                         Code = "serving",
-                        Label = $"{foodDto.ServingDescription} ({foodDto.ServingAmount} {foodDto.ServingUnit})",
+                        Label = $"{dto.ServingDescription} ({dto.ServingAmount} {dto.ServingUnit})",
                         UnitType = UnitType.Custom,
-                        ConversionFactor = foodDto.ServingAmount
+                        ConversionFactor = dto.ServingAmount
                     },
                     new()
                     {
-                        Code = foodDto.ServingUnit,
-                        Label = foodDto.ServingUnit,
+                        Code = dto.ServingUnit,
+                        Label = dto.ServingUnit,
                         UnitType = UnitType.Custom,
                         ConversionFactor = 1
                     }
@@ -173,28 +173,65 @@ namespace API.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<Food>> UpdateFood(int id, UpdateFoodDto foodDto)
+        public async Task<ActionResult<FoodDto>> UpdateFood(int id, UpsertFoodDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var food = await _db.Foods.FindAsync(id);
+            var food = await _db.Foods
+                .Include(f => f.Units)
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (food == null) return NotFound();
 
             if (food.UserId != currentUserId)
                 return Forbid(); // can’t edit global or other users' foods
 
-            food.Name = foodDto.Name;
-            food.Brand = foodDto.Brand;
-            food.Calories = foodDto.Calories;
-            food.Carbs = foodDto.Carbs;
-            food.Protein = foodDto.Protein;
-            food.Fat = foodDto.Fat;
+            food.Name = dto.Name;
+            food.Brand = dto.Brand;
+            food.Calories = dto.Calories;
+            food.Carbs = dto.Carbs;
+            food.Protein = dto.Protein;
+            food.Fat = dto.Fat;
             food.UpdatedAt = DateTime.UtcNow;
+            food.BaseQuantity = dto.ServingAmount;
+            food.BaseUnit = dto.ServingUnit;
+
+            var unit = food.Units.FirstOrDefault(u => u.Code == "serving");
+            if (unit != null)
+            {
+                unit.Label = $"{dto.ServingDescription} ({dto.ServingAmount} {dto.ServingUnit})";
+                unit.ConversionFactor = dto.ServingAmount;
+            }
+            else
+            {
+                food.Units.Add(new FoodUnit
+                {
+                    Code = "serving",
+                    Label = $"{dto.ServingDescription} ({dto.ServingAmount} {dto.ServingUnit})",
+                    UnitType = UnitType.Custom,
+                    ConversionFactor = dto.ServingAmount
+                });
+            }
+
+            unit = food.Units.FirstOrDefault(u => u.Code == dto.ServingUnit);
+            if (unit != null)
+            {
+                unit.Label = dto.ServingUnit;
+            }
+            else
+            {
+                food.Units.Add(new FoodUnit
+                {
+                    Code = dto.ServingUnit,
+                    Label = dto.ServingUnit,
+                    UnitType = UnitType.Custom,
+                    ConversionFactor = 1
+                });
+            }
 
             await _db.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(MapToFoodDto(food));
         }
 
         [HttpDelete("{id}")]

@@ -1,4 +1,4 @@
-export type CreateCustomFoodRequest = {
+export type UpsertCustomFoodRequest = {
   name: string;
   brand?: string;
   servingDescription: string;

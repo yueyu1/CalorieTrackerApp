@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 import { Food } from '../../types/food';
 import { environment } from '../../environments/environment';
-import { CreateCustomFoodRequest } from '../../types/custom-food';
+import { UpsertCustomFoodRequest } from '../../types/custom-food';
 
 export type FoodQuery = {
   scope?: 'all' | 'global' | 'mine';
@@ -55,7 +55,7 @@ export class FoodService {
     ).subscribe();
   }
 
-  createCustomFood(payload: CreateCustomFoodRequest): Observable<Food> {
+  createCustomFood(payload: UpsertCustomFoodRequest): Observable<Food> {
     this.saving.set(true);
     this.error.set(null);
 
@@ -68,6 +68,25 @@ export class FoodService {
       }),
       catchError((error) => {
         this.error.set('Failed to create food:');
+        return throwError(() => error);
+      })
+    );
+  }
+
+  editCustomFood(foodId: number, payload: UpsertCustomFoodRequest): Observable<Food> {
+    this.saving.set(true);
+    this.error.set(null);
+    return this.http.put<Food>(`${this.apiUrl}/foods/${foodId}`, payload).pipe(
+      tap((updatedFood: Food) => {
+        this.foods.update((foods) => foods.map((food) =>
+          food.id === foodId ? updatedFood : food
+        ));
+      }),
+      finalize(() => {
+        this.saving.set(false);
+      }),
+      catchError((error) => {
+        this.error.set('Failed to edit food:');
         return throwError(() => error);
       })
     );

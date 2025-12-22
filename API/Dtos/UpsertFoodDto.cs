@@ -2,7 +2,7 @@ using System;
 
 namespace API.Dtos;
 
-public class CreateFoodDto
+public class UpsertFoodDto
 {
     public required string Name { get; set; }
     public string? Brand { get; set; }

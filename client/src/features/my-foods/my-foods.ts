@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -19,11 +19,12 @@ import { CustomFoodDialog } from './dialogs/custom-food-dialog/custom-food-dialo
 import { CustomFoodDialogResult } from '../../types/custom-food';
 import { FoodService } from '../../core/services/food-service';
 import { ToastService } from '../../core/services/toast-service';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-my-foods',
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatChipsModule,
@@ -46,11 +47,13 @@ export class MyFoods implements OnInit {
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
   private dialog = inject(MatDialog);
-  protected readonly showArchived = signal(false);
-  protected readonly selectedIds = signal<Set<number>>(new Set());
+  private destroyRef = inject(DestroyRef);
   protected form: FormGroup;
+  protected readonly showArchived = signal(false);
+  private searchQuery = signal('');
+  private sortMode = signal('recent');
+  protected readonly selectedIds = signal<Set<number>>(new Set());
   protected readonly foods = this.foodService.foods;
-  protected readonly visibleFoods = this.foodService.foods;
   protected readonly loading = this.foodService.loading;
   protected readonly deletingIds = this.foodService.deletingIds;
 
@@ -63,44 +66,53 @@ export class MyFoods implements OnInit {
 
   ngOnInit(): void {
     this.foodService.loadFoods({ scope: 'mine' });
+
+    this.searchCtrl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(value => {
+      this.searchQuery.set(value);
+      this.selectedIds.set(new Set());
+    });
+
+    this.sortCtrl.valueChanges.pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe((value) => {
+      this.sortMode.set(value);
+    });
   }
 
-  // readonly visibleFoods = computed(() => {
-  //   const q = this.searchCtrl.value.trim().toLowerCase();
-  //   const sort = this.sortCtrl.value;
-  //   const includeArchived = this.showArchived();
+  readonly visibleFoods = computed(() => {
+    const q = this.searchQuery();
+    const sort = this.sortMode();
+    const includeArchived = this.showArchived();
 
-  //   let rows = this.foods();
+    let rows = this.foods();
 
-  //   if (!includeArchived) rows = rows.filter(r => !r.isArchived);
+    if (!includeArchived) rows = rows.filter(r => !r.isArchived);
 
-  //   if (q) {
-  //     rows = rows.filter(r =>
-  //       r.name.toLowerCase().includes(q) ||
-  //       (r.brand ?? '').toLowerCase().includes(q) ||
-  //       this.primaryUnitLabel(r).toLowerCase().includes(q)
-  //     );
-  //   }
-  //   rows = [...rows].sort((a, b) => {
-  //     switch (sort) {
-  //       case 'name': return a.name.localeCompare(b.name);
-  //       case 'calories': return b.calories - a.calories;
-  //       case 'protein': return b.protein - a.protein;
-  //       case 'carbs': return b.carbs - a.carbs;
-  //       case 'fat': return b.fat - a.fat;
-  //       case 'recent':
-  //       default:
-  //         return (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
-  //     }
-  //   });
-
-  //   // Keep selection clean if rows disappear
-  //   const visibleIds = new Set(rows.map(r => r.id));
-  //   const nextSel = new Set([...this.selectedIds()].filter(id => visibleIds.has(id)));
-  //   if (nextSel.size !== this.selectedIds().size) this.selectedIds.set(nextSel);
-
-  //   return rows;
-  // });
+    if (q.trim().toLowerCase()) {
+      rows = rows.filter(r =>
+        r.name.toLowerCase().includes(q) ||
+        (r.brand ?? '').toLowerCase().includes(q) ||
+        this.primaryUnitLabel(r).toLowerCase().includes(q)
+      );
+    }
+    rows = [...rows].sort((a, b) => {
+      switch (sort) {
+        case 'name': return a.name.localeCompare(b.name);
+        case 'calories': return b.calories - a.calories;
+        case 'protein': return b.protein - a.protein;
+        case 'carbs': return b.carbs - a.carbs;
+        case 'fat': return b.fat - a.fat;
+        case 'recent':
+        default:
+          return (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '');
+      }
+    });
+    return rows;
+  });
 
   // Display helpers
   
@@ -152,7 +164,18 @@ export class MyFoods implements OnInit {
   }
 
   toggleArchived() {
-    this.showArchived.update(v => !v);
+    this.showArchived.set(!this.showArchived());
+
+    if (!this.showArchived()) {
+      // Clear selection of archived items
+      const next = new Set(this.selectedIds());
+      for (const food of this.foods()) {
+        if (food.isArchived && next.has(food.id)) {
+          next.delete(food.id);
+        }
+      }
+      this.selectedIds.set(next);
+    }
   }
 
   // Actions
@@ -163,10 +186,7 @@ export class MyFoods implements OnInit {
     });
     ref.afterClosed().subscribe((result: CustomFoodDialogResult | null) => {
       if (!result) return;
-      this.foodService.getFoods({ scope: 'mine' }).subscribe({
-        next: () => this.toast.success('Food created successfully.'),
-        error: (err) => this.toast.error(err)
-      });
+      this.toast.success('Food created successfully.')
     });
   }
 
@@ -180,12 +200,9 @@ export class MyFoods implements OnInit {
         foodId: food.id
       }
     });
-    ref.afterClosed().subscribe((result: CustomFoodDialogResult | null) => {
+    ref.afterClosed().subscribe((result) => {
       if (!result) return;
-      this.foodService.getFoods({ scope: 'mine' }).subscribe({
-        next: () => this.toast.success('Food created successfully.'),
-        error: (err) => this.toast.error(err)
-      });
+      this.toast.success('Food updated successfully.');
     });
   }
 
@@ -211,10 +228,10 @@ export class MyFoods implements OnInit {
   }
 
   onBulkDelete() {
-    const ids = [...this.selectedIds()];
-    if (!ids.length) return;
-
-    for (const id of ids) {
+    const visibleIds = this.visibleFoods().map(f => f.id);
+    const toDelete = [...this.selectedIds()].filter(id => visibleIds.includes(id));
+    if (!toDelete.length) return;
+    for (const id of toDelete) {
       this.foodService.deleteCustomFood(id).subscribe({
         error: (err) => this.toast.error(err)
       });

@@ -19,7 +19,9 @@
 
         <span class="kicker-meta">
           {{ visibleFoods().length }} visible
-          <span *ngIf="showArchived()">· archived included</span>
+          @if(showArchived()) {
+          <span>· archived included</span>
+          }
         </span>
       </div>
 
@@ -89,10 +91,11 @@
       <mat-form-field appearance="outline" class="search">
         <mat-icon matPrefix fontIcon="search"></mat-icon>
         <input matInput placeholder="Search my foods..." formControlName="search" />
-        <button *ngIf="searchCtrl.value" mat-icon-button matSuffix type="button" aria-label="Clear"
-          (click)="searchCtrl.setValue('')">
+        @if (searchCtrl.value) {
+        <button mat-icon-button matSuffix type="button" aria-label="Clear" (click)="searchCtrl.setValue('')">
           <mat-icon fontIcon="close"></mat-icon>
         </button>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="field">
@@ -119,7 +122,9 @@
   <!-- Meta -->
   <div class="meta">
     <span>{{ visibleFoods().length }} foods</span>
-    <span class="hint" *ngIf="showArchived()">Showing archived items</span>
+    @if (showArchived()) {
+    <span class="hint">Showing archived items</span>
+    }
   </div>
 
   <!-- Card -->
@@ -139,7 +144,9 @@
     </div>
 
     <!-- Rows -->
-    <div class="grid row" *ngFor="let f of visibleFoods()">
+    @if (!loading()) {
+    @for (f of visibleFoods(); track f.id) {
+    <div class="grid row">
       <div class="col-select">
         <mat-checkbox [checked]="isSelected(f.id)" (change)="toggleRow(f.id)" aria-label="Select row"></mat-checkbox>
       </div>
@@ -148,12 +155,16 @@
         <div class="food-cell">
           <div class="food-name">
             {{ f.name }}
-            <span class="archived" *ngIf="f.isArchived">Archived</span>
+            @if (f.isArchived) {
+            <span class="archived">Archived</span>
+            }
           </div>
 
           <div class="food-sub">
-            <span *ngIf="f.brand" class="brand">{{ f.brand }}</span>
-            <span class="dot" *ngIf="f.brand"></span>
+            @if (f.brand) {
+            <span class="brand">{{ f.brand }}</span>
+            <span class="dot"></span>
+            }
             <span>{{ primaryUnitLabel(f) }}</span>
             <span class="dot"></span>
             <span class="base">{{ baseLine(f) }}</span>
@@ -191,16 +202,20 @@
             <mat-icon fontIcon="edit"></mat-icon>
             Edit
           </button>
-          
-          <button mat-menu-item type="button" *ngIf="!f.isArchived" (click)="onArchive(f)">
+
+          @if (!f.isArchived) {
+          <button mat-menu-item type="button" (click)="onArchive(f)">
             <mat-icon fontIcon="inventory_2"></mat-icon>
             Archive
           </button>
+          }
 
-          <button mat-menu-item type="button" *ngIf="f.isArchived" (click)="onRestore(f)">
+          @if (f.isArchived) {
+          <button mat-menu-item type="button" (click)="onRestore(f)">
             <mat-icon fontIcon="restore"></mat-icon>
             Restore
           </button>
+          }
 
           <mat-divider></mat-divider>
 
@@ -211,9 +226,11 @@
         </mat-menu>
       </div>
     </div>
+    }
 
     <!-- Empty state -->
-    <div class="empty" *ngIf="visibleFoods().length === 0">
+    @if (visibleFoods().length === 0) {
+    <div class="empty">
       <div class="empty-title">No foods found</div>
       <div class="empty-sub">Try a different search, or create a custom food to get started.</div>
       <button mat-raised-button class="btn-primary" type="button" (click)="onCreateFood()">
@@ -221,14 +238,63 @@
         Create Food
       </button>
     </div>
+    }
 
     <!-- Bulk bar -->
-    <div class="bulk" *ngIf="this.selectedIds().size > 0">
+    @if (this.selectedIds().size > 0) {
+    <div class="bulk">
       <div class="bulk-left">{{ this.selectedIds().size }} selected</div>
       <div class="bulk-actions">
         <button mat-stroked-button class="btn-danger" type="button" (click)="onBulkDelete()">Delete</button>
         <button mat-stroked-button type="button" (click)="clearSelection()">Cancel</button>
       </div>
     </div>
+    }
+    }
+    @else {
+    <!-- Skeleton rows -->
+    @for (i of [1,2,3,4,5,6]; track i) {
+    <div class="grid row sk-row" aria-hidden="true">
+      <div class="col-select">
+        <div class="sk sk-box"></div>
+      </div>
+
+      <div class="col-food">
+        <div class="food-cell">
+          <div class="sk sk-line w-55"></div>
+          <div class="food-sub">
+            <div class="sk sk-line w-18"></div>
+            <span class="dot"></span>
+            <div class="sk sk-line w-28"></div>
+            <span class="dot"></span>
+            <div class="sk sk-line w-22"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-kcal">
+        <div class="kcal">
+          <div class="sk sk-line w-45 sk-kcal"></div>
+        </div>
+      </div>
+
+      <div class="col-macros">
+        <div class="macro-chips">
+          <div class="sk sk-chip"></div>
+          <div class="sk sk-chip"></div>
+          <div class="sk sk-chip"></div>
+        </div>
+      </div>
+
+      <div class="col-actions">
+        <div class="sk-actions">
+          <div class="sk sk-icon"></div>
+          <div class="sk sk-icon"></div>
+        </div>
+      </div>
+    </div>
+    }
+    }
+
   </div>
 </div>

@@ -56,38 +56,6 @@ export class AddFoodDialog implements OnInit {
     });
   }
 
-  /* ---------- form getters ---------- */
-  get searchCtrl(): FormControl {
-    return this.form.get('search') as FormControl;
-  }
-
-  get foodsArray(): FormArray {
-    return this.form.get('foods') as FormArray;
-  }
-
-  get showMyFoodsEmptyState(): boolean {
-    return (
-      !this.loading() &&
-      this.activeFilter === 'myFoods' &&
-      this.foods().length === 0
-    );
-  }
-
-  get myFoodsEmptyTitle(): string {
-    const q = (this.searchCtrl.value ?? '').trim();
-    return q
-      ? 'No matching custom foods'
-      : 'No custom foods yet';
-  }
-
-  get myFoodsEmptySubtitle(): string {
-    const q = (this.searchCtrl.value ?? '').trim();
-    return q
-      ? `You don't have any custom foods matching “${q}”.`
-      : 'Create your own foods to quickly add them to meals.';
-  }
-
-
   /* ---------- lifecycle + form setup ---------- */
   ngOnInit(): void {
     this.loadFoods();
@@ -348,5 +316,36 @@ export class AddFoodDialog implements OnInit {
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+    /* ---------- form getters ---------- */
+  get searchCtrl(): FormControl {
+    return this.form.get('search') as FormControl;
+  }
+
+  get foodsArray(): FormArray {
+    return this.form.get('foods') as FormArray;
+  }
+
+  get showMyFoodsEmptyState(): boolean {
+    return (
+      !this.loading() &&
+      this.activeFilter === 'myFoods' &&
+      this.foods().length === 0
+    );
+  }
+
+  get myFoodsEmptyTitle(): string {
+    const q = (this.searchCtrl.value ?? '').trim();
+    return q
+      ? 'No matching custom foods'
+      : 'No custom foods yet';
+  }
+
+  get myFoodsEmptySubtitle(): string {
+    const q = (this.searchCtrl.value ?? '').trim();
+    return q
+      ? `You don't have any custom foods matching “${q}”.`
+      : 'Create your own foods to quickly add them to meals.';
   }
 }
