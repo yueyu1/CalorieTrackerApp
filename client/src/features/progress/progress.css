@@ -2,7 +2,7 @@
   display: block;
 }
 
-/* Page wrapper (match your 1180px rhythm) */
+/* Page wrapper */
 .page {
   max-width: 1180px;
   margin: 0 auto;
@@ -37,7 +37,7 @@
   gap: 12px;
 }
 
-/* Range pill (echo your date pill energy, but unique) */
+/* Range pill */
 .range-pill {
   height: 44px;
   border-radius: 999px;
@@ -110,7 +110,13 @@
   color: rgba(15, 23, 42, 0.55);
 }
 
-/* Subtle per-card vibes (consistent, but unique) */
+.chart-hint {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.45);
+  white-space: nowrap;
+}
+
 .card--today {
   background:
     radial-gradient(700px 220px at 0% 0%, rgba(99,102,241,0.16), transparent 60%),
@@ -239,7 +245,6 @@
   transition: width 240ms ease;
 }
 
-/* Fill colors (match your macro palette) */
 .bar-fill--cal {
   background: linear-gradient(90deg, rgba(99,102,241,0.92), rgba(168,85,247,0.86));
 }
@@ -418,6 +423,40 @@
   overflow: hidden;
 }
 
+.chart-empty{
+  position:absolute;
+  inset:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  gap:8px;
+  padding:18px;
+  color: rgba(15, 23, 42, 0.6);
+}
+
+.chart-empty-title{
+  font-weight: 900;
+  color: rgba(15, 23, 42, 0.78);
+}
+
+.chart-empty-sub{
+  font-size: 12px;
+  color: rgba(15, 23, 42, 0.55);
+}
+
+.chart-empty-btn{
+  margin-top: 6px;
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(99,102,241,0.28);
+  background: rgba(99,102,241,0.10);
+  font-weight: 800;
+  cursor: pointer;
+}
+
 .bars {
   position: absolute;
   inset: 14px 14px 34px 14px;
@@ -437,6 +476,13 @@
   gap: 10px;
 }
 
+.bar-slot {
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
 .bar-rect {
   width: 78%;
   min-width: 18px;
@@ -446,6 +492,16 @@
     linear-gradient(180deg, rgba(56,189,248,0.55), rgba(99,102,241,0.22));
   box-shadow: 0 16px 34px rgba(15, 23, 42, 0.10);
   transition: height 260ms ease;
+}
+
+.bar-rect--empty {
+  height: 100% !important;
+  background: transparent !important;
+  box-shadow: none !important;
+
+  border: 2px solid rgba(99, 102, 241, 0.28);
+  border-radius: 14px 14px 12px 12px;
+  opacity: 0.28;
 }
 
 .bar-col:nth-child(1) .bar-rect { background: linear-gradient(180deg, rgba(147,197,253,0.55), rgba(99,102,241,0.18)); }
@@ -478,7 +534,7 @@
 
 .cal-line {
   fill: none;
-  stroke: rgba(99, 102, 241, 0.78);
+  stroke: rgba(99,102,241,0.65);
   stroke-width: 4;
   filter: drop-shadow(0 10px 18px rgba(15, 23, 42, 0.14));
 }

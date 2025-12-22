@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { GoalSettingsDto, GoalSettingsResponseDto } from '../../types/goals';
 import { environment } from '../../environments/environment';
-import { tap } from 'rxjs';
+import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -12,20 +12,31 @@ export class GoalSettingsService {
   private apiUrl = environment.apiUrl;
   readonly goalSettings = signal<GoalSettingsDto | null>(null);
   readonly isSet = signal<boolean>(false);
-  readonly goalsLoading = signal<boolean>(false);
+  readonly isLoading = signal<boolean>(false);
 
-  save(dto: GoalSettingsDto) {
-    return this.http.post<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`, dto).pipe(
-      tap((dto) => {
-        this.isSet.set(true);
-        this.goalSettings.set(dto.settings);
-      })
-    );
-  }
+  readonly targetCalories = computed(() => this.goalSettings()?.calories ?? 0);
+  readonly macroTargets = computed(() => {
+    const g = this.goalSettings();
+    if (!g) return { protein: 0, carbs: 0, fat: 0 };
 
-  getSettings() {
-    this.goalsLoading.set(true);
-    return this.http.get<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`).pipe(
+    if (g.macroMode === 'grams') {
+      return {
+        protein: g.protein,
+        carbs: g.carbs,
+        fat: g.fat
+      };
+    }
+
+    return {
+      protein: (g.calories * g.protein / 100) / 4,
+      carbs: (g.calories * g.carbs / 100) / 4,
+      fat: (g.calories * g.fat / 100) / 9
+    };
+  });
+
+  loadGoalSettings(): void {
+    this.isLoading.set(true);
+    this.getGoalSettings().pipe(
       tap((dto) => {
         if (dto.isSet) {
           this.isSet.set(true);
@@ -34,7 +45,26 @@ export class GoalSettingsService {
           this.isSet.set(false);
           this.goalSettings.set(null);
         }
-        this.goalsLoading.set(false);
+      }),
+      finalize(() => {
+        this.isLoading.set(false);
+      }),
+      catchError((error) => {
+        console.error('Failed to load goal settings.', error);
+        return throwError(() => error);
+      })
+    ).subscribe();
+  }
+
+  getGoalSettings(): Observable<GoalSettingsResponseDto> {
+    return this.http.get<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`);
+  }
+
+  save(dto: GoalSettingsDto) {
+    return this.http.post<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`, dto).pipe(
+      tap((dto) => {
+        this.isSet.set(true);
+        this.goalSettings.set(dto.settings);
       })
     );
   }

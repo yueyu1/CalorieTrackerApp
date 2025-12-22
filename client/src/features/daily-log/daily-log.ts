@@ -22,6 +22,7 @@ import { Router } from '@angular/router';
 import { GoalSettingsService } from '../../core/services/goal-settings-service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { CustomFoodDialogResult } from '../../types/custom-food';
+import { toYmd } from '../../shared/utils/date-utils';
 
 @Component({
   selector: 'app-daily-log',
@@ -54,70 +55,41 @@ export class DailyLog implements OnInit {
   protected datePickerOpen = signal(false);
   protected formatQuantity = formatQuantity;
   protected pageLoading = computed(() => this.mealsService.mealsLoading()
-    || this.goalSettingsService.goalsLoading());
+    || this.goalSettingsService.isLoading());
   protected goal = this.goalSettingsService.goalSettings;
+  protected currentDayTotals = this.mealsService.currentDayTotals;
+  protected goalCalories = this.goalSettingsService.targetCalories;
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
-    this.goalSettingsService.getSettings().subscribe();
+    this.goalSettingsService.loadGoalSettings();
   }
 
-  // ---- Goal targets ----
-
-  protected goalCalories = computed(() => this.goal()?.calories ?? 0);
-
-  protected proteinTarget = computed(() => {
-    const g = this.goal();
-    if (!g) return 0;
-
-    if (g.macroMode === 'grams') return g.protein;
-
-    return (g.calories * (g.protein / 100)) / 4;
-  });
-
-  protected carbsTarget = computed(() => {
-    const g = this.goal();
-    if (!g) return 0;
-
-    if (g.macroMode === 'grams') return g.carbs;
-
-    return (g.calories * (g.carbs / 100)) / 4;
-  });
-
-  protected fatTarget = computed(() => {
-    const g = this.goal();
-    if (!g) return 0;
-
-    if (g.macroMode === 'grams') return g.fat;
-
-    return (g.calories * (g.fat / 100)) / 9;
-  });
-
   protected caloriesRemaining = computed(() =>
-    this.goalCalories() - this.totalCalories()
+    this.goalCalories() - this.currentDayTotals().calories
   );
 
   protected proteinRemaining = computed(() =>
-    this.proteinTarget() - this.totalProtein()
+    this.goalSettingsService.macroTargets().protein - this.currentDayTotals().protein
   );
 
   protected carbsRemaining = computed(() =>
-    this.carbsTarget() - this.totalCarbs()
+    this.goalSettingsService.macroTargets().carbs - this.currentDayTotals().carbs
   );
 
   protected fatRemaining = computed(() =>
-    this.fatTarget() - this.totalFat()
+    this.goalSettingsService.macroTargets().fat - this.currentDayTotals().fat
   );
 
   protected caloriesProgress = computed(() =>
     this.goalCalories() > 0
-      ? this.totalCalories() / this.goalCalories()
+      ? this.currentDayTotals().calories / this.goalCalories()
       : 0
   );
 
   protected proteinProgress = computed(() =>
-    this.proteinTarget() > 0
-      ? this.totalProtein() / this.proteinTarget()
+    this.goalSettingsService.macroTargets().protein > 0
+      ? this.currentDayTotals().protein / this.goalSettingsService.macroTargets().protein
       : 0
   );
 
@@ -126,8 +98,8 @@ export class DailyLog implements OnInit {
   );
 
   protected carbsProgress = computed(() =>
-    this.carbsTarget() > 0
-      ? this.totalCarbs() / this.carbsTarget()
+    this.goalSettingsService.macroTargets().carbs > 0
+      ? this.currentDayTotals().carbs / this.goalSettingsService.macroTargets().carbs
       : 0
   );
 
@@ -136,8 +108,8 @@ export class DailyLog implements OnInit {
   );
 
   protected fatProgress = computed(() =>
-    this.fatTarget() > 0
-      ? this.totalFat() / this.fatTarget()
+    this.goalSettingsService.macroTargets().fat > 0
+      ? this.currentDayTotals().fat / this.goalSettingsService.macroTargets().fat
       : 0
   );
 
@@ -179,28 +151,10 @@ export class DailyLog implements OnInit {
     return 'Custom';
   }
 
-  // ---- Daily totals ----
-
-  totalCalories = computed(() =>
-    this.meals().reduce((sum, m) => sum + m.totalCalories, 0)
-  );
-
-  totalProtein = computed(() =>
-    this.meals().reduce((sum, m) => sum + m.totalProtein, 0)
-  );
-
-  totalCarbs = computed(() =>
-    this.meals().reduce((sum, m) => sum + m.totalCarbs, 0)
-  );
-
-  totalFat = computed(() =>
-    this.meals().reduce((sum, m) => sum + m.totalFat, 0)
-  );
-
   // ---- Macro calorie calculations ----
-  proteinCalories = computed(() => this.totalProtein() * 4);
-  carbsCalories = computed(() => this.totalCarbs() * 4);
-  fatCalories = computed(() => this.totalFat() * 9);
+  proteinCalories = computed(() => this.currentDayTotals().protein * 4);
+  carbsCalories = computed(() => this.currentDayTotals().carbs * 4);
+  fatCalories = computed(() => this.currentDayTotals().fat * 9);
 
   get totalMacroCalories() {
     return this.proteinCalories() +
@@ -537,18 +491,13 @@ export class DailyLog implements OnInit {
   }
 
   private loadForDate(d: Date): void {
-    this.mealsService.loadDailyMeals(this.toYmd(d));
+    this.mealsService.loadDailyMeals(toYmd(d));
 
-    this.mealsService.getDailyMeals(this.toYmd(this.yesterdayDate())).pipe(
+    this.mealsService.getDailyMeals(toYmd(this.yesterdayDate())).pipe(
       tap((meals) => {
         this.yesterdayMeals.set(meals);
       })
     ).subscribe();
-  }
-
-  private toYmd(d: Date): string {
-    // local date -> YYYY-MM-DD (avoids UTC shift issues from toISOString())
-    return d.toLocaleDateString('en-CA');
   }
 
   protected yesterdayDate = computed(() => {

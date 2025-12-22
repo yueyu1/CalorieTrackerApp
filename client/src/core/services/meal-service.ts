@@ -1,11 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { Meal, MealType } from '../../types/meal';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
-import { forkJoin, tap } from 'rxjs';
+import { catchError, finalize, forkJoin, tap, throwError } from 'rxjs';
 import { MealEntryItem } from '../../types/meal-entry-item';
+import { getPastDays } from '../../shared/utils/date-utils';
+import { DailyTotals } from '../../types/progress';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +17,21 @@ export class MealService {
   private apiUrl = environment.apiUrl;
   public readonly meals = signal<Meal[]>([]);
   readonly mealsLoading = signal<boolean>(false);
+  readonly days = getPastDays(7);
+  readonly rangeTotals = signal<DailyTotals[]>([]);
+
+  readonly currentDayTotals = computed(() => {
+    return this.meals().reduce(
+      (acc, m) => {
+        acc.calories += m.totalCalories ?? 0;
+        acc.protein += m.totalProtein ?? 0;
+        acc.carbs += m.totalCarbs ?? 0;
+        acc.fat += m.totalFat ?? 0;
+        return acc;
+      },
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    );
+  });
 
   /** Load meals (with totals and items) for a specific date */
   loadDailyMeals(date: string): void {
@@ -22,14 +39,43 @@ export class MealService {
     this.getDailyMeals(date).pipe(
       tap((meals) => {
         this.meals.set(meals);
-        this.mealsLoading.set(false);
-    })).subscribe();
+      }),
+      finalize(() => { 
+        this.mealsLoading.set(false); 
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    ).subscribe();
+  }
+
+  /** Load meals totals in a date range */
+  loadMealsInRange(from: string, to: string): void {
+    this.mealsLoading.set(true);
+    this.getMealsInRange(from, to).pipe(
+      tap((dts) => {
+        this.rangeTotals.set(dts);
+      }),
+      finalize(() => { 
+        this.mealsLoading.set(false); 
+      }),
+      catchError((error) => {
+        return throwError(() => error);
+      })
+    ).subscribe();
   }
 
   /** Get meals for a specific date */
   getDailyMeals(date: string): Observable<Meal[]> {
     return this.http.get<Meal[]>(`${this.apiUrl}/meals/daily`, {
       params: { date },
+    });
+  }
+
+  /** Get meals in a date range */
+  getMealsInRange(from: string, to: string): Observable<DailyTotals[]> {
+    return this.http.get<DailyTotals[]>(`${this.apiUrl}/meals/range`, {
+      params: { from, to },
     });
   }
 

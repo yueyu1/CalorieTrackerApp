@@ -12,7 +12,6 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 import { GoalSettingsService } from '../../core/services/goal-settings-service';
-import { tap } from 'rxjs/internal/operators/tap';
 import { ToastService } from '../../core/services/toast-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -41,6 +40,9 @@ export class GoalSettings implements OnInit {
   protected goalSettingsService = inject(GoalSettingsService);
   private toast = inject(ToastService);
   private destroyRef = inject(DestroyRef);
+  private goalSettings = this.goalSettingsService.goalSettings;
+  protected isLoading = this.goalSettingsService.isLoading;
+  private isSet = this.goalSettingsService.isSet;
   private initial = signal<GoalSettingsDto>({
     calories: 2200,
     macroMode: 'percent',
@@ -65,20 +67,18 @@ export class GoalSettings implements OnInit {
   }
 
   ngOnInit(): void {
-    this.goalSettingsService.getSettings().pipe(
-      tap(() => {
-        if (this.goalSettingsService.isSet()) {
-          this.baseCalories.set(this.goalSettingsService.goalSettings()!.calories);
-          this.initial.set(this.goalSettingsService.goalSettings()!);
-          this.form.setValue(this.goalSettingsService.goalSettings()!, { emitEvent: false });
-        } else {
-          this.form.setValue(this.initial(), { emitEvent: false });
-        }
-        this.activePreset.set(this.detectPreset(this.currentDto()));
-        this.form.markAsPristine();
-        this.form.markAsUntouched();
-      })
-    ).subscribe();
+    this.goalSettingsService.loadGoalSettings();
+
+    if (this.isSet()) {
+      this.baseCalories.set(this.goalSettings()!.calories);
+      this.initial.set(this.goalSettings()!);
+      this.form.setValue(this.goalSettings()!, { emitEvent: false });
+    } else {
+      this.form.setValue(this.initial(), { emitEvent: false });
+    }
+    this.activePreset.set(this.detectPreset(this.currentDto()));
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
 
     this.form.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))

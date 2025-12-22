@@ -1,25 +1,14 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { Router } from '@angular/router';
-
-type MacroKey = 'protein' | 'carbs' | 'fat';
-
-type TodayMacro = {
-  key: MacroKey;
-  label: string;
-  icon: string;      // material icon name
-  value: number;     // grams
-  goal: number;      // grams
-};
-
-type DayPoint = {
-  label: string;     // e.g. "M"
-  calories: number;
-};
+import { GoalSettingsService } from '../../core/services/goal-settings-service';
+import { TodayMacro, DayPoint } from '../../types/progress';
+import { getPastDays, toYmd } from '../../shared/utils/date-utils';
+import { MealService } from '../../core/services/meal-service';
 
 @Component({
   selector: 'app-progress',
@@ -33,28 +22,43 @@ type DayPoint = {
   templateUrl: './progress.html',
   styleUrl: './progress.css',
 })
-export class Progress {
-  private router = inject(Router);
+export class Progress implements OnInit {
+  protected router = inject(Router);
+  private mealService = inject(MealService);
+  private goalSettingsService = inject(GoalSettingsService);
+  private goalSettings = this.goalSettingsService.goalSettings;
+  private isLoading = this.goalSettingsService.isLoading;
+  protected readonly targetCalories = this.goalSettingsService.targetCalories;
+  protected readonly hasWeekData = computed(() => this.week().some(d => d.calories > 0));
 
-  readonly targetCalories = signal(2200);
+  readonly todayCalories = computed(() => {
+    const today = toYmd(new Date());
+    const t = this.mealService.rangeTotals().find(dt => dt.date === today);
+    return t?.calories || 0;
+  });
 
-  readonly todayCalories = signal(1975);
+  readonly todayMacros = computed<TodayMacro[]>(() => {
+    const today = toYmd(new Date());
+    const t = this.mealService.rangeTotals().find(dt => dt.date === today);
+    const targets = this.goalSettingsService.macroTargets();
+    return [
+      { key: 'protein', label: 'Protein', icon: 'radio_button_checked', value: t?.protein || 0, goal: targets?.protein || 0 },
+      { key: 'carbs', label: 'Carbs', icon: 'apps', value: t?.carbs || 0, goal: targets?.carbs || 0 },
+      { key: 'fat', label: 'Fat', icon: 'change_history', value: t?.fat || 0, goal: targets?.fat || 0 },
+    ];
+  });
 
-  readonly todayMacros = signal<TodayMacro[]>([
-    { key: 'protein', label: 'Protein', icon: 'radio_button_checked', value: 150, goal: 165 },
-    { key: 'carbs', label: 'Carbs', icon: 'apps', value: 250, goal: 275 },
-    { key: 'fat', label: 'Fat', icon: 'change_history', value: 75, goal: 73 },
-  ]);
-
-  readonly week = signal<DayPoint[]>([
-    { label: 'M', calories: 2100 },
-    { label: 'T', calories: 2050 },
-    { label: 'W', calories: 2320 },
-    { label: 'T', calories: 2175 },
-    { label: 'F', calories: 2085 },
-    { label: 'S', calories: 2380 },
-    { label: 'S', calories: 2305 },
-  ]);
+  readonly week = computed<DayPoint[]>(() => {
+    const last7Days = getPastDays(7);
+    const totals = this.mealService.rangeTotals();
+    return last7Days.map(date => {
+      const dayTotals = totals.find(t => t.date === date);
+      return {
+        label: this.dayLabel(date),
+        calories: Math.round(dayTotals?.calories ?? 0),
+      };
+    });
+  });
 
   readonly clamp100 = (n: number) => Math.max(0, Math.min(100, n));
 
@@ -101,7 +105,7 @@ export class Progress {
     const vals = this.week().map(d => d.calories);
     if (!vals.length) return 0;
     const min = Math.min(...vals);
-    return Math.floor((min - 120) / 50) * 50; // nice-ish padding
+    return Math.floor((min - 120) / 50) * 50;
   });
 
   readonly yMax = computed(() => {
@@ -113,6 +117,7 @@ export class Progress {
 
   // SVG path + points (viewBox 0 0 700 220)
   readonly linePath = computed(() => {
+    if (!this.hasWeekData()) return '';
     const pts = this.chartPoints();
     if (!pts.length) return '';
     const d0 = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
@@ -120,13 +125,27 @@ export class Progress {
     return `${d0} ${rest}`;
   });
 
-  readonly pointDots = computed(() => this.chartPoints());
+  readonly pointDots = computed(() => (this.hasWeekData() ? this.chartPoints() : []));
 
   readonly targetY = computed(() => {
     return this.toChartY(this.targetCalories());
   });
 
+  ngOnInit(): void {
+    const days = getPastDays(7); // oldest -> newest
+    const from = days[0];
+    const to = days[days.length - 1];
+
+    this.mealService.loadMealsInRange(from, to);
+    this.goalSettingsService.loadGoalSettings();
+  }
+
   // ===== Helpers =====
+  private dayLabel(ymd: string): string {
+    const d = new Date(`${ymd}T00:00:00`); // local midnight, safe
+    return ['S', 'M', 'T', 'W', 'T', 'F', 'S'][d.getDay()];
+  };
+
   private safePct(value: number, goal: number) {
     if (!goal || goal <= 0) return 0;
     return Math.max(0, Math.min(100, Math.round((value / goal) * 100)));
@@ -134,6 +153,7 @@ export class Progress {
 
   // bar heights are computed in template from yMin/yMax
   barHeightPct(cal: number) {
+    if (!this.hasWeekData()) return 0;
     const min = this.yMin();
     const max = this.yMax();
     if (max <= min) return 0;

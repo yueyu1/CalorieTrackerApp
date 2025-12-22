@@ -125,12 +125,15 @@
       <div class="card-head chart-head">
         <div>
           <h2 class="card-title">Weekly Trend</h2>
-          <p class="card-subtitle">Calories per day vs your target.</p>
+          <p class="card-subtitle">
+            Calories per day vs your target.
+            <span class="chart-hint">Line shows trend, not exact scale.</span>
+          </p>
         </div>
 
         <div class="legend">
           <span class="legend-dot"></span>
-          <span class="legend-label">Calories</span>
+          <span class="legend-label">Calories trend</span>
           @if (hasGoal()) {
           <span class="legend-sep">—</span>
           <span class="legend-target">Target {{ targetCalories() | number:'1.0-0' }} kcal</span>
@@ -147,21 +150,43 @@
       <div class="chart-shell">
         <!-- Grid labels -->
         <div class="y-labels">
+          @if (hasWeekData()) {
           <div class="y-label">{{ yMax() | number:'1.0-0' }}</div>
           <div class="y-label">{{ ((yMax() + yMin()) / 2) | number:'1.0-0' }}</div>
           <div class="y-label">{{ yMin() | number:'1.0-0' }}</div>
+          } @else {
+          <div class="y-label">0</div>
+          <div class="y-label">0</div>
+          <div class="y-label">0</div>
+          }
         </div>
 
-        <div class="chart">
+        <div>
+          <div class="chart">
           <!-- Bars -->
           <div class="bars">
-            @for (d of week(); track d.label + d.calories) {
+            @for (d of week(); track $index) {
             <div class="bar-col">
-              <div class="bar-rect" [style.height.%]="barHeightPct(d.calories)"></div>
+              <div class="bar-slot">
+                <div class="bar-rect" [class.bar-rect--empty]="!hasWeekData()"
+                  [style.height.%]="barHeightPct(d.calories)">
+                </div>
+              </div>
+
               <div class="x-label">{{ d.label }}</div>
             </div>
             }
           </div>
+
+          @if (!hasWeekData()) {
+          <div class="chart-empty">
+            <div class="chart-empty-title">No entries yet</div>
+            <div class="chart-empty-sub">Log food on the Daily Log to see your weekly trend.</div>
+            <button type="button" class="chart-empty-btn" (click)="router.navigateByUrl('/daily-log')">
+              Go to Daily Log
+            </button>
+          </div>
+          }
 
           <!-- Overlay SVG line + target -->
           <svg class="overlay" viewBox="0 0 700 220" preserveAspectRatio="none" aria-hidden="true">
@@ -180,6 +205,8 @@
             }
           </svg>
         </div>
+        </div>
+        
       </div>
     </section>
 

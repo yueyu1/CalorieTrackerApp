@@ -67,7 +67,7 @@
 
         @if (goalSettingsService.isSet()) {
         <div class="summary-main-value">
-          {{ totalCalories() | number:'1.0-0' }}
+          {{ this.currentDayTotals().calories | number:'1.0-0' }}
           /
           {{ goalCalories() | number:'1.0-0' }}
           <span class="summary-unit">kcal</span>
@@ -84,7 +84,7 @@
 
         @else {
         <div class="summary-main-value">
-          {{ totalCalories() | number: '1.0-0' }}
+          {{ this.currentDayTotals().calories| number: '1.0-0' }}
           <span class="summary-unit">kcal</span>
         </div>
         }
@@ -106,7 +106,7 @@
         <div class="summary-body">
           <!-- Left: grams -->
           <div class="summary-main-value">
-            {{ totalProtein() | number: '1.0-0' }}
+            {{ currentDayTotals().protein | number: '1.0-0' }}
             <span class="summary-unit">g</span>
           </div>
 
@@ -162,7 +162,7 @@
         <div class="summary-body">
           <!-- Left (grams) -->
           <div class="summary-main-value">
-            {{ totalCarbs() | number: '1.0-0' }}
+            {{ currentDayTotals().carbs | number: '1.0-0' }}
             <span class="summary-unit">g</span>
           </div>
 
@@ -218,7 +218,7 @@
         <div class="summary-body">
           <!-- Left (grams) -->
           <div class="summary-main-value">
-            {{ totalFat() | number: '1.0-0' }}
+            {{ currentDayTotals().fat | number: '1.0-0' }}
             <span class="summary-unit">g</span>
           </div>
 

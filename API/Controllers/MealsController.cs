@@ -23,43 +23,69 @@ namespace API.Controllers
             MealType.Snacks
         ];
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Meal>>> GetMeals(
-            [FromQuery] DateOnly? date,
-            [FromQuery] DateOnly? from,
-            [FromQuery] DateOnly? to,
-            [FromQuery] MealType? type
+        [HttpGet("range")]
+        public async Task<ActionResult<IEnumerable<DailyTotalsDto>>> GetMealsRange(
+            [FromQuery] DateOnly from,
+            [FromQuery] DateOnly to
         )
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
-            var query = db.Meals
-                .Where(m => m.UserId == currentUserId)
-                .AsQueryable();
-
-            if (date.HasValue)
-            {
-                query = query.Where(m => m.MealDate == date.Value);
-            }
-
-            if (from.HasValue && to.HasValue)
-            {
-                query = query.Where(m => m.MealDate >= from.Value && m.MealDate <= to.Value);
-            }
-
-            if (type.HasValue)
-            {
-                query = query.Where(m => m.Type == type.Value);
-            }
-
-            var meals = await query
+            // Filter meals in range for this user
+            var meals = await db.Meals
+                .Where(m => m.UserId == currentUserId && m.MealDate >= from && m.MealDate <= to)
                 .Include(m => m.MealFoods)
                     .ThenInclude(mf => mf.Food)
-                .OrderBy(m => m.MealDate)
-                .ThenBy(m => m.Type)
                 .ToListAsync();
 
-            return Ok(meals);
+            // Flatten to MealFoods while keeping the date
+            var entriesWithDate = meals
+                .SelectMany(m => m.MealFoods.Select(mf => new
+                {
+                    MealDate = m.MealDate,
+                    MealFood = mf
+                }))
+                .ToList();
+
+            // Group by date and calculate totals
+            var dailyTotals = entriesWithDate
+                .GroupBy(e => e.MealDate)
+                .Select(g => new DailyTotalsDto
+                {
+                    Date = g.Key,
+                    Calories = g.Sum(e => e.MealFood.Calories),
+                    Protein = (int)Math.Round(g.Sum(e => e.MealFood.Protein), MidpointRounding.AwayFromZero),
+                    Carbs = (int)Math.Round(g.Sum(e => e.MealFood.Carbs), MidpointRounding.AwayFromZero),
+                    Fat = (int)Math.Round(g.Sum(e => e.MealFood.Fat), MidpointRounding.AwayFromZero)
+                })
+                .OrderBy(dt => dt.Date)
+                .ToList();
+
+            // Put DB results into a dictionary for quick lookup by date
+            var byDate = dailyTotals.ToDictionary(x => x.Date);
+
+            // Generate every date from 'from' to 'to' and fill missing ones with zeros
+            var result = new List<DailyTotalsDto>();
+            for (var d = from; d <= to; d = d.AddDays(1))
+            {
+                if (byDate.TryGetValue(d, out var existing))
+                {
+                    result.Add(existing);
+                }
+                else
+                {
+                    result.Add(new DailyTotalsDto
+                    {
+                        Date = d,
+                        Calories = 0,
+                        Protein = 0,
+                        Carbs = 0,
+                        Fat = 0
+                    });
+                }
+            }
+
+            return Ok(result);
         }
 
         // GET api/meals/daily?date=2025-12-03
@@ -167,8 +193,7 @@ namespace API.Controllers
 
             db.Meals.Add(meal);
             await db.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetMeals), new { id = meal.Id }, MapToMealDto(meal));
+            return Ok(MapToMealDto(meal));
         }
 
         [HttpPut("{id}")]
@@ -259,6 +284,13 @@ namespace API.Controllers
                 CreatedAt = DateTime.UtcNow
             };
 
+            var n = nutritionCalculationService.CalculateNutritionForEntry(mealFood);
+
+            mealFood.Calories = n.Calories;
+            mealFood.Protein = n.Protein;
+            mealFood.Carbs = n.Carbs;
+            mealFood.Fat = n.Fat;
+
             db.MealFoods.Add(mealFood);
             await db.SaveChangesAsync();
 
@@ -285,6 +317,13 @@ namespace API.Controllers
             mealFood.Quantity = dto.Quantity;
             mealFood.Unit = dto.Unit;
             mealFood.UpdatedAt = DateTime.UtcNow;
+
+            var n = nutritionCalculationService.CalculateNutritionForEntry(mealFood);
+
+            mealFood.Calories = n.Calories;
+            mealFood.Protein = n.Protein;
+            mealFood.Carbs = n.Carbs;
+            mealFood.Fat = n.Fat;
 
             await db.SaveChangesAsync();
 

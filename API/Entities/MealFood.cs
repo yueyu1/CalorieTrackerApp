@@ -6,8 +6,16 @@ namespace API.Entities;
 public class MealFood
 {
     public int Id { get; set; }
+    
     public double Quantity { get; set; }
     public string Unit { get; set; } = "g";
+
+    // snapshot nutrition (stored at time of logging)
+    public int Calories { get; set; }
+    public double Protein { get; set; }
+    public double Carbs { get; set; }
+    public double Fat { get; set; }
+
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
 
