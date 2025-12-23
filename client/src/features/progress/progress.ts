@@ -1,4 +1,4 @@
-import { CommonModule, DecimalPipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
@@ -27,9 +27,12 @@ export class Progress implements OnInit {
   private mealService = inject(MealService);
   private goalSettingsService = inject(GoalSettingsService);
   private goalSettings = this.goalSettingsService.goalSettings;
-  private isLoading = this.goalSettingsService.isLoading;
   protected readonly targetCalories = this.goalSettingsService.targetCalories;
-  protected readonly hasWeekData = computed(() => this.week().some(d => d.calories > 0));
+  
+  protected readonly isLoading = computed(() => this.mealService.rangeLoading() || this.goalSettingsService.isLoading());
+  
+  protected readonly hasWeekData = computed(() =>
+    this.week().some(d => d.calories !== null));
 
   readonly todayCalories = computed(() => {
     const today = toYmd(new Date());
@@ -55,7 +58,7 @@ export class Progress implements OnInit {
       const dayTotals = totals.find(t => t.date === date);
       return {
         label: this.dayLabel(date),
-        calories: Math.round(dayTotals?.calories ?? 0),
+        calories: dayTotals?.calories ?? null,
       };
     });
   });
@@ -76,14 +79,14 @@ export class Progress implements OnInit {
   readonly avgCalories = computed(() => {
     const days = this.week();
     if (!days.length) return 0;
-    const sum = days.reduce((acc, d) => acc + d.calories, 0);
+    const sum = days.reduce((acc, d) => acc + (d.calories ?? 0), 0);
     return Math.round(sum / days.length);
   });
 
   readonly daysHitGoal = computed(() => {
     if (!this.hasGoal()) return 0;
     const target = this.targetCalories();
-    return this.week().filter(d => d.calories <= target).length;
+    return this.week().filter(d => d.calories && d.calories >= target).length;
   });
 
   readonly caloriesDeltaLabel = computed(() => {
@@ -102,30 +105,53 @@ export class Progress implements OnInit {
 
   // Chart scale
   readonly yMin = computed(() => {
-    const vals = this.week().map(d => d.calories);
+    const vals = this.week()
+      .map(d => d.calories).filter((v): v is number => v != null);
     if (!vals.length) return 0;
     const min = Math.min(...vals);
     return Math.floor((min - 120) / 50) * 50;
   });
 
   readonly yMax = computed(() => {
-    const vals = this.week().map(d => d.calories);
+    const vals = this.week()
+      .map(d => d.calories).filter((v): v is number => v != null);
     if (!vals.length) return 0;
     const max = Math.max(...vals);
     return Math.ceil((max + 120) / 50) * 50;
   });
 
-  // SVG path + points (viewBox 0 0 700 220)
-  readonly linePath = computed(() => {
-    if (!this.hasWeekData()) return '';
-    const pts = this.chartPoints();
-    if (!pts.length) return '';
-    const d0 = `M ${pts[0].x.toFixed(1)} ${pts[0].y.toFixed(1)}`;
-    const rest = pts.slice(1).map(p => `L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
-    return `${d0} ${rest}`;
+  readonly linePaths = computed(() => {
+    if (!this.hasWeekData()) return [] as string[];
+
+    const pts = this.chartPoints(); // (point | null)[]
+    const paths: string[] = [];
+
+    let segment: Array<{ x: number; y: number }> = [];
+
+    for (const p of pts) {
+      if (!p) {
+        if (segment.length >= 2) paths.push(this.pointsToPath(segment));
+        segment = [];
+        continue;
+      }
+      segment.push(p);
+    }
+
+    if (segment.length >= 2) paths.push(this.pointsToPath(segment));
+
+    return paths;
   });
 
-  readonly pointDots = computed(() => (this.hasWeekData() ? this.chartPoints() : []));
+  private pointsToPath(points: Array<{ x: number; y: number }>) {
+    const [first, ...rest] = points;
+    const d0 = `M ${first.x.toFixed(1)} ${first.y.toFixed(1)}`;
+    const restD = rest.map(p => `L ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    return restD ? `${d0} ${restD}` : d0;
+  }
+
+  readonly pointDots = computed(() =>
+    this.chartPoints().filter((p): p is { x: number; y: number; label: string; calories: number } => !!p)
+  );
 
   readonly targetY = computed(() => {
     return this.toChartY(this.targetCalories());
@@ -152,8 +178,10 @@ export class Progress implements OnInit {
   }
 
   // bar heights are computed in template from yMin/yMax
-  barHeightPct(cal: number) {
+  barHeightPct(cal: number | null) {
     if (!this.hasWeekData()) return 0;
+    if (cal == null) return 0;
+
     const min = this.yMin();
     const max = this.yMax();
     if (max <= min) return 0;
@@ -163,9 +191,11 @@ export class Progress implements OnInit {
 
   private chartPoints() {
     const data = this.week();
-    if (!data.length) return [];
+    if (!data.length) return [] as Array<{
+      x: number; y: number; label: string; calories: number;
+    } | null>;
 
-    const left = 36;     // padding inside viewBox
+    const left = 36;
     const right = 36;
     const top = 18;
     const bottom = 42;
@@ -179,6 +209,7 @@ export class Progress implements OnInit {
 
     return data.map((d, i) => {
       const x = left + (w * i) / Math.max(1, data.length - 1);
+      if (d.calories == null) return null;
       const yNorm = (d.calories - min) / denom;
       const y = top + (1 - yNorm) * h;
       return { x, y, label: d.label, calories: d.calories };

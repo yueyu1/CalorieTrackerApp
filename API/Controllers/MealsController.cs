@@ -77,10 +77,10 @@ namespace API.Controllers
                     result.Add(new DailyTotalsDto
                     {
                         Date = d,
-                        Calories = 0,
-                        Protein = 0,
-                        Carbs = 0,
-                        Fat = 0
+                        Calories = null,
+                        Protein = null,
+                        Carbs = null,
+                        Fat = null
                     });
                 }
             }
@@ -281,6 +281,7 @@ namespace API.Controllers
                 Unit = unit.Code,
                 MealId = mealId,
                 FoodId = dto.FoodId,
+                Food = food,
                 CreatedAt = DateTime.UtcNow
             };
 

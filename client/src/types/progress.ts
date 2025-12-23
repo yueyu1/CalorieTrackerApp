@@ -1,9 +1,9 @@
 export type DailyTotals = {
   date: string;     // "YYYY-MM-DD" from DateOnly
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
+  calories: number | null;
+  protein: number | null;
+  carbs: number | null;
+  fat: number | null;
 };
 
 export type TodayMacro = {
@@ -16,5 +16,5 @@ export type TodayMacro = {
 
 export type DayPoint = {
   label: string;     // e.g. "M"
-  calories: number;
+  calories: number | null;
 };

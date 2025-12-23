@@ -157,6 +157,12 @@
   color: #3730a3;
 }
 
+.chip--preview {
+  background: rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: rgba(15, 23, 42, 0.62);
+}
+
 /* ===== Today card body ===== */
 .calories-block {
   padding: 16px;
@@ -385,6 +391,26 @@
   color: rgba(15, 23, 42, 0.62);
 }
 
+.legend-cta{
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(99,102,241,0.30);
+  background: rgba(99,102,241,0.08);
+  font-weight: 800;
+  color: rgba(99,102,241,0.95);
+  cursor: pointer;
+}
+.legend-cta:hover{
+  background: rgba(99,102,241,0.12);
+  border-color: rgba(99,102,241,0.45);
+}
+
+.legend-cta:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(99,102,241,0.35);
+}
+
 .chart-shell {
   padding: 0 16px 16px;
   display: grid;
@@ -423,17 +449,50 @@
   overflow: hidden;
 }
 
-.chart-empty{
-  position:absolute;
-  inset:0;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-  gap:8px;
-  padding:18px;
-  color: rgba(15, 23, 42, 0.6);
+/* Dim the slots/bars behind the empty overlay */
+.chart.is-empty .bars {
+  opacity: 0.55;
+  filter: none;
+}
+
+/* Optional: dim x labels too */
+.chart.is-empty .x-label {
+  opacity: 0.45;
+}
+
+/* Ensure the message sits above bars + svg */
+.chart-empty {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 18px;
+}
+
+.chart-empty::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+
+  background: radial-gradient(
+    circle at 50% 45%,
+    rgba(255, 255, 255, 0.70) 0%,
+    rgba(255, 255, 255, 0.45) 30%,
+    rgba(255, 255, 255, 0.22) 48%,
+    rgba(255, 255, 255, 0.10) 62%,
+    rgba(255, 255, 255, 0.00) 78%
+  );
+}
+
+.chart-empty > * {
+  position: relative;
+  z-index: 1;
 }
 
 .chart-empty-title{
@@ -446,15 +505,36 @@
   color: rgba(15, 23, 42, 0.55);
 }
 
-.chart-empty-btn{
-  margin-top: 6px;
-  height: 36px;
-  padding: 0 14px;
+.chart-empty-btn {
+  height: 38px;
+  padding: 0 18px;
   border-radius: 999px;
-  border: 1px solid rgba(99,102,241,0.28);
-  background: rgba(99,102,241,0.10);
-  font-weight: 800;
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(243,244,246,0.9));
+  color: #0f172a;
+  font-weight: 700;
   cursor: pointer;
+  transition:
+    box-shadow 180ms ease,
+    transform 120ms ease,
+    border-color 180ms ease,
+    background 180ms ease;
+}
+
+.chart-empty-btn:hover {
+  border-color: rgba(99, 102, 241, 0.65);
+  background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(243,244,246,1));
+  box-shadow:
+    0 0 0 3px rgba(99, 102, 241, 0.18),
+    0 10px 22px rgba(99, 102, 241, 0.35);
+  transform: translateY(-1px);
+}
+
+.chart-empty-btn:active {
+  transform: translateY(0);
+  box-shadow:
+    0 0 0 2px rgba(99, 102, 241, 0.20),
+    0 6px 14px rgba(99, 102, 241, 0.25);
 }
 
 .bars {
@@ -717,16 +797,6 @@
   text-decoration: underline;
 }
 
-.legend-note {
-  margin-left: 10px;
-  font-weight: 700;
-  font-size: 12px;
-  color: rgba(15, 23, 42, 0.50);
-  padding: 0;
-  border: none;
-  background: transparent;
-}
-
 .stat-strong--muted {
   color: rgba(15, 23, 42, 0.40);
   font-weight: 800;
@@ -752,13 +822,6 @@
 
 .card--chart:has(.legend-note) .cal-line {
   stroke: rgba(99, 102, 241, 0.62);
-}
-
-/* ===== Today preview chip ===== */
-.chip--preview {
-  background: rgba(15, 23, 42, 0.05);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  color: rgba(15, 23, 42, 0.62);
 }
 
 /* Muted percent when no goal */
@@ -903,6 +966,334 @@
 
 .macro-values--preview .macro-value {
   font-size: 16px;
+}
+
+/* container */
+.chart.is-loading .bars {
+  pointer-events: none;
+}
+
+/* skeleton bar */
+.bar-skel {
+  width: 78%;
+  min-width: 18px;
+  height: 100%;
+  border-radius: 14px 14px 12px 12px;
+  background: linear-gradient(
+    90deg,
+    rgba(226,232,240,0.6) 25%,
+    rgba(241,245,249,0.9) 37%,
+    rgba(226,232,240,0.6) 63%
+  );
+  background-size: 400% 100%;
+  animation: skel-shimmer 1.3s ease-in-out infinite;
+}
+
+/* skeleton x label */
+.skel-label {
+  width: 18px;
+  height: 10px;
+  border-radius: 6px;
+  background: rgba(226,232,240,0.9);
+  margin-top: 6px;
+}
+
+/* shimmer animation */
+@keyframes skel-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: 0 0; }
+}
+
+/* ===== Skeleton (shared) ===== */
+.skel {
+  display: inline-block;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(15,23,42,0.06),
+    rgba(15,23,42,0.10),
+    rgba(15,23,42,0.06)
+  );
+  background-size: 220% 100%;
+  animation: skel-shimmer 1.15s ease-in-out infinite;
+}
+
+@keyframes skel-shimmer {
+  0% { background-position: 0% 0; }
+  100% { background-position: 120% 0; }
+}
+
+/* Weekly chart skeleton pieces (you already render these) */
+.bar-skel {
+  width: 78%;
+  min-width: 18px;
+  height: 100%;
+  border-radius: 14px 14px 12px 12px;
+  border: 2px solid rgba(99, 102, 241, 0.18);
+  background:
+    linear-gradient(
+      180deg,
+      rgba(99,102,241,0.06),
+      rgba(14,165,233,0.04)
+    );
+  position: relative;
+  overflow: hidden;
+}
+.bar-skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.55),
+    transparent
+  );
+  transform: translateX(-60%);
+  animation: skel-sweep 1.25s ease-in-out infinite;
+}
+@keyframes skel-sweep {
+  0% { transform: translateX(-60%); }
+  100% { transform: translateX(60%); }
+}
+
+.skel-label {
+  width: 18px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(15,23,42,0.08);
+}
+
+/* ===== Today skeleton ===== */
+.chip--skel {
+  width: 44px;
+  min-height: 19px;
+  border-radius: 999px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+
+  background: linear-gradient(
+    90deg,
+    rgba(226,232,240,0.60) 25%,
+    rgba(241,245,249,0.90) 37%,
+    rgba(226,232,240,0.60) 63%
+  );
+  background-size: 400% 100%;
+  animation: skel-shimmer 1.2s ease-in-out infinite;
+}
+
+.today-skeleton {
+  padding-top: 2px;
+  padding-bottom: 0;
+}
+
+.skel-big {
+  width: 88px;
+  height: 28px;
+  border-radius: 12px;
+}
+
+.skel-unit {
+  width: 34px;
+  height: 12px;
+  margin-left: 8px;
+  opacity: 0.9;
+}
+
+.today-slot--skel {
+  opacity: 0.95;
+}
+
+.skel-line {
+  height: 12px;
+  border-radius: 10px;
+}
+
+.skel-title {
+  width: 180px;
+  height: 14px;
+  border-radius: 10px;
+}
+
+.skel-sub {
+  width: 140px;
+  margin-top: 8px;
+  opacity: 0.85;
+}
+
+.skel-pill {
+  width: 52px;
+  height: 16px;
+  border-radius: 999px;
+}
+
+.mini-fill--skel {
+  height: 100%;
+  width: 48%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(99,102,241,0.20), rgba(56,189,248,0.12));
+  position: relative;
+  overflow: hidden;
+}
+.mini-fill--skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: translateX(-60%);
+  animation: skel-sweep 1.25s ease-in-out infinite;
+}
+
+/* Macro skeleton row */
+.macro-row--skel {
+  opacity: 0.95;
+}
+
+.icon-badge--skel {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(15,23,42,0.06);
+  border: 1px solid rgba(15,23,42,0.06);
+}
+
+.skel-macro-name {
+  width: 86px;
+  height: 12px;
+}
+
+.skel-macro-sub {
+  width: 64px;
+  height: 10px;
+  margin-top: 6px;
+  opacity: 0.85;
+}
+
+.skel-val {
+  width: 72px;
+  height: 14px;
+  border-radius: 10px;
+}
+
+.bar--skel {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.bar-fill--skel {
+  height: 100%;
+  width: 55%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(99,102,241,0.20), rgba(56,189,248,0.12));
+  position: relative;
+  overflow: hidden;
+}
+.bar-fill--skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: translateX(-60%);
+  animation: skel-sweep 1.25s ease-in-out infinite;
+}
+
+/* soften skeleton tiles a bit */
+.stat-tile--skel {
+  opacity: 0.95;
+}
+
+/* Big number like "3" */
+.skel-stat-strong {
+  width: 28px;
+  height: 18px;
+  border-radius: 10px;
+}
+
+/* Muted like "/ 7" */
+.skel-stat-muted {
+  width: 42px;
+  height: 14px;
+  margin-left: 8px;
+  border-radius: 10px;
+  opacity: 0.85;
+}
+
+/* Avg calories like "1985" */
+.skel-stat-avg {
+  width: 76px;
+  height: 22px;
+  border-radius: 12px;
+}
+
+/* "kcal" */
+.skel-stat-unit {
+  width: 30px;
+  height: 12px;
+  margin-left: 10px;
+  border-radius: 10px;
+  opacity: 0.85;
+}
+
+/* mini bar skeleton */
+.mini-bar--skel {
+  background: rgba(15, 23, 42, 0.06);
+}
+
+.mini-fill--skel {
+  width: 45%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(
+    90deg,
+    rgba(99,102,241,0.22),
+    rgba(56,189,248,0.14)
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.mini-fill--skel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.55), transparent);
+  transform: translateX(-60%);
+  animation: skel-sweep 1.25s ease-in-out infinite;
+}
+
+/* preview note skeleton */
+.skel-note {
+  width: 210px;
+  height: 12px;
+  margin-top: 10px;
+  border-radius: 10px;
+  opacity: 0.8;
+}
+
+.stat-tile--skel .skel-pill {
+  width: 160px;
+  height: 26px;
+  margin-top: 12px;
+  border-radius: 999px;
+  opacity: 0.85;
+}
+
+.legend-cta--skel {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  height: 30px;
+  min-width: 72px;
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(226,232,240,0.55) 25%,
+    rgba(241,245,249,0.90) 37%,
+    rgba(226,232,240,0.55) 63%
+  );
+  background-size: 400% 100%;
+  animation: skel-shimmer 1.2s ease-in-out infinite;
+
+  border: 1px solid rgba(15, 23, 42, 0.06);
 }
 
 /* Responsive */

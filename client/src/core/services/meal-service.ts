@@ -17,6 +17,7 @@ export class MealService {
   private apiUrl = environment.apiUrl;
   public readonly meals = signal<Meal[]>([]);
   readonly mealsLoading = signal<boolean>(false);
+  readonly rangeLoading = signal<boolean>(false);
   readonly days = getPastDays(7);
   readonly rangeTotals = signal<DailyTotals[]>([]);
 
@@ -51,13 +52,13 @@ export class MealService {
 
   /** Load meals totals in a date range */
   loadMealsInRange(from: string, to: string): void {
-    this.mealsLoading.set(true);
+    this.rangeLoading.set(true);
     this.getMealsInRange(from, to).pipe(
       tap((dts) => {
         this.rangeTotals.set(dts);
       }),
       finalize(() => { 
-        this.mealsLoading.set(false); 
+        this.rangeLoading.set(false); 
       }),
       catchError((error) => {
         return throwError(() => error);

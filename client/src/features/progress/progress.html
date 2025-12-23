@@ -21,14 +21,20 @@
     <section class="card card--today">
       <div class="card-head">
         <h2 class="card-title">Today's Snapshot</h2>
+        @if (!isLoading()) {
         @if (hasGoal()) {
         <span class="chip chip--soft">{{ caloriesPct() }}% to target</span>
         }
         @else {
         <span class="chip chip--preview">Preview</span>
         }
+        }
+        @else {
+        <span class="chip chip--skel"></span>
+        }
       </div>
 
+      @if (!isLoading()) {
       <!-- Calories (always show) -->
       <div class="calories-block">
         <div class="calories-top">
@@ -118,6 +124,63 @@
         </div>
         }
       </div>
+      }
+      @else {
+      <!-- Today skeleton -->
+      <div class="today-skeleton">
+        <!-- Calories -->
+        <div class="calories-block">
+          <div class="calories-top">
+            <div class="label">Calories</div>
+
+            <div class="numbers">
+              <span class="skel skel-big"></span>
+              <span class="skel skel-unit"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Goal/CTA row slot -->
+        <div class="today-slot today-slot--skel">
+          <div class="today-slot-main">
+            <div class="skel skel-line skel-title"></div>
+            <div class="skel skel-line skel-sub"></div>
+          </div>
+
+          <div class="today-slot-side">
+            <div class="skel skel-pill"></div>
+            <div class="mini-bar" aria-hidden="true">
+              <div class="mini-fill mini-fill--skel"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Macros (3 rows) -->
+        <div class="macro-list">
+          @for (_ of [0,1,2]; track $index) {
+          <div class="macro-row macro-row--skel">
+            <div class="macro-left">
+              <div class="icon-badge icon-badge--skel"></div>
+              <div class="macro-meta">
+                <div class="skel skel-line skel-macro-name"></div>
+                <div class="skel skel-line skel-macro-sub"></div>
+              </div>
+            </div>
+
+            <div class="macro-right">
+              <div class="macro-values">
+                <span class="skel skel-val"></span>
+              </div>
+              <div class="bar bar--macro bar--skel">
+                <div class="bar-fill bar-fill--skel"></div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+      </div>
+      }
+
     </section>
 
     <!-- Right: 7-day trend -->
@@ -134,15 +197,19 @@
         <div class="legend">
           <span class="legend-dot"></span>
           <span class="legend-label">Calories trend</span>
-          @if (hasGoal()) {
-          <span class="legend-sep">—</span>
-          <span class="legend-target">Target {{ targetCalories() | number:'1.0-0' }} kcal</span>
+          @if (!isLoading()) {
+            @if (hasGoal()) {
+            <span class="legend-sep">—</span>
+            <span class="legend-target">Target {{ targetCalories() | number:'1.0-0' }} kcal</span>
+            }
+            @else {
+            <button type="button" class="legend-cta" (click)="goToGoals()">
+              Set goals
+            </button>
+            }
           }
           @else {
-          <span class="legend-note">
-            Set a calorie goal to see how you compare
-            <button type="button" class="inline-link" (click)="goToGoals()">Set goals</button>
-          </span>
+            <span class="legend-cta legend-cta--skel"></span>
           }
         </div>
       </div>
@@ -161,14 +228,14 @@
           }
         </div>
 
-        <div>
-          <div class="chart">
+        <div class="chart" [class.is-empty]="!hasWeekData()">
+          @if (!isLoading()) {
           <!-- Bars -->
           <div class="bars">
             @for (d of week(); track $index) {
             <div class="bar-col">
               <div class="bar-slot">
-                <div class="bar-rect" [class.bar-rect--empty]="!hasWeekData()"
+                <div class="bar-rect" [class.bar-rect--empty]="!hasWeekData() || d.calories === null"
                   [style.height.%]="barHeightPct(d.calories)">
                 </div>
               </div>
@@ -196,7 +263,9 @@
             }
 
             <!-- line -->
-            <path [attr.d]="linePath()" class="cal-line"></path>
+            @for (d of linePaths(); track $index) {
+            <path [attr.d]="d" class="cal-line"></path>
+            }
 
             <!-- points -->
             @for (p of pointDots(); track $index) {
@@ -204,9 +273,23 @@
             <circle [attr.cx]="p.x" [attr.cy]="p.y" r="4.2" class="pt-dot"></circle>
             }
           </svg>
+          }
+          @else {
+          <!-- Loading skeleton -->
+          <div class="chart-skeleton">
+            <div class="bars">
+              @for (_ of [0,1,2,3,4,5,6]; track $index) {
+              <div class="bar-col">
+                <div class="bar-slot">
+                  <div class="bar-skel"></div>
+                </div>
+                <div class="x-label skel-label"></div>
+              </div>
+              }
+            </div>
+          </div>
+          }
         </div>
-        </div>
-        
       </div>
     </section>
 
@@ -222,6 +305,7 @@
         </div>
       </div>
 
+      @if (!isLoading()) {
       <div class="streak-grid">
         <div class="stat-tile">
           <div class="stat-label">Days hit calorie goal</div>
@@ -265,6 +349,39 @@
           }
         </div>
       </div>
+      }
+      @else {
+      <!-- Streak skeleton -->
+      <div class="streak-grid streak-grid--skel">
+        <!-- Tile 1 -->
+        <div class="stat-tile stat-tile--skel">
+          <div class="stat-label">Days hit calorie goal</div>
+
+          <div class="stat-value">
+            <span class="skel skel-stat-strong"></span>
+            <span class="skel skel-stat-muted"></span>
+          </div>
+
+          <div class="mini-bar mini-bar--skel">
+            <div class="mini-fill mini-fill--skel"></div>
+          </div>
+
+          <div class="skel skel-note"></div>
+        </div>
+
+        <!-- Tile 2 -->
+        <div class="stat-tile stat-tile--skel">
+          <div class="stat-label">Average calories</div>
+
+          <div class="stat-value">
+            <span class="skel skel-stat-avg"></span>
+            <span class="skel skel-stat-unit"></span>
+          </div>
+
+          <div class="skel skel-pill"></div>
+        </div>
+      </div>
+      }
     </section>
   </div>
 </div>
