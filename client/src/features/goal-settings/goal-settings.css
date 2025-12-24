@@ -30,7 +30,7 @@
 .hero {
   margin-top: 12px;
   border-radius: 22px;
-  padding: 22px 22px;
+  padding: 14px 16px;
   background:
     radial-gradient(900px 260px at 10% 0%, rgba(99,102,241,0.18), transparent 60%),
     radial-gradient(700px 240px at 90% 20%, rgba(14,165,233,0.14), transparent 55%),
@@ -148,9 +148,10 @@
 }
 
 .status-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+  margin-right: 10px;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
 }
 
 .hero-note {
@@ -175,23 +176,12 @@
 /* Cards */
 .card {
   border-radius: 22px;
-  padding: 16px;
+  padding: 16px 16px 16px;
 }
 
 .card--panel {
   border: 1px solid rgba(15, 23, 42, 0.08);
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
-}
-
-.tip-list {
-  padding-left: 16px;
-  color: #6b7280;
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.tip-list li {
-  margin: 4px 0;
 }
 
 .card-head {
@@ -224,7 +214,7 @@
 /* Forms */
 .form {
   display: grid;
-  gap: 14px;
+  gap: 2px;
 }
 
 .block-label {
@@ -234,24 +224,36 @@
   margin-bottom: 8px;
 }
 
-.micro-hint {
-  margin-top: 8px;
-  font-size: 12px;
-  color: #6b7280;
-}
-
-.warn {
-  font-weight: 900;
-  color: #92400e;
-}
-
 /* Goal grid */
 .goal-grid {
   display: grid;
   grid-template-columns: 1.25fr 1fr;
-  gap: 14px;
+  gap: 22px;
   align-items: start;
 }
+
+.hint-icon.mdc-icon-button {
+  width: 14px;
+  height: 14px;
+  padding: 0;
+  margin-left: 5px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  vertical-align: middle;
+}
+
+.hint-icon .mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  margin: 0;
+}
+
+.hint-icon { transform: none !important; }
 
 .calories-field {
   width: 100%;
@@ -305,7 +307,7 @@
 
 /* Macro footer */
 .macro-footer {
-  margin-top: 10px;
+  margin-top: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -515,6 +517,18 @@
   margin: 6px 0 10px;
 }
 
+/* Tips */
+.tip-list {
+  padding-left: 16px;
+  color: #6b7280;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.tip-list li {
+  margin: 4px 0;
+}
+
 /* Helper */
 .helper {
   display: flex;
@@ -550,7 +564,7 @@
   bottom: 14px;
   margin-top: 18px;
 
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: space-between;
 
@@ -560,6 +574,15 @@
   background: rgba(255,255,255,0.92);
   backdrop-filter: blur(10px);
   box-shadow: 0 18px 44px rgba(15, 23, 42, 0.10);
+}
+
+.save-bar--idle {
+  opacity: 0.78;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+}
+
+.save-bar--idle .status-icon {
+  opacity: 0.9;
 }
 
 .save-bar--visible {
@@ -586,10 +609,66 @@
   color: #6b7280;
 }
 
+/* --- Save bar buttons --- */
+
 .save-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   align-items: center;
+}
+
+/* consistent button sizing */
+.save-btn {
+  height: 36px;
+  border-radius: 14px !important;
+  padding: 0 14px !important;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.save-btn.mat-mdc-raised-button .mdc-button__label span {
+  white-space: nowrap;
+}
+
+.save-btn--primary.mat-mdc-raised-button {
+  box-shadow: 0 10px 22px rgba(37, 99, 235, 0.20) !important;
+}
+.save-btn--primary.mat-mdc-raised-button:active {
+  transform: translateY(0.5px);
+  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18) !important;
+}
+.save-btn--primary.mat-mdc-raised-button:hover {
+  box-shadow: 0 14px 28px rgba(37, 99, 235, 0.26) !important;
+}
+
+.save-btn--text.mat-mdc-button {
+  height: 34px;
+  padding: 0 10px !important;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  opacity: 0.72;
+}
+
+.save-btn--text.mat-mdc-button:hover {
+  opacity: 1;
+  background: rgba(15, 23, 42, 0.04) !important;
+}
+
+.save-btn:disabled {
+  opacity: 0.55;
+}
+
+.save-btn .mat-icon {
+  margin-right: 6px;
+}
+
+.btn-spinner {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: text-bottom;
 }
 
 /* ---------------------------
@@ -632,7 +711,7 @@
 .sk-sub   { height: 12px; width: 360px; margin-top: 8px; border-radius: 10px; }
 
 /* Hero skeleton */
-.sk-hero { min-height: 132px; }
+.sk-hero { min-height: 80px; }
 .sk-kicker { height: 12px; width: 130px; border-radius: 10px; }
 .sk-hero-number { height: 44px; width: 220px; margin-top: 10px; border-radius: 14px; }
 

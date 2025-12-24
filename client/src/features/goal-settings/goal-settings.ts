@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { GoalPreset, GoalSettingsDto } from '../../types/goals';
 import { DecimalPipe } from '@angular/common';
@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { GoalSettingsService } from '../../core/services/goal-settings-service';
 import { ToastService } from '../../core/services/toast-service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-goals-settings',
@@ -25,10 +27,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     MatInputModule,
     MatButtonModule,
     MatButtonToggleModule,
+    MatTooltip,
     MatDividerModule,
     MatSlideToggleModule,
     MatChipsModule,
     MatIconModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './goal-settings.html',
   styleUrl: './goal-settings.css',
@@ -43,6 +47,7 @@ export class GoalSettings implements OnInit {
   private goalSettings = this.goalSettingsService.goalSettings;
   protected isLoading = this.goalSettingsService.isLoading;
   private isSet = this.goalSettingsService.isSet;
+  protected isSaving = signal(false);
   private initial = signal<GoalSettingsDto>({
     calories: 2200,
     macroMode: 'percent',
@@ -52,6 +57,7 @@ export class GoalSettings implements OnInit {
     weightUnit: 'g',
     showMacroPercent: true,
   });
+
   protected baseCalories = signal<number>(this.initial().calories);
 
   constructor() {
@@ -67,24 +73,30 @@ export class GoalSettings implements OnInit {
   }
 
   ngOnInit(): void {
-    this.goalSettingsService.loadGoalSettings();
-
-    if (this.isSet()) {
-      this.baseCalories.set(this.goalSettings()!.calories);
-      this.initial.set(this.goalSettings()!);
-      this.form.setValue(this.goalSettings()!, { emitEvent: false });
-    } else {
-      this.form.setValue(this.initial(), { emitEvent: false });
-    }
-    this.activePreset.set(this.detectPreset(this.currentDto()));
-    this.form.markAsPristine();
-    this.form.markAsUntouched();
-
-    this.form.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
+    this.goalSettingsService.loadGoalSettings().subscribe({
+      next: () => {
+        if (this.isSet()) {
+          this.baseCalories.set(this.goalSettings()!.calories);
+          this.initial.set(this.goalSettings()!);
+          this.form.setValue(this.goalSettings()!, { emitEvent: false });
+        } else {
+          this.form.setValue(this.initial(), { emitEvent: false });
+        }
         this.activePreset.set(this.detectPreset(this.currentDto()));
-      });
+        this.form.markAsPristine();
+        this.form.markAsUntouched();
+
+        this.form.valueChanges
+          .pipe(takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => {
+            this.activePreset.set(this.detectPreset(this.currentDto()));
+          });
+      },
+      error: (err) => {
+        console.error(err);
+        this.toast.error('Failed to load goal settings');
+      }
+    });
   }
 
   applyPreset(preset: GoalPreset) {
@@ -114,15 +126,20 @@ export class GoalSettings implements OnInit {
 
     const dto = this.currentDto();
 
+    this.isSaving.set(true);
+
     this.goalSettingsService.save(dto).subscribe({
       next: () => {
+        this.isSaving.set(false);
         this.initial.set(dto);
         this.baseCalories.set(dto.calories);
+        this.form.patchValue(dto, { emitEvent: false });
         this.form.markAsPristine();
         this.form.markAsUntouched();
         this.toast.success('Goals saved');
       },
       error: (err) => {
+        this.isSaving.set(false);
         console.error(err);
         this.toast.error('Failed to save goals');
       }
@@ -133,6 +150,10 @@ export class GoalSettings implements OnInit {
     const dto = this.initial();
     this.form.patchValue(dto, { emitEvent: false });
     this.form.markAsPristine();
+  }
+
+  applyDefaults() {
+    this.save();
   }
 
   private detectPreset(dto: GoalSettingsDto): GoalPreset | null {
@@ -250,5 +271,14 @@ export class GoalSettings implements OnInit {
     const cur = this.currentDto();
     const init = this.initial();
     return JSON.stringify(cur) !== JSON.stringify(init);
+  }
+
+  get primaryLabel(): string {
+    return this.goalSettingsService.isSet() ? 'Save changes' :
+      this.isDirty ? 'Set goals' : 'Apply defaults';
+  }
+
+  get needsSave(): boolean {
+    return !this.goalSettingsService.isSet() || this.isDirty;
   }
 }

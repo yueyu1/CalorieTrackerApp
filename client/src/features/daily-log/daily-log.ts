@@ -62,7 +62,7 @@ export class DailyLog implements OnInit {
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
-    this.goalSettingsService.loadGoalSettings();
+    this.goalSettingsService.loadGoalSettings().subscribe();
   }
 
   protected caloriesRemaining = computed(() =>

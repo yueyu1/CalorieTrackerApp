@@ -42,7 +42,7 @@
     <div class="hero-side">
       <div class="status-chip" [class.status-chip--pending]="showPendingChip"
         [class.status-chip--warn]="showInvalidChip" [class.status-chip--neutral]="showNotSetChip">
-        <mat-icon [fontIcon]="chipIcon" class="status-icon"></mat-icon>
+        <mat-icon class="status-icon" [fontIcon]="isDirty ? 'error' : 'check_circle'"></mat-icon>
         {{ chipText }}
       </div>
 
@@ -51,7 +51,7 @@
         Set your goals and hit Save to apply them to the Daily Log.
         }
         @else if (showPendingChip) {
-        Save changes to apply them to today’s Daily Log.
+        Save changes to apply them to today's Daily Log.
         }
         @else if (showInvalidChip) {
         Fix macro total to 100% to apply changes.
@@ -81,53 +81,45 @@
           <div class="goal-grid">
             <!-- Calories -->
             <div class="calories-block">
-              <div class="block-label">Daily calories</div>
+              <div class="block-label inline">
+                <span>Daily calories</span>
+                <button mat-icon-button type="button" class="hint-icon"
+                  matTooltip="Common range: 1,600-3,000 kcal. You can go outside if needed.">
+                  <mat-icon fontIcon="info"></mat-icon>
+                </button>
+              </div>
 
               <mat-form-field appearance="outline" class="calories-field">
                 <mat-label>Calories</mat-label>
                 <input matInput type="number" formControlName="calories" (blur)="onCaloriesBlur()" />
                 <span matTextSuffix>kcal</span>
                 @if (this.caloriesControl?.hasError('min')) {
-                <mat-error>Too low</mat-error>
+                <mat-error>Calories must be at least 800</mat-error>
                 }
                 @if (this.caloriesControl?.hasError('max')) {
-                <mat-error>Too high</mat-error>
+                <mat-error>Calories must be no more than 8000</mat-error>
                 }
-                @if (this.caloriesControl?.hasError('calories required')) {
-                <mat-error>Required</mat-error>
+                @if (this.caloriesControl?.hasError('required')) {
+                <mat-error>Calories is required</mat-error>
                 }
               </mat-form-field>
-
-              <div class="micro-hint">
-                Common range: 1,600-3,000 kcal (you can go outside if needed).
-              </div>
             </div>
 
             <!-- Macro mode + hint -->
             <div class="mode-block">
-              <div class="block-label">Macro mode</div>
+              <div class="block-label inline">
+                <span>Macro mode</span>
+                <button mat-icon-button type="button" class="hint-icon" [matTooltip]="macroModeControl?.value === 'percent'
+                  ? 'Percent mode: Protein + Carbs + Fat must equal 100%.'
+                  : 'Grams mode: Set daily grams. We estimate calories using the 4/4/9 rule for preview.'">
+                  <mat-icon fontIcon="info"></mat-icon>
+                </button>
+              </div>
 
               <mat-button-toggle-group formControlName="macroMode" aria-label="Macro mode" class="toggle">
                 <mat-button-toggle value="percent">Percent</mat-button-toggle>
                 <mat-button-toggle value="grams">Grams</mat-button-toggle>
               </mat-button-toggle-group>
-
-              @if (macroModeControl?.value === 'percent') {
-              <div class="micro-hint">
-                Total must equal 100%.
-                @if (percentInvalid) {
-                <span class="warn">
-                  Currently {{ percentSum }}%.
-                </span>
-                }
-              </div>
-              }
-
-              @if (macroModeControl?.value === 'grams') {
-              <div class="micro-hint">
-                Tip: grams use the 4/4/9 calorie rule for preview.
-              </div>
-              }
             </div>
           </div>
 
@@ -145,18 +137,27 @@
                 <mat-label>Protein</mat-label>
                 <input matInput type="number" formControlName="protein" />
                 <span matTextSuffix>{{ macroModeControl?.value === 'percent' ? '%' : 'g' }}</span>
+                @if (proteinControl?.hasError('required')) {
+                <mat-error>Protein is required</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="macro-field macro-field--c">
                 <mat-label>Carbs</mat-label>
                 <input matInput type="number" formControlName="carbs" />
                 <span matTextSuffix>{{ macroModeControl?.value === 'percent' ? '%' : 'g' }}</span>
+                @if (carbsControl?.hasError('required')) {
+                <mat-error>Carbs is required</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="macro-field macro-field--f">
                 <mat-label>Fat</mat-label>
                 <input matInput type="number" formControlName="fat" />
                 <span matTextSuffix>{{ macroModeControl?.value === 'percent' ? '%' : 'g' }}</span>
+                @if (fatControl?.hasError('required')) {
+                <mat-error>Fat is required</mat-error>
+                }
               </mat-form-field>
             </div>
 
@@ -168,6 +169,8 @@
                 </span>
                 @if (!percentInvalid) {
                 <span class="muted">Looks good.</span>
+                } @else {
+                <span class="muted">Adjust macros to total 100%.</span>
                 }
               </div>
               }
@@ -179,7 +182,6 @@
                   ~{{ macroCaloriesPreview }} kcal from macros
                 </span>
                 }
-                <span class="muted">Calories implied by your macro gram targets doesn't need to match your daily calorie target.</span>
               </div>
               }
 
@@ -247,15 +249,9 @@
                 }
                 @if (macroModeControl?.value === 'grams') {
                 <li>
-                  Macro preview uses the <strong>4/4/9</strong> rule.
+                  Macro calories don't have to match your daily calorie goal.
                 </li>
                 }
-                <li>
-                  You can update goals anytime — Daily Log adjusts automatically.
-                </li>
-                <li>
-                  Goals apply per day — historical logs are not changed.
-                </li>
               </ul>
             </div>
           </div>
@@ -327,21 +323,35 @@
     </mat-card>
   </div>
 
-  <!-- Sticky save bar -->
-  <div class="save-bar" [class.save-bar--visible]="isDirty">
+  <!-- Save bar -->
+  <div class="save-bar" [class.save-bar--idle]="!isDirty">
     <div class="save-left">
       <mat-icon fontIcon="info" class="info-icon"></mat-icon>
       <div>
+        @if (isDirty) {
         <div class="save-title">Unsaved changes</div>
-        <div class="save-sub">Review and save when you’re ready.</div>
+        <div class="save-sub">Review and save when you're ready.</div>
+        } @else {
+        <div class="save-title">No changes</div>
+        <div class="save-sub">No changes to save.</div>
+        }
       </div>
     </div>
 
     <div class="save-actions">
-      <button mat-button type="button" (click)="cancel()">Cancel</button>
-      <button mat-raised-button color="primary" type="button" (click)="save()"
-        [disabled]="form.invalid || !isDirty || (macroModeControl?.value === 'percent' && percentInvalid)">
-        Save changes
+      <button mat-button type="button" class="save-btn save-btn--text" (click)="cancel()" 
+        [disabled]="isSaving() || !isDirty">
+        <mat-icon fontIcon="undo"></mat-icon>
+        Discard changes
+      </button>
+      <button mat-raised-button color="primary" type="button" class="save-btn save-btn--primary" (click)="save()"
+        [disabled]="isSaving() || form.invalid || !needsSave || (macroModeControl?.value === 'percent' && percentInvalid)">
+        @if (this.isSaving()) {
+          <mat-progress-spinner diameter="18" mode="indeterminate" class="btn-spinner"></mat-progress-spinner>
+          <span>Saving…</span>
+        } @else {
+          {{ primaryLabel }}
+        }
       </button>
     </div>
   </div>

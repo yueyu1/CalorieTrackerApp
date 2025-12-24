@@ -163,7 +163,7 @@ export class Progress implements OnInit {
     const to = days[days.length - 1];
 
     this.mealService.loadMealsInRange(from, to);
-    this.goalSettingsService.loadGoalSettings();
+    this.goalSettingsService.loadGoalSettings().subscribe();
   }
 
   // ===== Helpers =====

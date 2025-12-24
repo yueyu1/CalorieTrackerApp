@@ -34,9 +34,9 @@ export class GoalSettingsService {
     };
   });
 
-  loadGoalSettings(): void {
+  loadGoalSettings(): Observable<GoalSettingsResponseDto> {
     this.isLoading.set(true);
-    this.getGoalSettings().pipe(
+    return this.getGoalSettings().pipe(
       tap((dto) => {
         if (dto.isSet) {
           this.isSet.set(true);
@@ -53,14 +53,14 @@ export class GoalSettingsService {
         console.error('Failed to load goal settings.', error);
         return throwError(() => error);
       })
-    ).subscribe();
+    );
   }
 
   getGoalSettings(): Observable<GoalSettingsResponseDto> {
     return this.http.get<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`);
   }
 
-  save(dto: GoalSettingsDto) {
+  save(dto: GoalSettingsDto): Observable<GoalSettingsResponseDto> {
     return this.http.post<GoalSettingsResponseDto>(`${this.apiUrl}/goal-settings`, dto).pipe(
       tap((dto) => {
         this.isSet.set(true);
