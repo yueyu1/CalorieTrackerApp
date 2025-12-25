@@ -3,7 +3,7 @@
   <div class="daily-log-header">
     <div class="header-left">
       <h1>Daily Log</h1>
-      <p>Log your meals and see today’s breakdown at a glance.</p>
+      <p>Log your meals and see today's breakdown at a glance.</p>
     </div>
 
     <div class="header-right">
@@ -290,7 +290,7 @@
     <h2 class="meals-title">Today's Meals</h2>
 
     @if (!pageLoading()) {
-    @for (meal of meals(); track $index) {
+    @for (meal of meals(); track meal.id) {
     <mat-card class="meal-card" [class.meal-card--expanded]="isMealExpanded(meal)">
       <!-- Meal header button -->
       <button matRipple type="button" class="meal-header" (click)="toggleMeal(meal)">
@@ -410,7 +410,7 @@
             <span class="col-actions"></span> <!-- empty label, just space -->
           </div>
 
-          @for (item of meal.items; track $index) {
+          @for (item of meal.items; track item.id) {
           <div class="meal-table-row">
             <span class="col-name">
               <span class="food-name">

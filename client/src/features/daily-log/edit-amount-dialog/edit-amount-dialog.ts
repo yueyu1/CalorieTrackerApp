@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MealService } from '../../../core/services/meal-service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-edit-amount-dialog',
@@ -21,7 +23,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatOptionModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './edit-amount-dialog.html',
   styleUrl: './edit-amount-dialog.css',
@@ -30,6 +33,8 @@ export class EditAmountDialog {
   private fb = inject(FormBuilder);
   private readonly dialogRef = inject(MatDialogRef<EditAmountDialog>);
   protected readonly data = inject<MealItem>(MAT_DIALOG_DATA);
+  protected mealservice = inject(MealService);
+  protected isUpdating = signal(false);
   protected form: FormGroup;
 
   constructor() {
@@ -136,7 +141,7 @@ export class EditAmountDialog {
   };
 
   onCancel(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   onSave(): void {
@@ -144,11 +149,27 @@ export class EditAmountDialog {
       this.form.markAllAsTouched();
       return;
     }
+    
+    this.isUpdating.set(true);
 
-    const { quantity, unitId } = this.form.value;
-    this.dialogRef.close({
-      quantity: Number(quantity),
-      unitCode: unitId!,
+    this.dialogRef.disableClose = true;
+    this.quantityCtrl?.disable();
+    this.unitIdCtrl?.disable();
+
+    this.mealservice.updateMealEntryQuantity(
+      this.data.mealId,
+      this.data.id,
+      Number(this.quantityCtrl?.value),
+      this.unitIdCtrl?.value
+    ).subscribe({
+      next: () => {
+        this.isUpdating.set(false);
+        this.dialogRef.close(true);
+      },
+      error: () => {
+        this.isUpdating.set(false);
+        console.error('Failed to update meal entry.');
+      }
     });
   }
 }

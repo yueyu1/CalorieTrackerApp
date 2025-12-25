@@ -48,7 +48,6 @@ export class DailyLog implements OnInit {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private expandedMealTypes = signal<MealType[]>([]);
-  protected today = new Date().toLocaleDateString('en-CA');
   protected meals = this.mealsService.meals;
   protected yesterdayMeals = signal<Meal[]>([]);
   protected selectedDate = signal<Date>(new Date());
@@ -253,18 +252,13 @@ export class DailyLog implements OnInit {
 
       const { mealId, mealType, mealDate, items } = result;
 
-      this.mealsService.addFoodToMeal(mealId, mealType, mealDate, items).pipe(
-        tap(() => {
-          this.mealsService.loadDailyMeals(mealDate);
-          const count = items.length;
-          const message =
-            count === 1
-              ? `Food added to ${mealType}.`
-              : `${count} foods added to ${mealType}.`;
+      const count = items.length;
+      const message =
+        count === 1
+          ? `Food added to ${mealType}.`
+          : `${count} foods added to ${mealType}.`;
 
-          this.toast.success(message);
-        })
-      ).subscribe();
+      this.toast.success(message);
     });
   }
 
@@ -273,25 +267,14 @@ export class DailyLog implements OnInit {
       width: '640px',
       maxWidth: '90vw',
       data: item,
-    }
-    );
+    });
 
     ref.afterClosed().subscribe(result => {
       if (!result) return;
-
-      const { quantity, unitCode } = result;
-      this.mealsService.updateMealEntry(item.mealId, item.id, quantity, unitCode).pipe(
-        tap(() => {
-          this.mealsService.loadDailyMeals(this.today);
-          const displayName = item.brand
-            ? `${item.brand} ${item.name}`
-            : item.name;
-
-          this.toast.success(
-            `Updated amount for ${displayName}.`
-          );
-        })
-      ).subscribe();
+      const displayName = item.brand
+        ? `${item.brand} ${item.name}`
+        : item.name;
+      this.toast.success(`Updated amount for ${displayName}.`);
     });
   }
 
@@ -301,6 +284,8 @@ export class DailyLog implements OnInit {
       width: '420px',
       maxWidth: '95vw',
       data: {
+        mealId: meal.id, 
+        entryId: item.id,
         itemName: displayName,
         mealType: meal.mealType,
       }
@@ -308,13 +293,7 @@ export class DailyLog implements OnInit {
 
     ref.afterClosed().subscribe(confirmed => {
       if (!confirmed) return;
-
-      this.mealsService.deleteMealEntry(meal.id, item.id).pipe(
-        tap(() => {
-          this.mealsService.loadDailyMeals(meal.mealDate);
-          this.toast.success(`${displayName} removed from ${meal.mealType}.`);
-        })
-      ).subscribe();
+      this.toast.success(`${displayName} deleted from ${meal.mealType}.`);
     });
   }
 
@@ -329,7 +308,7 @@ export class DailyLog implements OnInit {
 
     ref.afterClosed().subscribe((result: CustomFoodDialogResult | null) => {
       if (!result || result.foodId == null) return;
-      this.mealsService.addFoodToMeal(mealId, mealType as MealType, mealDate, [{
+      this.mealsService.addFoodsToMeal(mealId, mealType as MealType, mealDate, [{
         foodId: result.foodId,
         quantity: 1,
         unit: result.unitCode,
@@ -491,7 +470,7 @@ export class DailyLog implements OnInit {
   }
 
   private loadForDate(d: Date): void {
-    this.mealsService.loadDailyMeals(toYmd(d));
+    this.mealsService.loadDailyMeals(toYmd(d)).subscribe();
 
     this.mealsService.getDailyMeals(toYmd(this.yesterdayDate())).pipe(
       tap((meals) => {

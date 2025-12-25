@@ -4,7 +4,7 @@
   <div class="afd-header">
     <h2>Add Food</h2>
 
-    <button mat-icon-button type="button" (click)="onClose()">
+    <button mat-icon-button type="button" (click)="onClose()" [disabled]="isAddingFood()">
       <mat-icon>close</mat-icon>
     </button>
   </div>
@@ -18,35 +18,35 @@
   <!-- FILTER CHIPS + CUSTOM FOOD CTA -->
   <div class="afd-filters-row">
     <mat-chip-listbox class="afd-chips" [multiple]="false">
-      <mat-chip-option [selected]="activeFilter === 'all'" [disabled]="activeFilter === 'all'"
+      <mat-chip-option [selected]="activeFilter === 'all'" [disabled]="activeFilter === 'all' || isAddingFood()"
         (click)="setFilter('all')">
         All
       </mat-chip-option>
 
-      <mat-chip-option [selected]="activeFilter === 'myFoods'" [disabled]="activeFilter === 'myFoods'"
+      <mat-chip-option [selected]="activeFilter === 'myFoods'" [disabled]="activeFilter === 'myFoods' || isAddingFood()"
         (click)="setFilter('myFoods')">
         My Foods
       </mat-chip-option>
 
-      <mat-chip-option [selected]="activeFilter === 'recent'" [disabled]="activeFilter === 'recent'"
+      <mat-chip-option [selected]="activeFilter === 'recent'" [disabled]="activeFilter === 'recent' || isAddingFood()"
         (click)="setFilter('recent')">
         Recent
       </mat-chip-option>
 
-      <mat-chip-option [selected]="activeFilter === 'brands'" [disabled]="activeFilter === 'brands'"
+      <mat-chip-option [selected]="activeFilter === 'brands'" [disabled]="activeFilter === 'brands' || isAddingFood()"
         (click)="setFilter('brands')">
         Brands
       </mat-chip-option>
     </mat-chip-listbox>
 
-    <button mat-button type="button" class="afd-custom-food-btn" color="primary" (click)="openCustomFood()">
+    <button mat-button type="button" class="afd-custom-food-btn" color="primary" (click)="openCustomFood()" [disabled]="isAddingFood()">
       <mat-icon fontIcon="add" />
       Custom food
     </button>
   </div>
 
   <!-- FOOD LIST -->
-  <div class="afd-list" formArrayName="foods">
+  <div class="afd-list" formArrayName="foods" [class.is-disabled]="isAddingFood()">
     @if (!this.loading()) {
       @if (showMyFoodsEmptyState) {
         <div class="afd-empty">
@@ -142,8 +142,18 @@
       {{ selectedCalories }} kcal
     </div>
 
-    <button mat-flat-button color="primary" type="button" (click)="confirmAdd()" [disabled]="selectedCount === 0">
-      Add to Breakfast
+    <button mat-flat-button class="add-btn" color="primary" type="button" (click)="confirmAdd()" [disabled]="selectedCount === 0 || isAddingFood()">
+      @if (!isAddingFood()) {
+        Add to {{ this.data.mealType }}
+      }
+      @else {
+        <mat-progress-spinner
+          diameter="18"
+          mode="indeterminate"
+          class="btn-spinner">
+        </mat-progress-spinner>
+        <span class="saving-text">Saving…</span>
+      }
     </button>
   </div>
 </form>

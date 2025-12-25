@@ -298,8 +298,68 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpPost("{mealId}/entries/bulk")]
+        public async Task<ActionResult<DailyMealDto>> AddMealEntriesBulk(int mealId, List<CreateMealEntryDto> dtos)
+        {
+            if (dtos == null || dtos.Count == 0)
+                return BadRequest("No entries provided.");
+
+            var currentUserId = HttpContext.GetCurrentUserId();
+
+            if (currentUserId == null)
+                return Unauthorized(); 
+
+            var meal = await db.Meals
+                .Include(m => m.MealFoods)
+                    .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.Units)
+                .Where(m => m.UserId == currentUserId && m.Id == mealId)
+                .FirstOrDefaultAsync();
+            
+            if (meal == null) return NotFound();
+
+            // Pre-fetch all foods to minimize DB queries
+            var foodIds = dtos.Select(d => d.FoodId).Distinct().ToList();
+            var foods = await db.Foods
+                .Include(f => f.Units)
+                .Where(f => foodIds.Contains(f.Id))
+                .ToDictionaryAsync(f => f.Id);
+
+            foreach (var dto in dtos)
+            {
+                var food = foods.GetValueOrDefault(dto.FoodId);
+                if (food == null)
+                    return BadRequest($"Food with ID {dto.FoodId} does not exist.");
+                var unit = food.Units.FirstOrDefault(u => u.Code == dto.Unit);
+                if (unit == null)
+                    return BadRequest($"Food with ID {dto.FoodId} does not have unit '{dto.Unit}'.");
+
+                var mealFood = new MealFood
+                {
+                    Quantity = dto.Quantity,
+                    Unit = unit.Code,
+                    MealId = mealId,
+                    FoodId = dto.FoodId,
+                    Food = food,
+                    CreatedAt = DateTime.UtcNow
+                };
+
+                var n = nutritionCalculationService.CalculateNutritionForEntry(mealFood);
+                mealFood.Calories = n.Calories;
+                mealFood.Protein = n.Protein;
+                mealFood.Carbs = n.Carbs;
+                mealFood.Fat = n.Fat;
+
+                db.MealFoods.Add(mealFood);
+            }
+
+            await db.SaveChangesAsync();
+
+            return Ok(MapMealToDailyDto(meal));
+        }
+
         [HttpPut("{mealId}/entries/{entryId}")]
-        public async Task<IActionResult> UpdateMealEntry(int mealId, int entryId, UpdateMealEntryDto dto)
+        public async Task<ActionResult<DailyMealItemDto>> UpdateMealEntry(int mealId, int entryId, UpdateMealEntryDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
@@ -310,6 +370,8 @@ namespace API.Controllers
             if (meal == null) return NotFound();
 
             var mealFood = await db.MealFoods
+                .Include(mf => mf.Food)
+                    .ThenInclude(f => f.Units)
                 .Where(mf => mf.MealId == mealId && mf.Id == entryId)
                 .FirstOrDefaultAsync();
 
@@ -328,7 +390,7 @@ namespace API.Controllers
 
             await db.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(MapMealFoodToItemDto(mealFood));
         }
 
         [HttpDelete("{mealId}/entries/{entryId}")]
@@ -432,10 +494,7 @@ namespace API.Controllers
 
         private DailyMealItemDto MapMealFoodToItemDto(MealFood mealFood)
         {
-            var nutrition = nutritionCalculationService.CalculateNutritionForEntry(mealFood);
-
-            var food = mealFood.Food; // included via ThenInclude
-
+            var food = mealFood.Food;
             var unit = food.Units.FirstOrDefault(u => u.Code == mealFood.Unit)
                 ?? throw new Exception($"Food with ID {food.Id} does not have unit '{mealFood.Unit}'.");
 
@@ -451,10 +510,10 @@ namespace API.Controllers
                 UnitLabel = unit.Label,
                 ConversionFactor = unit.ConversionFactor,
                 UnitType = unit.UnitType,
-                Calories = nutrition.Calories,
-                Protein = nutrition.Protein,
-                Carbs = nutrition.Carbs,
-                Fat = nutrition.Fat,
+                Calories = mealFood.Calories,
+                Protein = mealFood.Protein,
+                Carbs = mealFood.Carbs,
+                Fat = mealFood.Fat,
                 Units = food.Units.Select(u => new FoodUnitDto
                 {
                     Code = u.Code,

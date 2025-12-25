@@ -9,12 +9,14 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MealType } from '../../../types/meal';
 import { FoodService } from '../../../core/services/food-service';
-import { debounceTime, distinctUntilChanged, Subscription, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, finalize, Subscription, switchMap, tap } from 'rxjs';
 import { Food } from '../../../types/food';
 import { MealEntryItem } from '../../../types/meal-entry-item';
 import { DecimalPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { MealService } from '../../../core/services/meal-service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-add-food-dialog',
@@ -29,26 +31,28 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatChipsModule,
     MatSelectModule,
-    MatOptionModule],
+    MatOptionModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './add-food-dialog.html',
   styleUrl: './add-food-dialog.css',
 })
 export class AddFoodDialog implements OnInit {
-  /* ---------- injections + signals ---------- */
   private foodService = inject(FoodService);
+  private mealsService = inject(MealService);
   private searchSub: Subscription | undefined;
   protected loading = signal(true);
   protected form!: FormGroup;
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AddFoodDialog>);
-  private data = inject(MAT_DIALOG_DATA) as {
+  protected data = inject(MAT_DIALOG_DATA) as {
     mealId: number; mealType: MealType; mealDate: string
   };
   protected selectedIds = new Set<number>();
   protected foods = signal<Food[]>([]);
   protected activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
+  protected isAddingFood = signal(false);
 
-  /* ---------- constructor ---------- */
   constructor() {
     this.form = this.fb.group({
       search: [''],
@@ -56,7 +60,6 @@ export class AddFoodDialog implements OnInit {
     });
   }
 
-  /* ---------- lifecycle + form setup ---------- */
   ngOnInit(): void {
     this.loadFoods();
 
@@ -65,7 +68,6 @@ export class AddFoodDialog implements OnInit {
       debounceTime(250),
       distinctUntilChanged(),
       tap(() => {
-        console.log('search changed, loading foods...');
         this.loadFoods();
       })
     ).subscribe();
@@ -279,14 +281,6 @@ export class AddFoodDialog implements OnInit {
     });
   }
 
-
-  /**
-   * Build payload for the caller.
-   * Send:
-   *   quantity: user-entered value
-   *   unit:     the unit.code ("serving", "g", "oz", ...)
-   * Backend will use ConversionFactor to do the math.
-   */
   confirmAdd(): void {
     const items: MealEntryItem[] = this.foods()
       .map((food, index) => {
@@ -305,20 +299,36 @@ export class AddFoodDialog implements OnInit {
           unit: unit.code,
         };
       });
+    
+    this.dialogRef.disableClose = true;
+    this.isAddingFood.set(true);
 
-    this.dialogRef?.close({
-      mealId: this.data?.mealId,
-      mealType: this.data?.mealType,
-      mealDate: this.data?.mealDate,
-      items
-    });
+    this.searchCtrl.disable({ emitEvent: false });
+
+    this.mealsService.addFoodsToMeal(
+      this.data.mealId, this.data.mealType, this.data.mealDate, items).subscribe({
+        next: () => {
+          this.isAddingFood.set(false);
+          this.dialogRef?.close({
+            mealId: this.data?.mealId,
+            mealType: this.data?.mealType,
+            mealDate: this.data?.mealDate,
+            items
+          });
+        },
+        error: (err) => {
+          this.isAddingFood.set(false);
+          console.error('Failed to add food to meal', err);
+          this.dialogRef?.close();
+        }
+      });
   }
 
   onClose(): void {
     this.dialogRef.close();
   }
 
-    /* ---------- form getters ---------- */
+  /* ---------- form getters ---------- */
   get searchCtrl(): FormControl {
     return this.form.get('search') as FormControl;
   }

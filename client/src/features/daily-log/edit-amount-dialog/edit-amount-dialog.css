@@ -83,8 +83,18 @@
   min-width: 80px;
 }
 
-.primary-btn {
+.save-btn {
   min-width: 96px;
+  white-space: nowrap;
+}
+
+.btn-spinner {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: text-bottom;
 }
 
 .macros-row {

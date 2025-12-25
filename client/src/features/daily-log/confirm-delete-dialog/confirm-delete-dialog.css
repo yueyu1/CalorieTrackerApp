@@ -69,3 +69,16 @@
   background-color: #ef4444; /* red-500 */
   transform: translateY(-1px);
 }
+
+.delete-btn {
+  white-space: nowrap;
+}
+
+.btn-spinner {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: text-bottom;
+}

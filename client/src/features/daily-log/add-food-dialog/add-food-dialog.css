@@ -43,10 +43,24 @@
 }
 
 .afd-list {
+  position: relative;
   flex: 1 1 auto;
   overflow-y: auto;
   padding-right: 6px;
   min-height: 0; 
+}
+
+.afd-list.is-disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.afd-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.6);
+  pointer-events: all;
+  z-index: 2;
 }
 
 /* ROW */
@@ -334,4 +348,17 @@
   font-size: 13px;
   color: #6b7280;
   margin-bottom: 12px;
+}
+
+.add-btn {
+  white-space: nowrap;
+}
+
+.btn-spinner {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: text-bottom;
 }

@@ -8,7 +8,7 @@
       </p>
     </div>
 
-    <button mat-icon-button type="button" class="close-btn" (click)="onCancel()">
+    <button mat-icon-button type="button" class="close-btn" (click)="onCancel()" [disabled]="isUpdating()">
       <mat-icon fontIcon="close"></mat-icon>
     </button>
   </div>
@@ -82,12 +82,22 @@
 
     <!-- Footer actions -->
     <div class="edit-dialog-footer">
-      <button mat-button type="button" class="secondary-btn" (click)="onCancel()">
+      <button mat-button type="button" class="secondary-btn" (click)="onCancel()" [disabled]="isUpdating()">
         Cancel
       </button>
 
-      <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="form.invalid">
-        Save
+      <button mat-flat-button color="primary" type="submit" class="save-btn" [disabled]="form.invalid || isUpdating()">
+        @if (!isUpdating()) {
+          Save
+        }
+        @else {
+          <mat-progress-spinner
+            diameter="18"
+            mode="indeterminate"
+            class="btn-spinner">
+          </mat-progress-spinner>
+          <span class="saving-text">Saving…</span>
+        }
       </button>
     </div>
   </form>

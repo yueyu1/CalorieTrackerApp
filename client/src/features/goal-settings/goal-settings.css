@@ -624,9 +624,6 @@
   padding: 0 14px !important;
   font-weight: 700;
   letter-spacing: 0.2px;
-}
-
-.save-btn.mat-mdc-raised-button .mdc-button__label span {
   white-space: nowrap;
 }
 

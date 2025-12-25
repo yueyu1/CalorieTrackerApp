@@ -16,12 +16,22 @@
     </div>
 
     <div class="confirm-dialog-actions">
-        <button mat-stroked-button type="button" (click)="onCancel()">
+        <button mat-stroked-button type="button" (click)="onCancel()" [disabled]="isDeletingEntry()">
             Cancel
         </button>
 
-        <button mat-flat-button color="warn" type="button" (click)="onConfirm()">
-            Delete
+        <button mat-flat-button color="warn" type="button" class="delete-btn" (click)="onConfirm()" [disabled]="isDeletingEntry()">
+            @if (!isDeletingEntry()) {
+                Delete
+            }
+            @else {
+                <mat-progress-spinner
+                    diameter="18"
+                    mode="indeterminate"
+                    class="btn-spinner">
+                </mat-progress-spinner>
+                <span class="saving-text">Deleting…</span>
+            }
         </button>
     </div>
 </div>
