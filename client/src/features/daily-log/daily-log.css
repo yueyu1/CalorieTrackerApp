@@ -102,7 +102,7 @@
 .date-pill-hint {
   position: absolute;
   top: -14px;
-  left: 0;
+  left: 10px;
 
   font-size: 11px;
   color: #9ca3af;
@@ -684,7 +684,6 @@
   display: grid;
   /* Food | Calories | P | C | F | Actions */
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
-  column-gap: 12px;
   align-items: center;
 }
 
