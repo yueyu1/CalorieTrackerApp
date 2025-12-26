@@ -23,7 +23,6 @@ export class FoodService {
   readonly loading = signal(false);
   readonly saving = signal(false);
   readonly deletingIds = signal<Set<number>>(new Set());
-  readonly error = signal<string | null>(null);
 
   getFoods(query: FoodQuery): Observable<Food[]> {
     let params = new HttpParams();
@@ -38,7 +37,6 @@ export class FoodService {
   }
 
   loadFoods(query: FoodQuery): void {
-    this.error.set(null);
     this.loading.set(true);
 
     this.getFoods(query).pipe(
@@ -49,7 +47,6 @@ export class FoodService {
         this.loading.set(false);
       }),
       catchError((error) => {
-        this.error.set('Failed to load foods.');
         return throwError(() => error);
       })
     ).subscribe();
@@ -57,8 +54,6 @@ export class FoodService {
 
   createCustomFood(payload: UpsertCustomFoodRequest): Observable<Food> {
     this.saving.set(true);
-    this.error.set(null);
-
     return this.http.post<Food>(`${this.apiUrl}/foods`, payload).pipe(
       tap((newFood: Food) => {
         this.foods.update((foods) => [newFood, ...foods]);
@@ -67,7 +62,6 @@ export class FoodService {
         this.saving.set(false);
       }),
       catchError((error) => {
-        this.error.set('Failed to create food:');
         return throwError(() => error);
       })
     );
@@ -75,7 +69,6 @@ export class FoodService {
 
   editCustomFood(foodId: number, payload: UpsertCustomFoodRequest): Observable<Food> {
     this.saving.set(true);
-    this.error.set(null);
     return this.http.put<Food>(`${this.apiUrl}/foods/${foodId}`, payload).pipe(
       tap((updatedFood: Food) => {
         this.foods.update((foods) => foods.map((food) =>
@@ -86,14 +79,12 @@ export class FoodService {
         this.saving.set(false);
       }),
       catchError((error) => {
-        this.error.set('Failed to edit food:');
         return throwError(() => error);
       })
     );
   }
 
   deleteCustomFood(foodId: number): Observable<void> {
-    this.error.set(null);
     this.deletingIds.update((set) => new Set(set).add(foodId));
 
     return this.http.delete<void>(`${this.apiUrl}/foods/${foodId}`).pipe(
@@ -106,14 +97,23 @@ export class FoodService {
         this.deletingIds.set(deletingSet);
       }),
       catchError((error) => {
-        this.error.set('Failed to delete food:');
+        return throwError(() => error);
+      })
+    );
+  }
+
+  deleteCustomFoodsBulk(foodIds: number[]): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/foods/bulk-delete`, foodIds).pipe(
+      tap(() => {
+        this.foods.update((foods) => foods.filter((food) => !foodIds.includes(food.id)));
+      }),
+      catchError((error) => {
         return throwError(() => error);
       })
     );
   }
 
   archiveCustomFood(foodId: number): Observable<void> {
-    this.error.set(null);
     return this.http.patch<void>(`${this.apiUrl}/foods/${foodId}/archive`, {}).pipe(
       tap(() => {
         this.foods.update((foods) => foods.map((food) =>
@@ -121,14 +121,12 @@ export class FoodService {
         ));
       }),
       catchError((error) => {
-        this.error.set('Failed to archive food:');
         return throwError(() => error);
       })
     );
   }
 
   restoreCustomFood(foodId: number): Observable<void> {
-    this.error.set(null);
     return this.http.patch<void>(`${this.apiUrl}/foods/${foodId}/restore`, {}).pipe(
       tap(() => {
         this.foods.update((foods) => foods.map((food) =>
@@ -136,7 +134,6 @@ export class FoodService {
         ));
       }),
       catchError((error) => {
-        this.error.set('Failed to restore food:');
         return throwError(() => error);
       })
     );

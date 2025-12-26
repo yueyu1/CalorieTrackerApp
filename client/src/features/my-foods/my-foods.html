@@ -30,7 +30,7 @@
       </p>
 
       <p class="hero-subtitle">
-        Your personal catalog for quick logging — create, edit, archive, and keep things clean.
+        Create, edit, and organize foods for quick logging — always clean, always ready.
       </p>
 
       <div class="hero-chips" aria-label="Highlights">
@@ -55,21 +55,6 @@
           <mat-icon fontIcon="add"></mat-icon>
           Create Food
         </button>
-
-        <button mat-icon-button class="btn-split" type="button" [matMenuTriggerFor]="createMenu" aria-label="More">
-          <mat-icon fontIcon="expand_more"></mat-icon>
-        </button>
-
-        <mat-menu #createMenu="matMenu">
-          <button mat-menu-item type="button" (click)="onCreateFood()">
-            <mat-icon fontIcon="restaurant_menu"></mat-icon>
-            Create custom food
-          </button>
-          <button mat-menu-item type="button" disabled>
-            <mat-icon fontIcon="content_copy"></mat-icon>
-            Duplicate (soon)
-          </button>
-        </mat-menu>
       </div>
 
       <div class="hero-mini">
@@ -113,7 +98,7 @@
 
     <div class="spacer"></div>
 
-    <button mat-icon-button class="tool-btn" type="button" (click)="toggleArchived()"
+    <button mat-icon-button class="tool-btn" type="button" (click)="toggleArchived()" [disabled]="archivedCount() <= 0"
       [matTooltip]="showArchived() ? 'Hide archived' : 'Show archived'">
       <mat-icon fontIcon="inventory_2"></mat-icon>
     </button>
@@ -132,7 +117,7 @@
     <!-- Header row -->
     <div class="grid header">
       <div class="col-select">
-        <mat-checkbox [checked]="allVisibleSelected" [indeterminate]="someVisibleSelected"
+        <mat-checkbox [checked]="allVisibleSelected" [indeterminate]="someVisibleSelected" [disabled]="visibleFoods().length === 0"
           (change)="toggleAllVisible($event.checked)" aria-label="Select all visible">
         </mat-checkbox>
       </div>
@@ -231,8 +216,8 @@
     <!-- Empty state -->
     @if (visibleFoods().length === 0) {
     <div class="empty">
-      <div class="empty-title">No foods found</div>
-      <div class="empty-sub">Try a different search, or create a custom food to get started.</div>
+      <div class="empty-title">{{ searchQuery().trim() || archivedCount() === 0 ? "No foods found" : "All your foods are archived" }}</div>
+      <div class="empty-sub">{{ searchQuery().trim() || archivedCount() === 0 ? "Try a different search, or create a custom food to get started." : "Show archived items to view or restore them, or create a new food to keep logging." }}</div>
       <button mat-raised-button class="btn-primary" type="button" (click)="onCreateFood()">
         <mat-icon fontIcon="add"></mat-icon>
         Create Food

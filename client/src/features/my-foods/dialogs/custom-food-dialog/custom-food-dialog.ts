@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -10,6 +10,10 @@ import { UpsertCustomFoodRequest, CustomFoodDialogResult } from '../../../../typ
 import { FoodService } from '../../../../core/services/food-service';
 import { Food } from '../../../../types/food';
 import { UnitService } from '../../../../core/services/unit-service';
+import { MealService } from '../../../../core/services/meal-service';
+import { switchMap } from 'rxjs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { P } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-custom-food-dialog',
@@ -21,6 +25,7 @@ import { UnitService } from '../../../../core/services/unit-service';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './custom-food-dialog.html',
   styleUrl: './custom-food-dialog.css',
@@ -28,14 +33,26 @@ import { UnitService } from '../../../../core/services/unit-service';
 export class CustomFoodDialog {
   private foodService = inject(FoodService);
   private unitService = inject(UnitService);
+  private mealsService = inject(MealService);
   private dialogRef = inject(MatDialogRef<CustomFoodDialog>);
   private data = inject(MAT_DIALOG_DATA);
   private fb = inject(FormBuilder);
   protected form: FormGroup;
   protected saving = this.foodService.saving;
+  protected isCreating = signal(false);
+  protected isEditting = signal(false);
 
   protected mode = computed<'create' | 'edit'>(() => {
     return this.data?.mode === 'edit' ? 'edit' : 'create';
+  });
+
+  protected primaryButtonLabel = computed(() => {
+    if (this.data?.mealType) {
+      return `Save & add to ${this.data.mealType}`;
+    }
+    else {
+      return 'Save food';
+    }
   });
 
   protected servingUnits = [
@@ -43,18 +60,6 @@ export class CustomFoodDialog {
     { value: 'oz', label: 'oz' },
     { value: 'ml', label: 'ml' },
   ];
-
-  protected primaryButtonLabel = computed(() => {
-    if (this.saving()) {
-      return 'Saving...';
-    }
-
-    if (this.data?.mealTypeLabel) {
-      return `Save & add to ${this.data.mealTypeLabel}`;
-    }
-
-    return 'Save food';
-  });
 
   constructor() {
     const food: Food = this.data?.food;
@@ -99,25 +104,46 @@ export class CustomFoodDialog {
     };
 
     if (this.mode() === 'edit' && this.data?.food) {
+      this.isEditting.set(true);
+      this.form.disable();
+      this.dialogRef.disableClose = true;
       this.foodService.editCustomFood(this.data.food.id, payload).subscribe({
         next: () => {
+          this.isEditting.set(false);
           this.dialogRef.close(true);
         },
         error: (err) => {
+          this.isEditting.set(false);
           console.error(err);
+          this.dialogRef.close(true);
         }
       });
     } else { // Create mode
-      this.foodService.createCustomFood(payload).subscribe({
-        next: (createdFood: Food) => {
-          const result: CustomFoodDialogResult = {
-            foodId: createdFood.id,
-            unitCode: createdFood.units[0].code,
-          };
-          this.dialogRef.close(result);
+      this.isCreating.set(true);
+      this.form.disable();
+      this.dialogRef.disableClose = true;
+      this.foodService.createCustomFood(payload).pipe(
+        switchMap((createdFood: Food) => {
+          return this.mealsService.addFoodsToMeal(
+            this.data.mealId,
+            this.data.mealType,
+            this.data.mealDate,
+            [{
+              foodId: createdFood.id,
+              quantity: 1,
+              unit: createdFood.units[0].code,
+            }]
+          )
+        })
+      ).subscribe({
+        next: () => {
+          this.isCreating.set(false);
+          this.dialogRef.close(true);
         },
         error: (err) => {
+          this.isCreating.set(false);
           console.error(err);
+          this.dialogRef.close(true);
         }
       });
     }

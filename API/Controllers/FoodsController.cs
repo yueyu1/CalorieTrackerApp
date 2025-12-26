@@ -252,6 +252,24 @@ namespace API.Controllers
             return NoContent();
         }
 
+        [HttpPost("bulk-delete")]
+        public async Task<IActionResult> BulkDeleteFoods([FromBody] List<int> foodIds)
+        {
+            var currentUserId = HttpContext.GetCurrentUserId();
+
+            var foods = await _db.Foods
+                .Where(f => foodIds.Contains(f.Id))
+                .ToListAsync();
+
+            if (foods.Any(f => f.UserId != currentUserId))
+                return Forbid(); // can’t delete global or other users' foods
+
+            _db.Foods.RemoveRange(foods);
+            await _db.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         [HttpPatch("{id}/archive")]
         public async Task<IActionResult> ArchiveFood(int id)
         {
@@ -304,7 +322,7 @@ namespace API.Controllers
             return Ok(new { Count = foods.Count });
         }
 
-        private FoodDto MapToFoodDto(Food food) => new()
+        private static FoodDto MapToFoodDto(Food food) => new()
         {
             Id = food.Id,
             Name = food.Name,
@@ -315,16 +333,17 @@ namespace API.Controllers
             Fat = food.Fat,
             BaseQuantity = food.BaseQuantity,
             BaseUnit = food.BaseUnit,
+            IsArchived = food.IsArchived,
             Units = food.Units
-                    .OrderBy(u => u.Id)
-                    .Select(u => new FoodUnitDto
-                    {
-                        Id = u.Id,
-                        Code = u.Code,
-                        Label = u.Label,
-                        ConversionFactor = u.ConversionFactor,
-                        UnitType = u.UnitType
-                    }).ToList()
+                .OrderBy(u => u.Id)
+                .Select(u => new FoodUnitDto
+                {
+                    Id = u.Id,
+                    Code = u.Code,
+                    Label = u.Label,
+                    ConversionFactor = u.ConversionFactor,
+                    UnitType = u.UnitType
+                }).ToList()
         };
 
         [HttpGet("debug")]

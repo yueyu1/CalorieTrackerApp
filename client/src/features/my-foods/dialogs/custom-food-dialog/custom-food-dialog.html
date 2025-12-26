@@ -8,7 +8,7 @@
       </p>
     </div>
 
-    <button mat-icon-button type="button" (click)="close()" aria-label="Close">
+    <button mat-icon-button type="button" (click)="close()" aria-label="Close" [disabled]="isCreating() || isEditting()">
       <mat-icon fontIcon="close" />
     </button>
   </header>
@@ -141,12 +141,22 @@
 
     <!-- ACTIONS -->
     <footer class="cfd-actions">
-      <button mat-button type="button" (click)="close()">
+      <button mat-button type="button" (click)="close()" [disabled]="isCreating() || isEditting()">
         Cancel
       </button>
 
-      <button mat-flat-button color="primary" type="submit" [disabled]="form.invalid || saving()">
-        {{ primaryButtonLabel() }}
+      <button mat-flat-button class="save-btn" color="primary" type="submit" [disabled]="form.invalid || isCreating() || isEditting()">
+        @if (!isCreating() && !isEditting()) {
+          {{ primaryButtonLabel() }}
+        }
+        @else {
+          <mat-progress-spinner
+            diameter="18"
+            mode="indeterminate"
+            class="btn-spinner">
+          </mat-progress-spinner>
+          <span class="saving-text">Saving…</span>
+        }
       </button>
     </footer>
   </form>

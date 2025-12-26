@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -49,8 +48,8 @@ export class MyFoods implements OnInit {
   private dialog = inject(MatDialog);
   private destroyRef = inject(DestroyRef);
   protected form: FormGroup;
-  protected readonly showArchived = signal(false);
-  private searchQuery = signal('');
+  protected showArchived = signal(false);
+  protected searchQuery = signal('');
   private sortMode = signal('recent');
   protected readonly selectedIds = signal<Set<number>>(new Set());
   protected readonly foods = this.foodService.foods;
@@ -61,6 +60,14 @@ export class MyFoods implements OnInit {
     this.form = this.fb.group({
       search: [''],
       sort: ['recent'],
+    });
+
+    effect(() => {
+      if (this.visibleFoods().length === 0 && this.searchQuery().trim() === '') {
+        this.form.disable({ emitEvent: false });
+      } else {
+        this.form.enable({ emitEvent: false });
+      }
     });
   }
 
@@ -112,6 +119,10 @@ export class MyFoods implements OnInit {
       }
     });
     return rows;
+  });
+
+  readonly archivedCount = computed(() => {
+    return this.foods().filter(f => f.isArchived).length;
   });
 
   // Display helpers
@@ -215,14 +226,24 @@ export class MyFoods implements OnInit {
 
   onRestore(food: Food) {
     this.foodService.restoreCustomFood(food.id).subscribe({
-      next: () => this.toast.success('Food restored successfully.'),
+      next: () => {
+        if (this.showArchived() && this.archivedCount() === 0) {
+          this.showArchived.set(false);
+        }
+        this.toast.success('Food restored successfully.')
+      },
       error: (err) => this.toast.error(err)
     });
   }
 
   onDelete(food: Food) {
     this.foodService.deleteCustomFood(food.id).subscribe({
-      next: () => this.toast.success('Food deleted successfully.'),
+      next: () => { 
+        if (this.showArchived() && this.archivedCount() === 0) {
+          this.showArchived.set(false);
+        }
+        this.toast.success('Food deleted successfully.')
+      },
       error: (err) => this.toast.error(err)
     });
   }
@@ -231,11 +252,16 @@ export class MyFoods implements OnInit {
     const visibleIds = this.visibleFoods().map(f => f.id);
     const toDelete = [...this.selectedIds()].filter(id => visibleIds.includes(id));
     if (!toDelete.length) return;
-    for (const id of toDelete) {
-      this.foodService.deleteCustomFood(id).subscribe({
-        error: (err) => this.toast.error(err)
-      });
-    }
+    this.foodService.deleteCustomFoodsBulk(toDelete).subscribe({
+      next: () => {
+        if (this.showArchived() && this.archivedCount() === 0) {
+          this.showArchived.set(false);
+        }
+        this.toast.success('Selected foods deleted successfully.');
+        this.clearSelection();
+      },
+      error: (err) => this.toast.error(err)
+    });
   }
 
   get searchCtrl() {
@@ -244,5 +270,12 @@ export class MyFoods implements OnInit {
 
   get sortCtrl() {
     return this.form.get('sort')!;
+  }
+
+  get emptyTitle(): string {
+    if (this.searchQuery().trim()) {
+      return 'No foods match your search.';
+    }
+    return 'You have no custom foods.';
   }
 }

@@ -136,6 +136,19 @@
   text-transform: none;
 }
 
+.save-btn {
+  white-space: nowrap;
+}
+
+.btn-spinner {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto;
+  display: inline-block;
+  margin-right: 5px;
+  vertical-align: text-bottom;
+}
+
 /* Responsive tweaks ------------------------------------------------- */
 
 @media (max-width: 599px) {

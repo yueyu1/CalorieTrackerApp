@@ -302,7 +302,6 @@ export class AddFoodDialog implements OnInit {
     
     this.dialogRef.disableClose = true;
     this.isAddingFood.set(true);
-
     this.searchCtrl.disable({ emitEvent: false });
 
     this.mealsService.addFoodsToMeal(
@@ -310,10 +309,7 @@ export class AddFoodDialog implements OnInit {
         next: () => {
           this.isAddingFood.set(false);
           this.dialogRef?.close({
-            mealId: this.data?.mealId,
-            mealType: this.data?.mealType,
-            mealDate: this.data?.mealDate,
-            items
+            count: items.length
           });
         },
         error: (err) => {

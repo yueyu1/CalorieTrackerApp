@@ -228,6 +228,7 @@ export class DailyLog implements OnInit {
   }
 
   // ---- Actions ----
+  
   onAddFood(meal: Meal): void {
     const ref = this.dialog.open(AddFoodDialog, {
       maxWidth: '100vw',
@@ -248,16 +249,12 @@ export class DailyLog implements OnInit {
         return;
       }
 
-      if (!result.items || result.items.length === 0) return;
+      if (!result) return;
 
-      const { mealId, mealType, mealDate, items } = result;
-
-      const count = items.length;
-      const message =
-        count === 1
-          ? `Food added to ${mealType}.`
-          : `${count} foods added to ${mealType}.`;
-
+      const count = result.count;
+      const message = count === 1
+        ? `Food added to ${meal.mealType}.`
+        : `${count} foods added to ${meal.mealType}.`;
       this.toast.success(message);
     });
   }
@@ -302,22 +299,15 @@ export class DailyLog implements OnInit {
       width: '800px',
       maxWidth: '95vw',
       data: {
+        mealId,
         mealTypeLabel: mealType,
+        mealDate,
       }
     });
 
-    ref.afterClosed().subscribe((result: CustomFoodDialogResult | null) => {
-      if (!result || result.foodId == null) return;
-      this.mealsService.addFoodsToMeal(mealId, mealType as MealType, mealDate, [{
-        foodId: result.foodId,
-        quantity: 1,
-        unit: result.unitCode,
-      }]).pipe(
-        tap(() => {
-          this.mealsService.loadDailyMeals(mealDate);
-          this.toast.success(`Custom food added to ${mealType}.`);
-        })
-      ).subscribe();
+    ref.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.toast.success(`Custom food added to ${mealType}.`);
     });
   }
 

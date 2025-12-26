@@ -113,6 +113,12 @@ export class MealService {
 
     // CASE 2: placeholder, must create meal first
     return this.createMeal(mealType, mealDate).pipe(
+      tap((createdMeal) => {
+        // Update the placeholder meal in the signal
+        this.meals.update(meals => 
+          meals.map(m => m.id == 0 && m.mealType === createdMeal.mealType ? createdMeal : m)
+        );
+      }),
       switchMap((createdMeal: Meal) => {
         return this.addMealEntriesBulk(createdMeal.id, items).pipe(
           tap((updatedMeal) => {
