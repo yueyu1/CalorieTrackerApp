@@ -8,6 +8,7 @@ import { DailyLog } from '../features/daily-log/daily-log';
 import { GoalSettings } from '../features/goal-settings/goal-settings';
 import { MyFoods } from '../features/my-foods/my-foods';
 import { Progress } from '../features/progress/progress';
+import { preventUnsavedChangesGuard } from '../core/guards/prevent-unsaved-changes-guard';
 
 export const routes: Routes = [
     { path: '', component: Home},
@@ -16,7 +17,9 @@ export const routes: Routes = [
     { path: 'daily-log', component: DailyLog },
     { path: 'progress', component: Progress },
     { path: 'my-foods', component: MyFoods },
-    { path: 'goal-settings', component: GoalSettings },
+    { path: 'goal-settings', component: GoalSettings, title: 'Goal Settings',
+        canDeactivate: [preventUnsavedChangesGuard]
+     },
     { path: 'test-errors', component: TestErrors },
     { path: '**', component: NotFound }
 ];

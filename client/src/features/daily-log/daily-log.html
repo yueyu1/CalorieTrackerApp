@@ -66,11 +66,16 @@
         </div>
 
         @if (goalSettingsService.isSet()) {
-        <div class="summary-main-value">
-          {{ this.currentDayTotals().calories | number:'1.0-0' }}
-          /
-          {{ goalCalories() | number:'1.0-0' }}
-          <span class="summary-unit">kcal</span>
+        <div class="summary-calorie-value">
+          <div class="summary-calorie-current">
+            {{ this.currentDayTotals().calories | number:'1.0-0' }}
+          </div>
+          <div class="summary-calorie-sep">
+            /
+          </div>
+          <div class="summary-calorie-goal">
+            {{ goalCalories() | number:'1.0-0' }}
+          </div>
         </div>
 
         <div class="summary-meta">
@@ -85,7 +90,6 @@
         @else {
         <div class="summary-main-value">
           {{ this.currentDayTotals().calories| number: '1.0-0' }}
-          <span class="summary-unit">kcal</span>
         </div>
         }
 
@@ -99,7 +103,7 @@
           </div>
           <div class="summary-header-text">
             <div class="summary-label">Protein</div>
-            <div class="summary-subtitle">Muscle support</div>
+            <div class="macro-desc">Muscle support</div>
           </div>
         </div>
 
@@ -155,7 +159,7 @@
           </div>
           <div class="summary-header-text">
             <div class="summary-label">Carbs</div>
-            <div class="summary-subtitle">Energy</div>
+            <div class="macro-desc">Energy</div>
           </div>
         </div>
 
@@ -211,7 +215,7 @@
           </div>
           <div class="summary-header-text">
             <div class="summary-label">Fat</div>
-            <div class="summary-subtitle">Hormones & satiety</div>
+            <div class="macro-desc">Hormones & satiety</div>
           </div>
         </div>
 

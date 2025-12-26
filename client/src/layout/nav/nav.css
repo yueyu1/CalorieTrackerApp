@@ -1,11 +1,17 @@
 .public-header {
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
   padding: 12px 32px !important;
   background: #ffffff !important;
   box-shadow: 0 1px 0 rgba(15, 23, 42, 0.08);
+
+  overflow: visible;
 }
 
 /* Left logo */
@@ -21,6 +27,11 @@
   display: flex;
   align-items: center;
   gap: 16px;
+}
+
+.public-header .left-section,
+.public-header .right-section {
+  min-width: 0;
 }
 
 /* Reuse login button style for logged-out state */
@@ -55,25 +66,32 @@
 
 /* Circle avatar with initial */
 .user-chip .avatar {
-  width: 32px;
-  height: 32px;
+  width: 38px;
+  height: 38px;
   border-radius: 999px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #eff6ff;
   color: #1d4ed8;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 600;
 }
 
 /* Name text */
 .user-chip .user-name {
   white-space: nowrap;
-  font-weight: 500;
+  font-size: 15px;
+  font-weight: 420;
+  color: #374151;
   margin-left: 1px;
   position: relative;
-  top: -1px; /* lift the text slightly */
+  top: -1px;
+
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* Dropdown icon */
@@ -82,7 +100,6 @@
   opacity: 0.7;
 }
 
-/* Group of top-level links shown when logged in */
 .nav-links {
   display: flex;
   align-items: center;
@@ -90,14 +107,13 @@
   margin-right: 8px;
 }
 
-/* Base style for each nav link */
 .nav-link {
   font-size: 15px;
   font-weight: 500;
   color: #4b5563;
   text-decoration: none;
   padding: 6px 12px;
-  border-radius: 14px; /* use 999 for rounded */
+  border-radius: 999px;
   transition:
     background-color 0.15s ease,
     color 0.15s ease,
@@ -113,11 +129,10 @@
   background-color: #3b5ccc;
   color: #ffffff;
   box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2);
-  font-weight: 550;   /* slightly lighter than 600 */
-  padding: 6px 13px;  /* left-right balance */
+  font-weight: 550;
+  padding: 6px 13px;
 }
 
-/* Slightly tighten right-section to keep things balanced */
 .public-header .right-section {
   display: flex;
   align-items: center;
@@ -125,10 +140,6 @@
 }
 
 /* --- Top loading bar --- */
-
-.navbar {
-  position: relative;
-}
 
 .nav-loading-bar {
   position: absolute;
@@ -163,5 +174,33 @@
   }
   100% {
     background-position: -200% 0;
+  }
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .user-chip .user-name {
+    max-width: 110px;
+  }
+
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+
+  .nav-links {
+    display: none;
+  }
+
+  .public-header {
+    padding: 10px 16px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .user-chip .user-name {
+    display: none;
   }
 }

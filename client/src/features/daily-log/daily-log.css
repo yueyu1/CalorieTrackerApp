@@ -250,10 +250,40 @@
   color: #9ca3af;
 }
 
+.macro-desc {
+  font-size: 14px;
+  color: #9ca3af;
+}
+
 .summary-label {
   font-size: 15px;
   font-weight: 600;
   color: #4b5563;
+}
+
+.summary-calorie-value {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.summary-calorie-current {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.summary-calorie-sep {
+  font-size: 22px;
+  font-weight: 600;
+  color: #9ca3af;
+}
+
+.summary-calorie-goal {
+  font-size: 20px;
+  font-weight: 600;
+  color: #9ca3af;
 }
 
 .summary-main-value {
@@ -262,20 +292,31 @@
   font-weight: 700;
   display: flex;
   align-items: baseline;
-  gap: 4px;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.summary-calorie-value {
+  line-height: 1.1;
+}
+
+.summary-goal-value {
+  font-size: 18px;
+  font-weight: 500;
+  color: #6b7280;
 }
 
 .summary-unit {
-  font-size: 14px;
+  font-size: 12px;
   color: #9ca3af;
 }
 
 .summary-meta {
-  margin-top: 6px;
   display: flex;
   align-items: baseline;
   gap: 4px;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 .summary-meta--secondary {
@@ -306,7 +347,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 12px;
+  gap: 10px;
 }
 
 .summary-side {
@@ -314,7 +355,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 4px;
+  gap: 2px;
 }
 
 .summary-bar-wrapper {
@@ -401,7 +442,6 @@
 }
 
 .meal-card {
-  min-height: 84px;
   border-radius: 26px;
   margin-bottom: 22px;
   box-shadow: 0 18px 44px rgba(15, 23, 42, 0.09);
@@ -445,11 +485,10 @@
   width: 100%;
   border: none;
   background: transparent;
-  padding: 16px 22px;
+  padding: 18px 22px;
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 2.1fr) auto;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.5fr) auto;
   align-items: center;
-  column-gap: 28px;
   row-gap: 10px;
   cursor: pointer;
 }
@@ -535,10 +574,9 @@
 .meal-header-summary {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   gap: 10px;
+  align-self: flex-start;
+  max-width: 85%;
 }
 
 .meal-header-summary--empty {
@@ -582,11 +620,12 @@
 
 .macro-chip {
   font-size: 13px;
-  padding: 4px 12px;
+  padding: 4px 6px;
   border-radius: 999px;
   background-color: #eef2ff;
   color: #4338ca;
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .macro-percent {
@@ -848,8 +887,17 @@
 .sk-meal-sub { height: 14px; width: 220px; }
 .sk-meal-actions { height: 40px; width: 220px; border-radius: 999px; }
 
-/* Responsive */
+@media (max-width: 1100px) {
+  .macro-desc {
+    display: none;
+  }
+}
+
 @media (max-width: 768px) {
+  .meal-header-summary {
+    display: none;
+  }
+
   .daily-log-header {
     flex-direction: column;
     align-items: flex-start;

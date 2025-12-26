@@ -7,92 +7,97 @@
 
     <!-- NOT LOGGED IN -->
     @if (!accountService.currentUser()) {
-      <button mat-button routerLink="/account/login" class="login-btn">
-        Login
-      </button>
+    <button mat-button routerLink="/account/login" class="login-btn">
+      Login
+    </button>
     }
 
     <!-- LOGGED IN -->
     @if (accountService.currentUser(); as u) {
 
-      <!-- TOP-LEVEL NAV LINKS (Dashboard highlighted when active) -->
-      <div class="nav-links">
-        <a
-          routerLink="/daily-log"
-          routerLinkActive="nav-link-active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link"
-        >
-          Daily Log
-        </a>
-        
-        <a
-          routerLink="/progress"
-          routerLinkActive="nav-link-active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link"
-        >
-          Progress
-        </a>
+    <!-- MOBILE NAV MENU -->
+    <button mat-icon-button class="mobile-menu-btn" [matMenuTriggerFor]="navMenu" aria-label="Open navigation menu">
+      <mat-icon>menu</mat-icon>
+    </button>
 
-        <a
-          routerLink="/my-foods"
-          routerLinkActive="nav-link-active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link"
-        >
-          My Foods
-        </a>
+    <mat-menu #navMenu="matMenu">
+      <button mat-menu-item routerLink="/daily-log">
+        <mat-icon>today</mat-icon>
+        <span>Daily Log</span>
+      </button>
 
-        <a
-          routerLink="/goal-settings"
-          routerLinkActive="nav-link-active"
-          [routerLinkActiveOptions]="{ exact: true }"
-          class="nav-link"
-        >
-          Goals & Settings
-        </a>
+      <button mat-menu-item routerLink="/progress">
+        <mat-icon>insights</mat-icon>
+        <span>Progress</span>
+      </button>
+
+      <button mat-menu-item routerLink="/my-foods">
+        <mat-icon>restaurant</mat-icon>
+        <span>My Foods</span>
+      </button>
+
+      <button mat-menu-item routerLink="/goal-settings">
+        <mat-icon>settings</mat-icon>
+        <span>Goals &amp; Settings</span>
+      </button>
+    </mat-menu>
+
+    <!-- TOP-LEVEL NAV LINKS (Dashboard highlighted when active) -->
+    <div class="nav-links">
+      <a routerLink="/daily-log" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link">
+        Daily Log
+      </a>
+
+      <a routerLink="/progress" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link">
+        Progress
+      </a>
+
+      <a routerLink="/my-foods" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link">
+        My Foods
+      </a>
+
+      <a routerLink="/goal-settings" routerLinkActive="nav-link-active" [routerLinkActiveOptions]="{ exact: true }"
+        class="nav-link">
+        Goals & Settings
+      </a>
+    </div>
+
+    <!-- DROPDOWN TRIGGER -->
+    <div [matMenuTriggerFor]="userMenu" class="user-chip">
+      <div class="avatar">
+        {{ (u.displayName || u.email || 'U').charAt(0) | uppercase }}
       </div>
+      <span class="user-name">
+        {{ u.displayName || u.email }}
+      </span>
+      <mat-icon class="chevron-icon">expand_more</mat-icon>
+    </div>
 
-      <!-- DROPDOWN TRIGGER -->
-      <div
-        [matMenuTriggerFor]="userMenu"
-        class="user-chip"
-      >
-        <div class="avatar">
-          {{ (u.displayName || u.email || 'U').charAt(0) | uppercase }}
-        </div>
-        <span class="user-name">
-          {{ u.displayName || u.email }}
-        </span>
-        <mat-icon class="chevron-icon">expand_more</mat-icon>
-      </div>
+    <!-- DROPDOWN MENU -->
+    <mat-menu #userMenu="matMenu">
+      <button mat-menu-item routerLink="/progress">
+        <mat-icon>insights</mat-icon>
+        <span>Progress</span>
+      </button>
 
-      <!-- DROPDOWN MENU -->
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item routerLink="/progress">
-          <mat-icon>insights</mat-icon>
-          <span>Progress</span>
-        </button>
+      <button mat-menu-item routerLink="/goal-settings">
+        <mat-icon>settings</mat-icon>
+        <span>Goals & Settings</span>
+      </button>
 
-        <button mat-menu-item routerLink="/goal-settings">
-          <mat-icon>settings</mat-icon>
-          <span>Goals & Settings</span>
-        </button>
+      <mat-divider></mat-divider>
 
-        <mat-divider></mat-divider>
-
-        <button mat-menu-item (click)="logout()">
-          <mat-icon>logout</mat-icon>
-          <span>Log out</span>
-        </button>
-      </mat-menu>
+      <button mat-menu-item (click)="logout()">
+        <mat-icon>logout</mat-icon>
+        <span>Log out</span>
+      </button>
+    </mat-menu>
     }
   </div>
 
   <!-- Thin loading bar -->
-  <div
-    class="nav-loading-bar"
-    [class.active]="loading.isLoading()"
-  ></div>
+  <div class="nav-loading-bar" [class.active]="loading.isLoading()"></div>
 </mat-toolbar>
