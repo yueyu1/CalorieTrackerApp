@@ -4,11 +4,13 @@ using API.Entities;
 using API.Enums;
 using API.Extensions;
 using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class MealsController(
@@ -310,10 +312,10 @@ namespace API.Controllers
                 return Unauthorized(); 
 
             var meal = await db.Meals
+                .Where(m => m.UserId == currentUserId && m.Id == mealId)
                 .Include(m => m.MealFoods)
                     .ThenInclude(mf => mf.Food)
                         .ThenInclude(f => f.Units)
-                .Where(m => m.UserId == currentUserId && m.Id == mealId)
                 .FirstOrDefaultAsync();
             
             if (meal == null) return NotFound();
@@ -321,8 +323,8 @@ namespace API.Controllers
             // Pre-fetch all foods to minimize DB queries
             var foodIds = dtos.Select(d => d.FoodId).Distinct().ToList();
             var foods = await db.Foods
-                .Include(f => f.Units)
                 .Where(f => foodIds.Contains(f.Id))
+                .Include(f => f.Units)
                 .ToDictionaryAsync(f => f.Id);
 
             foreach (var dto in dtos)
@@ -421,12 +423,15 @@ namespace API.Controllers
         /// Duplicate foods are allowed.
         /// </summary>
         [HttpPost("{targetMealId}/copy-from/{sourceMealId}")]
-        public async Task<IActionResult> CopyMealEntries(int targetMealId, int sourceMealId)
+        public async Task<ActionResult<DailyMealDto>> CopyMealEntries(int targetMealId, int sourceMealId)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
             var targetMeal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == targetMealId)
+                .Include(m => m.MealFoods)
+                    .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.Units)
                 .FirstOrDefaultAsync();
 
             if (targetMeal == null) return NotFound();
@@ -434,6 +439,8 @@ namespace API.Controllers
             var sourceMeal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == sourceMealId)
                     .Include(m => m.MealFoods)
+                        .ThenInclude(mf => mf.Food)
+                            .ThenInclude(f => f.Units)
                 .FirstOrDefaultAsync();
 
             if (sourceMeal == null) return NotFound();
@@ -444,8 +451,13 @@ namespace API.Controllers
                 {
                     MealId = targetMealId,
                     FoodId = entry.FoodId,
+                    Food = entry.Food,
                     Quantity = entry.Quantity,
                     Unit = entry.Unit,
+                    Calories = entry.Calories,
+                    Protein = entry.Protein,
+                    Carbs = entry.Carbs,
+                    Fat = entry.Fat,
                     CreatedAt = DateTime.UtcNow
                 };
 
@@ -454,7 +466,7 @@ namespace API.Controllers
 
             await db.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(MapMealToDailyDto(targetMeal));
         }
 
         private static MealDto MapToMealDto(Meal meal)

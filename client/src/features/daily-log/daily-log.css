@@ -454,6 +454,16 @@
   box-shadow: 0 24px 56px rgba(15, 23, 42, 0.15);
 }
 
+.meal-card--busy {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.meal-card--busy:hover {
+  box-shadow: none;
+  transform: none;
+}
+
 /* Lift non-expanded cards slightly on hover */
 .meal-card:hover:not(.meal-card--expanded) {
   transform: translateY(-1px);

@@ -74,7 +74,7 @@ export class MealService {
   }
 
   /** Get meals in a date range */
-  getMealsInRange(from: string, to: string): Observable<DailyTotals[]> {
+  private getMealsInRange(from: string, to: string): Observable<DailyTotals[]> {
     return this.http.get<DailyTotals[]>(`${this.apiUrl}/meals/range`, {
       params: { from, to },
     });
@@ -113,18 +113,12 @@ export class MealService {
 
     // CASE 2: placeholder, must create meal first
     return this.createMeal(mealType, mealDate).pipe(
-      tap((createdMeal) => {
-        // Update the placeholder meal in the signal
-        this.meals.update(meals => 
-          meals.map(m => m.id == 0 && m.mealType === createdMeal.mealType ? createdMeal : m)
-        );
-      }),
       switchMap((createdMeal: Meal) => {
         return this.addMealEntriesBulk(createdMeal.id, items).pipe(
           tap((updatedMeal) => {
             // Update the meal in the signal
             this.meals.update(meals =>
-              meals.map(m => m.id === updatedMeal.id ? updatedMeal : m)
+              meals.map(m => m.mealType === updatedMeal.mealType && m.mealDate === updatedMeal.mealDate ? updatedMeal : m)
             );
           })
         );
@@ -180,8 +174,34 @@ export class MealService {
       unit: unit
     });
   }
+  
+  copyEntriesBetweenMeals(sourceMealId: number, targetMeal: Meal, mode: 'append' | 'replace' = 'append'): Observable<Meal> {
+    if (targetMeal.id === 0) {
+      return this.createMeal(targetMeal.mealType, targetMeal.mealDate).pipe(
+        switchMap((createdMeal: Meal) => {
+          return this.copyMealEntries(sourceMealId, createdMeal.id, mode).pipe(
+            tap((updatedMeal) => {
+              // Update the meal in the signal
+              this.meals.update(meals =>
+                meals.map(m => m.mealType === updatedMeal.mealType && m.mealDate == updatedMeal.mealDate ? updatedMeal : m)
+              );
+            })
+          );
+        })
+      );
+    } else {
+      return this.copyMealEntries(sourceMealId, targetMeal.id, mode).pipe(
+        tap((updatedMeal) => {
+          // Update the meal in the signal
+          this.meals.update(meals =>
+            meals.map(m => m.id === updatedMeal.id ? updatedMeal : m)
+          );
+        })
+      );
+    }
+  }
 
-  copyMealEntries(sourceMealId: number, targetMealId: number, mode: 'append' | 'replace' = 'append'): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/meals/${targetMealId}/copy-from/${sourceMealId}`, {});
+  private copyMealEntries(sourceMealId: number, targetMealId: number, mode: 'append' | 'replace' = 'append'): Observable<Meal> {
+    return this.http.post<Meal>(`${this.apiUrl}/meals/${targetMealId}/copy-from/${sourceMealId}`, {});
   }
 }

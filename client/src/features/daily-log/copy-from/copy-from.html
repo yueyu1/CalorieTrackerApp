@@ -4,14 +4,27 @@
   class="copy-from-btn"
   (click)="$event.stopPropagation()"
   [matMenuTriggerFor]="menu"
+  [disabled]="isCopying()"
 >
-  Copy from
-  <mat-icon class="copy-from-icon" fontIcon="expand_more"></mat-icon>
+  @if(!isCopying()) {
+    Copy from
+    <mat-icon class="copy-from-icon" fontIcon="expand_more"></mat-icon>
+  }
+
+  @else {
+    <mat-progress-spinner
+      diameter="18"
+      mode="indeterminate"
+      class="btn-spinner">
+    </mat-progress-spinner>
+    <span class="loading-text">Copying…</span>
+  }
+  
 </button>
 
 <mat-menu #menu="matMenu" class="copy-menu">
   <!-- Quick picks -->
-  <ng-container *ngFor="let pick of quickPicks">
+  @for (pick of quickPicks; track $index) {
     <button
       mat-menu-item
       class="menu-item"
@@ -21,7 +34,7 @@
     >
       <span class="menu-title">{{ pick.label }}</span>
     </button>
-  </ng-container>
+  }
 
   <mat-divider></mat-divider>
 

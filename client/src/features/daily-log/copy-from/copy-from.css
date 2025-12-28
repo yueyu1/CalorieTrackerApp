@@ -22,6 +22,19 @@
   cursor: pointer;
 }
 
+.copy-from-btn:disabled {
+  cursor: progress;
+  opacity: 0.6;
+  box-shadow: none;
+  background-color: rgba(15, 23, 42, 0.02);
+}
+
+.copy-from-btn:disabled:hover,
+.copy-from-btn:disabled:active {
+  background-color: rgba(15, 23, 42, 0.02);
+  box-shadow: none;
+}
+
 .copy-from-btn:hover {
   background-color: rgba(15, 23, 42, 0.05);
   box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
@@ -37,6 +50,14 @@
   width: 18px;
   height: 18px;
   color: rgba(107, 114, 128, 0.9);
+}
+
+.btn-spinner {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: text-bottom;
 }
 
 :host ::ng-deep .copy-menu {

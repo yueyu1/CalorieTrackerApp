@@ -3,11 +3,13 @@ using API.Dtos;
 using API.Entities;
 using API.Enums;
 using API.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class FoodsController(AppDbContext db) : ControllerBase

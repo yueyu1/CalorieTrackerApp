@@ -9,15 +9,17 @@ import { GoalSettings } from '../features/goal-settings/goal-settings';
 import { MyFoods } from '../features/my-foods/my-foods';
 import { Progress } from '../features/progress/progress';
 import { preventUnsavedChangesGuard } from '../core/guards/prevent-unsaved-changes-guard';
+import { authGuard } from '../core/guards/auth-guard';
 
 export const routes: Routes = [
-    { path: '', component: Home},
-    { path: 'account/login', component: Login},
-    { path: 'account/register', component: Register},
-    { path: 'daily-log', component: DailyLog },
-    { path: 'progress', component: Progress },
-    { path: 'my-foods', component: MyFoods },
+    { path: '', component: Home, title: 'Home' },
+    { path: 'account/login', component: Login, title: 'Login' },
+    { path: 'account/register', component: Register, title: 'Register' },
+    { path: 'daily-log', component: DailyLog, title: 'Daily Log', canActivate: [authGuard] },
+    { path: 'progress', component: Progress, title: 'Progress', canActivate: [authGuard] },
+    { path: 'my-foods', component: MyFoods, title: 'My Foods', canActivate: [authGuard] },
     { path: 'goal-settings', component: GoalSettings, title: 'Goal Settings',
+        canActivate: [authGuard],
         canDeactivate: [preventUnsavedChangesGuard]
      },
     { path: 'test-errors', component: TestErrors },

@@ -295,7 +295,11 @@
 
     @if (!pageLoading()) {
     @for (meal of meals(); track $index) {
-    <mat-card class="meal-card" [class.meal-card--expanded]="isMealExpanded(meal)">
+    <mat-card 
+      class="meal-card" 
+      [class.meal-card--expanded]="isMealExpanded(meal)"
+      [class.meal-card--busy]="isMealBusy(meal)"
+    >
       <!-- Meal header button -->
       <button matRipple type="button" class="meal-header" (click)="toggleMeal(meal)">
 
@@ -385,13 +389,23 @@
 
         <!-- Right column: actions -->
         <div class="meal-header-actions">
-          <button mat-stroked-button color="primary" type="button" class="add-food-btn"
-            (click)="onAddFood(meal); $event.stopPropagation()">
+          <button 
+            mat-stroked-button 
+            color="primary" 
+            type="button" 
+            class="add-food-btn"
+            (click)="onAddFood(meal);
+            $event.stopPropagation()"
+            [disabled]="isMealBusy(meal)"
+          >
             + Add Food
           </button>
 
-          <app-copy-from [quickPicks]="copyQuickPicksFor(meal)"
-            (copyRequested)="onCopyRequested(meal, $event)"></app-copy-from>
+          <app-copy-from 
+            [targetMeal]="meal" 
+            [quickPicks]="copyQuickPicksFor(meal)"
+            (busyChanged)="setMealBusy(meal, $event)"
+          ></app-copy-from>
 
           <mat-icon class="chevron-icon" [class.chevron-icon--open]="isMealExpanded(meal)"
             fontIcon="expand_more"></mat-icon>
@@ -462,7 +476,13 @@
               {{ meal.mealType.toLowerCase() }} yet.
             </p>
 
-            <button mat-flat-button color="primary" type="button" (click)="onAddFood(meal)">
+            <button 
+              mat-flat-button 
+              color="primary" 
+              type="button" 
+              (click)="onAddFood(meal)"
+              [disabled]="isMealBusy(meal)"
+            >
               + Add Food
             </button>
           </div>

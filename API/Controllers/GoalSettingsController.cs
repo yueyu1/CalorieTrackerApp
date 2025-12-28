@@ -3,12 +3,14 @@ using API.Dtos;
 using API.Entities;
 using API.Enums;
 using API.Extensions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
+    [Authorize]
     [Route("api/goal-settings")]
     [ApiController]
     public class GoalSettingsController(AppDbContext db) : ControllerBase

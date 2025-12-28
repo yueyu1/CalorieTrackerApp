@@ -62,6 +62,7 @@ export class DailyLog implements OnInit {
   protected currentDayTotals = this.mealService.currentDayTotals;
   protected goalCalories = this.goalSettingsService.targetCalories;
   protected deletingIds = signal<Set<number>>(new Set());
+  private busyByMealKey = signal<Record<string, boolean>>({});
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
@@ -452,26 +453,17 @@ export class DailyLog implements OnInit {
     }
   }
 
-  onCopyRequested(meal: Meal, $event: { sourceMealId: number; mode: "append" | "replace"; }) {
-    const { sourceMealId, mode } = $event;
-    if (!sourceMealId || sourceMealId <= 0) return;
-    if (meal.id <= 0) {
-      this.mealService.createMeal(meal.mealType, meal.mealDate).pipe(
-        tap((createdMeal: Meal) => {
-          this.copyEntriesToMeal(sourceMealId, createdMeal, mode);
-        })).subscribe();
-    } else {
-      this.copyEntriesToMeal(sourceMealId, meal, mode);
-    }
+  private mealKey(meal: Meal): string {
+    return meal.id > 0 ? `id:${meal.id}` : `type:${meal.mealType}`;
   }
 
-  copyEntriesToMeal(sourceMealId: number, targetMeal: Meal, mode: 'append' | 'replace') {
-    this.mealService.copyMealEntries(sourceMealId, targetMeal.id, mode).pipe(
-      tap(() => {
-        this.mealService.loadDailyMeals(targetMeal.mealDate);
-        this.toast.success(`Entries copied to ${targetMeal.mealType}.`);
-      })
-    ).subscribe();
+  setMealBusy(meal: Meal, busy: boolean): void {
+    const key = this.mealKey(meal);
+    this.busyByMealKey.update(map => ({ ...map, [key]: busy }));
+  }
+
+  isMealBusy(meal: Meal): boolean {
+    return !!this.busyByMealKey()[this.mealKey(meal)];
   }
 
   // ---- Date picker helpers ----
