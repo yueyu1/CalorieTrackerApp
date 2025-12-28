@@ -1,9 +1,3 @@
-:host {
-  display: block;
-  min-height: calc(100vh - 64px);
-  background: #f5f6ff;
-}
-
 .auth-wrapper {
   max-width: 420px;
   margin: 72px auto;
@@ -17,7 +11,6 @@
   padding: 28px 28px 24px;
 }
 
-/* Header */
 .auth-header {
   text-align: center;
   margin-bottom: 24px;
@@ -36,13 +29,11 @@
   color: #6b7280;
 }
 
-/* Fields */
 .auth-field {
   width: 100%;
   margin-bottom: 16px;
 }
 
-/* Primary button */
 .auth-actions {
   margin-top: 6px;
 }
@@ -57,7 +48,6 @@
   border-radius: 999px;
 }
 
-/* Cancel */
 .cancel-button {
   margin-top: 10px;
   padding: 10px 0;
@@ -74,7 +64,17 @@
   color: #374151;
 }
 
-/* Footer link */
+.cancel-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+  text-decoration: none;
+}
+
+.cancel-button:disabled:hover {
+  color: #6b7280;
+  text-decoration: none;
+}
+
 .auth-footer {
   margin-top: 22px;
   text-align: center;
@@ -91,6 +91,11 @@
 
 .auth-footer a:hover {
   text-decoration: underline;
+}
+
+a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
 }
 
 /* Responsive tweaks */

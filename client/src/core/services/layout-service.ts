@@ -5,6 +5,8 @@ import { Injectable, signal } from '@angular/core';
 })
 export class LayoutService {
   readonly showNav = signal(true);
+  readonly isRegistering = signal(false);
+  readonly isLoggingIn = signal(false);
 
   hideNav() {
     this.showNav.set(false);

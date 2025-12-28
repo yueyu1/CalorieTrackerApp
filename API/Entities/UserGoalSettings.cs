@@ -11,7 +11,7 @@ public class UserGoalSettings
     public double Protein { get; set; }
     public double Carbs { get; set; }
     public double Fat { get; set; }
-    public WeightUnit WeightUnit { get; set; }
+    public bool ConfirmDeleteFood { get; set; }
     public bool ShowMacroPercent { get; set; }
     public DateTime UpdatedUtc { get; set; }
 

@@ -54,7 +54,7 @@ export class GoalSettings implements OnInit {
     protein: 30,
     carbs: 40,
     fat: 30,
-    weightUnit: 'g',
+    confirmDeleteFood: true,
     showMacroPercent: true,
   });
 
@@ -67,7 +67,7 @@ export class GoalSettings implements OnInit {
       protein: [this.initial().protein, [Validators.required, Validators.min(0)]],
       carbs: [this.initial().carbs, [Validators.required, Validators.min(0)]],
       fat: [this.initial().fat, [Validators.required, Validators.min(0)]],
-      weightUnit: [this.initial().weightUnit],
+      confirmDeleteFood: [this.initial().confirmDeleteFood],
       showMacroPercent: [this.initial().showMacroPercent],
     })
   }
@@ -207,7 +207,7 @@ export class GoalSettings implements OnInit {
       protein: this.proteinControl?.value,
       carbs: this.carbsControl?.value,
       fat: this.fatControl?.value,
-      weightUnit: this.form.get('weightUnit')?.value,
+      confirmDeleteFood: this.form.get('confirmDeleteFood')?.value,
       showMacroPercent: this.form.get('showMacroPercent')?.value,
     };
   }

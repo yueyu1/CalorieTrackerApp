@@ -1,4 +1,3 @@
-
 <div class="landing-container">
 
   <!-- Hero Section -->
@@ -6,7 +5,7 @@
     <h1>Track your calories. Achieve your goals.</h1>
     <p>
       A simple, fast, and beautiful calorie tracking app built with
-      Angular & .NET Core.
+      Angular &amp; .NET Core.
     </p>
 
     <div class="cta-buttons">
@@ -20,38 +19,121 @@
     </div>
   </section>
 
-  <!-- Feature Cards Section -->
+  <!-- Feature Cards Section (UPDATED CONTENT) -->
   <section class="features">
     <mat-card class="feature-card">
-      <mat-icon>monitor_heart</mat-icon>
-      <h3>Daily Dashboard</h3>
-      <p>See calories, macros, and meal summaries at a glance.</p>
-    </mat-card>
-
-    <mat-card class="feature-card">
-      <mat-icon>fastfood</mat-icon>
-      <h3>Quick Meal Logging</h3>
-      <p>Search foods and add meals in seconds.</p>
+      <mat-icon>restaurant</mat-icon>
+      <h3>Daily Log</h3>
+      <p>Log meals fast, edit entries, and see daily totals at a glance.</p>
     </mat-card>
 
     <mat-card class="feature-card">
       <mat-icon>query_stats</mat-icon>
-      <h3>Charts & Insights</h3>
-      <p>Track progress weekly, monthly, and over time.</p>
+      <h3>Progress</h3>
+      <p>Spot trends over time with simple charts for calories and macros.</p>
+    </mat-card>
+
+    <mat-card class="feature-card">
+      <mat-icon>menu_book</mat-icon>
+      <h3>My Foods</h3>
+      <p>Create custom foods and units so logging stays quick and consistent.</p>
     </mat-card>
   </section>
 
-  <!-- Placeholder for screenshots -->
+  <!-- See it in action (REPLACED) -->
   <section class="screenshots">
     <div class="screenshots-inner">
-      <div class="screenshots-text">
-        <h2>See it in action</h2>
-        <p>Learn more about how the dashboard helps you stay on track.</p>
-      </div>
-  
-      <div class="screenshot-placeholder">
-        <span>Dashboard Preview</span>
-      </div>
+      <mat-card class="see-card" appearance="outlined">
+        <div class="see-grid">
+          <!-- Left: Mini Daily Log mock -->
+          <mat-card class="mini" appearance="outlined">
+            <div class="mini-top">
+              <div class="mini-brand">
+                <span class="mini-appicon">
+                  <mat-icon>monitor_heart</mat-icon>
+                </span>
+                <span class="mini-title">Daily Log</span>
+              </div>
+
+              <div class="mini-actions" aria-hidden="true">
+                <span class="mini-pill"></span>
+                <span class="mini-pill"></span>
+                <span class="mini-pill"></span>
+              </div>
+            </div>
+
+            <div class="mini-body">
+              <div class="mini-row">
+                <div class="mini-left">
+                  <div class="mini-meal">
+                    <span class="mini-meal-icon">
+                      <mat-icon>egg_alt</mat-icon>
+                    </span>
+                    <span class="mini-meal-name">Breakfast</span>
+                  </div>
+                </div>
+                <div class="mini-right">
+                  <span class="mini-value">1,850</span>
+                </div>
+              </div>
+
+              <div class="mini-row">
+                <div class="mini-left">
+                  <div class="mini-meal">
+                    <span class="mini-meal-icon">
+                      <mat-icon>lunch_dining</mat-icon>
+                    </span>
+                    <span class="mini-meal-name">Lunch</span>
+                  </div>
+                </div>
+                <div class="mini-right">
+                  <span class="mini-value">128g</span>
+                </div>
+              </div>
+
+              <div class="mini-row">
+                <div class="mini-left">
+                  <div class="mini-meal">
+                    <span class="mini-meal-icon">
+                      <mat-icon>dinner_dining</mat-icon>
+                    </span>
+                    <span class="mini-meal-name">Dinner</span>
+                  </div>
+
+                  <div class="mini-bars" aria-hidden="true">
+                    <span class="bar w70"></span>
+                    <span class="bar w35"></span>
+                    <span class="bar w20"></span>
+                  </div>
+                </div>
+                <div class="mini-right">
+                  <span class="mini-value">195g</span>
+                </div>
+              </div>
+
+              <div class="mini-footer">
+                <span><strong>Calories</strong> 1,860</span>
+                <span class="dot">•</span>
+                <span><strong>Protein</strong> 195g</span>
+                <span class="dot">•</span>
+                <span><strong>Fat</strong> 60g</span>
+              </div>
+            </div>
+          </mat-card>
+
+          <!-- Right: Copy + buttons -->
+          <div class="see-copy">
+            <h2 class="see-title">See it in action</h2>
+            <p class="see-sub">
+              After login, you'll go straight to your Daily Log — the main workflow of the app.
+            </p>
+
+            <p class="see-text muted">
+              Add meals fast, track calories, and see your daily nutrition at a glance. It's your “home base” for Progress, My Foods, and Goals.
+            </p>
+          </div>
+        </div>
+      </mat-card>
     </div>
   </section>
 </div>

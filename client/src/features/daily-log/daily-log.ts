@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Meal, MealItem, MealType } from '../../types/meal';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,14 +15,15 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CopySourceQuickPick } from '../../types/copy';
-import { tap } from 'rxjs';
+import { finalize, tap } from 'rxjs';
 import { formatQuantity } from '../../shared/formatters/quantity-formatter';
 import { CopyFrom } from "./copy-from/copy-from";
 import { Router } from '@angular/router';
 import { GoalSettingsService } from '../../core/services/goal-settings-service';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { CustomFoodDialogResult } from '../../types/custom-food';
 import { toYmd } from '../../shared/utils/date-utils';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-daily-log',
@@ -36,28 +37,31 @@ import { toYmd } from '../../shared/utils/date-utils';
     MatIconModule,
     MatDatepickerModule,
     MatTooltipModule,
+    MatProgressSpinnerModule,
     CopyFrom
   ],
   templateUrl: './daily-log.html',
   styleUrl: './daily-log.css',
 })
 export class DailyLog implements OnInit {
-  private mealsService = inject(MealService);
+  private mealService = inject(MealService);
   protected goalSettingsService = inject(GoalSettingsService);
   private toast = inject(ToastService);
   private router = inject(Router);
   private dialog = inject(MatDialog);
+  private distroyRef = inject(DestroyRef);
   private expandedMealTypes = signal<MealType[]>([]);
-  protected meals = this.mealsService.meals;
+  protected meals = this.mealService.meals;
   protected yesterdayMeals = signal<Meal[]>([]);
   protected selectedDate = signal<Date>(new Date());
   protected datePickerOpen = signal(false);
   protected formatQuantity = formatQuantity;
-  protected pageLoading = computed(() => this.mealsService.mealsLoading()
+  protected pageLoading = computed(() => this.mealService.mealsLoading()
     || this.goalSettingsService.isLoading());
   protected goal = this.goalSettingsService.goalSettings;
-  protected currentDayTotals = this.mealsService.currentDayTotals;
+  protected currentDayTotals = this.mealService.currentDayTotals;
   protected goalCalories = this.goalSettingsService.targetCalories;
+  protected deletingIds = signal<Set<number>>(new Set());
 
   ngOnInit(): void {
     this.loadForDate(this.selectedDate());
@@ -228,7 +232,7 @@ export class DailyLog implements OnInit {
   }
 
   // ---- Actions ----
-  
+
   onAddFood(meal: Meal): void {
     const ref = this.dialog.open(AddFoodDialog, {
       maxWidth: '100vw',
@@ -277,11 +281,31 @@ export class DailyLog implements OnInit {
 
   onDeleteItem(meal: Meal, item: MealItem): void {
     const displayName = item.brand ? `${item.brand} ${item.name}` : item.name;
+
+    if (this.goalSettingsService.goalSettings()?.confirmDeleteFood === false) {
+      this.setDeleting(item.id, true);
+
+      this.mealService.deleteFoodFromMeal(meal.id, item.id).pipe(
+        takeUntilDestroyed(this.distroyRef),
+        finalize(() => this.setDeleting(item.id, false))
+      ).subscribe({
+        next: () => {
+          this.toast.success(`${displayName} deleted from ${meal.mealType}.`);
+        },
+        error: (err) => {
+          console.error('Error deleting meal item:', err);
+          this.toast.error(`Failed to delete ${displayName}. Please try again.`);
+        }
+      });
+
+      return;
+    }
+
     const ref = this.dialog.open(ConfirmDeleteDialog, {
       width: '420px',
       maxWidth: '95vw',
       data: {
-        mealId: meal.id, 
+        mealId: meal.id,
         entryId: item.id,
         itemName: displayName,
         mealType: meal.mealType,
@@ -321,6 +345,16 @@ export class DailyLog implements OnInit {
 
   private isCopySourceEligible(meal?: Meal): boolean {
     return !!meal && meal.id > 0 && meal.items.length > 0;
+  }
+
+  private setDeleting(id: number, on: boolean) {
+    const next = new Set(this.deletingIds());
+    on ? next.add(id) : next.delete(id);
+    this.deletingIds.set(next);
+  }
+
+  protected isDeleting(id: number): boolean {
+    return this.deletingIds().has(id);
   }
 
   protected breakfastCopyQuickPicks = computed<CopySourceQuickPick[]>(() => {
@@ -422,7 +456,7 @@ export class DailyLog implements OnInit {
     const { sourceMealId, mode } = $event;
     if (!sourceMealId || sourceMealId <= 0) return;
     if (meal.id <= 0) {
-      this.mealsService.createMeal(meal.mealType, meal.mealDate).pipe(
+      this.mealService.createMeal(meal.mealType, meal.mealDate).pipe(
         tap((createdMeal: Meal) => {
           this.copyEntriesToMeal(sourceMealId, createdMeal, mode);
         })).subscribe();
@@ -432,9 +466,9 @@ export class DailyLog implements OnInit {
   }
 
   copyEntriesToMeal(sourceMealId: number, targetMeal: Meal, mode: 'append' | 'replace') {
-    this.mealsService.copyMealEntries(sourceMealId, targetMeal.id, mode).pipe(
+    this.mealService.copyMealEntries(sourceMealId, targetMeal.id, mode).pipe(
       tap(() => {
-        this.mealsService.loadDailyMeals(targetMeal.mealDate);
+        this.mealService.loadDailyMeals(targetMeal.mealDate);
         this.toast.success(`Entries copied to ${targetMeal.mealType}.`);
       })
     ).subscribe();
@@ -460,9 +494,9 @@ export class DailyLog implements OnInit {
   }
 
   private loadForDate(d: Date): void {
-    this.mealsService.loadDailyMeals(toYmd(d)).subscribe();
+    this.mealService.loadDailyMeals(toYmd(d)).subscribe();
 
-    this.mealsService.getDailyMeals(toYmd(this.yesterdayDate())).pipe(
+    this.mealService.getDailyMeals(toYmd(this.yesterdayDate())).pipe(
       tap((meals) => {
         this.yesterdayMeals.set(meals);
       })

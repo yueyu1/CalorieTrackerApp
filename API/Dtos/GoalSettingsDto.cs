@@ -9,6 +9,6 @@ public class GoalSettingsDto
     public double Protein { get; set; }
     public double Carbs { get; set; }
     public double Fat { get; set; }
-    public required string WeightUnit { get; set; }
+    public bool ConfirmDeleteFood { get; set; }
     public bool ShowMacroPercent { get; set; }
 }

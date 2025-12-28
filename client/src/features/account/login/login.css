@@ -1,17 +1,9 @@
-:host {
-  display: block;
-  min-height: calc(100vh - 64px);
-  background: #f5f6ff;
-}
-
-/* Center the card and control page width */
 .auth-wrapper {
   max-width: 420px;
   margin: 72px auto;
   padding: 0 16px;
 }
 
-/* Card container */
 .auth-card {
   background: #ffffff;
   border-radius: 20px;
@@ -19,7 +11,6 @@
   padding: 28px 28px 24px;
 }
 
-/* Center the header text */
 .auth-header {
   text-align: center;
   margin-bottom: 28px;
@@ -38,13 +29,11 @@
   color: #6b7280;
 }
 
-/* Field spacing */
 .auth-field {
   width: 100%;
   margin-bottom: 16px;
 }
 
-/* Login button */
 .auth-actions {
   margin-top: 6px;
 }
@@ -59,7 +48,6 @@
   border-radius: 999px;
 }
 
-/* Improved Cancel button */
 .cancel-button {
   margin-top: 10px;
   padding: 10px 0;
@@ -76,7 +64,17 @@
   color: #374151;
 }
 
-/* Footer section */
+.cancel-button:disabled {
+  cursor: default;
+  opacity: 0.5;
+  text-decoration: none;
+}
+
+.cancel-button:disabled:hover {
+  color: #6b7280;
+  text-decoration: none;
+}
+
 .auth-footer {
   margin-top: 22px;
   text-align: center;
@@ -95,12 +93,15 @@
   text-decoration: underline;
 }
 
+a.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
 :host ::ng-deep .mat-mdc-form-field-icon-suffix {
   margin-right: 4px;
 }
 
-
-/* Small screens */
 @media (max-width: 600px) {
   .auth-wrapper {
     margin: 48px auto;

@@ -8,7 +8,7 @@ export type GoalSettingsDto = {
   protein: number;
   carbs: number;
   fat: number;
-  weightUnit: WeightUnit;
+  confirmDeleteFood: boolean;
   showMacroPercent: boolean;
 }
 

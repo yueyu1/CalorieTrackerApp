@@ -515,10 +515,11 @@
 
 .meal-name {
   margin: 0;
-  font-size: 17px;
-  font-weight: 700;
+  font-size: 16px;
+  font-weight: 600;
   letter-spacing: 0.01em;
   line-height: 1.2;
+  color: #111827;
 }
 
 .meal-header-calories {
@@ -643,7 +644,9 @@
 
 .add-food-btn {
   border-radius: 999px;
-  padding-inline: 16px;
+  padding-inline: 14px;
+  min-height: 32px;
+  font-weight: 500;
 
   transition:
     background-color 0.14s ease,
@@ -680,7 +683,7 @@
 /* table */
 .meal-table-header,
 .meal-table-row {
-  padding: 10px 20px;
+  padding: 4px 12px;
   display: grid;
   /* Food | Calories | P | C | F | Actions */
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
@@ -737,7 +740,6 @@
 .col-name {
   display: flex;
   flex-direction: column;
-  gap: 2px;
 }
 
 /* Actions column */
@@ -749,10 +751,6 @@
   padding-left: 16px;
   opacity: 0.7;
   transition: opacity 0.15s ease;
-}
-
-.meal-table-row:hover .col-actions {
-  opacity: 1;
 }
 
 .row-action-btn {
@@ -821,6 +819,14 @@
 
 .goals-inline-btn {
   white-space: nowrap;
+}
+
+.row-spinner {
+  width: 18px !important;
+  height: 18px !important;
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: text-bottom;
 }
 
 /* ---------------------------

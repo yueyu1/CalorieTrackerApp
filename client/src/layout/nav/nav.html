@@ -7,8 +7,11 @@
 
     <!-- NOT LOGGED IN -->
     @if (!accountService.currentUser()) {
-    <button mat-button routerLink="/account/login" class="login-btn">
-      Login
+    <button mat-button 
+      class="auth-btn"
+      [routerLink]="isLoginPage() ? '/account/register' : '/account/login'" 
+      [disabled]="layoutService.isRegistering() || layoutService.isLoggingIn()">
+      {{ isLoginPage() ? 'Sign up' : 'Log in' }}
     </button>
     }
 

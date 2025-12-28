@@ -39,7 +39,8 @@
       </mat-chip-option>
     </mat-chip-listbox>
 
-    <button mat-button type="button" class="afd-custom-food-btn" color="primary" (click)="openCustomFood()" [disabled]="isAddingFood()">
+    <button mat-button type="button" class="afd-custom-food-btn" color="primary" (click)="openCustomFood()"
+      [disabled]="isAddingFood()">
       <mat-icon fontIcon="add" />
       Custom food
     </button>
@@ -48,72 +49,72 @@
   <!-- FOOD LIST -->
   <div class="afd-list" formArrayName="foods" [class.is-disabled]="isAddingFood()">
     @if (!this.loading()) {
-      @if (showMyFoodsEmptyState) {
-        <div class="afd-empty">
-          <div class="afd-empty-title">
-            {{ myFoodsEmptyTitle }}
-          </div>
+    @if (showMyFoodsEmptyState) {
+    <div class="afd-empty">
+      <div class="afd-empty-title">
+        {{ myFoodsEmptyTitle }}
+      </div>
 
-          <div class="afd-empty-sub">
-            {{ myFoodsEmptySubtitle }}
-          </div>
+      <div class="afd-empty-sub">
+        {{ myFoodsEmptySubtitle }}
+      </div>
 
-          <button mat-stroked-button color="primary" type="button" (click)="openCustomFood()">
-            <mat-icon fontIcon="add" />
-            Create custom food
-          </button>
+      <button mat-stroked-button color="primary" type="button" (click)="openCustomFood()">
+        <mat-icon fontIcon="add" />
+        Create custom food
+      </button>
+    </div>
+    }
+    @else {
+    @for (item of foods(); track item.id) {
+    <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected(item.id, $index)">
+      <!-- LEFT -->
+      <div class="afd-left">
+        <div class="afd-name">{{ item.name }}</div>
+        <div class="afd-brand">{{ item.brand }}</div>
+        <div class="afd-macros">
+          {{ getRowCalories($index) | number: '1.0-0' }} kcal ·
+          Protein {{ getRowProtein($index) | number: '1.2-2' }} g ·
+          Carbs {{ getRowCarbs($index) | number: '1.2-2' }} g ·
+          Fat {{ getRowFat($index) | number: '1.2-2' }} g
         </div>
-      }
-      @else {
-        @for (item of foods(); track item.id) {
-        <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected(item.id, $index)">
-          <!-- LEFT -->
-          <div class="afd-left">
-            <div class="afd-name">{{ item.name }}</div>
-            <div class="afd-brand">{{ item.brand }}</div>
-            <div class="afd-macros">
-              {{ getRowCalories($index) | number: '1.0-0' }} kcal ·
-              Protein {{ getRowProtein($index) | number: '1.2-2' }} g ·
-              Carbs {{ getRowCarbs($index) | number: '1.2-2' }} g ·
-              Fat {{ getRowFat($index) | number: '1.2-2' }} g
-            </div>
-          </div>
+      </div>
 
-          <!-- RIGHT: quantity + unit -->
-          <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
-            <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
-              <mat-icon>remove</mat-icon>
-            </button>
+      <!-- RIGHT: quantity + unit -->
+      <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
+        <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
+          <mat-icon>remove</mat-icon>
+        </button>
 
-            <mat-form-field appearance="outline" class="afd-qty-input">
-              <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
-                (blur)="onQtyBlur($index)" />
-            </mat-form-field>
+        <mat-form-field appearance="outline" class="afd-qty-input">
+          <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
+            (blur)="onQtyBlur($index)" />
+        </mat-form-field>
 
-            <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
-              <mat-icon>add</mat-icon>
-            </button>
+        <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
+          <mat-icon>add</mat-icon>
+        </button>
 
-            <mat-form-field appearance="outline" class="afd-unit-select">
-              <mat-select formControlName="unitId" (click)="onUnitClick($event)">
-                @for (unit of item.units; track unit.id) {
-                <mat-option [value]="unit.id">
-                  {{ unit.label }}
-                </mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-          </div>
+        <mat-form-field appearance="outline" class="afd-unit-select">
+          <mat-select formControlName="unitId" (click)="onUnitClick($event)">
+            @for (unit of item.units; track unit.id) {
+            <mat-option [value]="unit.id">
+              {{ unit.label }}
+            </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </div>
 
-          <!-- CHECKMARK -->
-          @if (isSelected(item.id)) {
-          <div class="afd-check">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-          }
-        </div>
-        }
-      }
+      <!-- CHECKMARK (always visible) -->
+      <div class="afd-check" [class.is-selected]="isSelected(item.id)">
+        <mat-icon aria-hidden="true">
+          {{ isSelected(item.id) ? 'check' : 'radio_button_unchecked' }}
+        </mat-icon>
+      </div>
+    </div>
+    }
+    }
     }
     @else {
     <!-- LOADING SKELETON -->
@@ -142,17 +143,15 @@
       {{ selectedCalories }} kcal
     </div>
 
-    <button mat-flat-button class="add-btn" color="primary" type="button" (click)="confirmAdd()" [disabled]="selectedCount === 0 || isAddingFood()">
+    <button mat-flat-button class="add-btn" color="primary" type="button" (click)="confirmAdd()"
+      [disabled]="selectedCount === 0 || isAddingFood()">
       @if (!isAddingFood()) {
-        Add to {{ this.data.mealType }}
+      Add to {{ this.data.mealType }}
       }
       @else {
-        <mat-progress-spinner
-          diameter="18"
-          mode="indeterminate"
-          class="btn-spinner">
-        </mat-progress-spinner>
-        <span class="saving-text">Saving…</span>
+      <mat-progress-spinner diameter="18" mode="indeterminate" class="btn-spinner">
+      </mat-progress-spinner>
+      <span class="saving-text">Saving…</span>
       }
     </button>
   </div>

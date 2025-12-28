@@ -31,19 +31,19 @@
       </mat-form-field>
 
       <div class="auth-actions">
-        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="isSubmitting()">
-          {{ isSubmitting() ? 'Logging in…' : 'Login' }}
+        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="layoutService.isLoggingIn()">
+          {{ layoutService.isLoggingIn() ? 'Logging in…' : 'Login' }}
         </button>
       </div>
 
-      <button routerLink="/" class="cancel-button">
+      <button routerLink="/" class="cancel-button" [disabled]="layoutService.isLoggingIn()">
         Cancel
       </button>
     </form>
 
     <div class="auth-footer">
-      <span>Don’t have an account?</span>
-      <a routerLink="/account/register">Get started</a>
+      <span>Don't have an account?</span>
+      <a routerLink="/account/register" [class.disabled]="layoutService.isLoggingIn()">Get started</a>
     </div>
   </div>
 </div>

@@ -2,7 +2,7 @@
   <div class="auth-card">
     <div class="auth-header">
       <h1>Create your account</h1>
-      <p>Sign up to start tracking your calories and reaching your goals.</p>
+      <p>Sign up to track calories and reach your goals.</p>
     </div>
 
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
@@ -73,19 +73,19 @@
       </mat-form-field>
 
       <div class="auth-actions">
-        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="isSubmitting">
-          {{ isSubmitting ? 'Creating account…' : 'Create account' }}
+        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="layoutService.isRegistering() || registerForm.invalid">
+          {{ layoutService.isRegistering()? 'Creating account…' : 'Create account' }}
         </button>
       </div>
     </form>
 
-    <button routerLink="/" class="cancel-button">
+    <button routerLink="/" class="cancel-button" [disabled]="layoutService.isRegistering()">
       Cancel
     </button>
 
     <div class="auth-footer">
       <span>Already have an account?</span>
-      <a routerLink="/account/login">Log in</a>
+      <a routerLink="/account/login" [class.disabled]="layoutService.isRegistering()">Log in</a>
     </div>
   </div>
 </div>

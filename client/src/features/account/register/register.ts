@@ -6,6 +6,9 @@ import { Router, RouterModule } from '@angular/router';
 import { AccountService } from '../../../core/services/account-service';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { finalize } from 'rxjs';
+import { ToastService } from '../../../core/services/toast-service';
+import { LayoutService } from '../../../core/services/layout-service';
 
 function confirmPasswordValidator(matchTo: string): ValidatorFn {
   return (control: any): ValidationErrors | null => {
@@ -39,10 +42,11 @@ function confirmPasswordValidator(matchTo: string): ValidatorFn {
 })
 export class Register implements OnInit {
   private fb = inject(FormBuilder);
-  protected registerForm: FormGroup;
-  protected isSubmitting = false;
   private router = inject(Router);
   private accountService = inject(AccountService);
+  private toastService = inject(ToastService);
+  protected layoutService = inject(LayoutService);
+  protected registerForm: FormGroup;
   protected hidePassword = signal(true);
   protected hideConfirmPassword = signal(true);
 
@@ -61,6 +65,42 @@ export class Register implements OnInit {
     });
   }
 
+  protected togglePassword(): void {
+    this.hidePassword.update(v => !v);
+  }
+
+  protected toggleConfirmPassword(): void {
+    this.hideConfirmPassword.update(v => !v);
+  }
+
+  onSubmit() {
+    if (!this.registerForm.valid) {
+      return; 
+    } 
+
+    this.layoutService.isRegistering.set(true);
+
+    const payload = {
+      email: this.email?.value,
+      displayName: this.displayName?.value,
+      password: this.password?.value,
+    }
+    this.accountService.register(payload).pipe(
+      finalize(() => this.layoutService.isRegistering.set(false))
+    ).subscribe({
+      next: (user) => {
+        localStorage.setItem('access_token', user.token);
+        localStorage.setItem('user', JSON.stringify(user));
+        this.accountService.setCurrentUser();
+        this.router.navigate(['/daily-log']);
+        this.toastService.success('Registration successful!');
+      },
+      error: () => {
+        this.toastService.error('Registration failed. Please try again.');
+      }
+    });
+  }
+
   get email() {
     return this.registerForm.get('email');
   }
@@ -75,36 +115,5 @@ export class Register implements OnInit {
 
   get confirmPassword() {
     return this.registerForm.get('confirmPassword');
-  }
-
-  protected togglePassword(): void {
-    this.hidePassword.update(v => !v);
-  }
-
-  protected toggleConfirmPassword(): void {
-    this.hideConfirmPassword.update(v => !v);
-  }
-
-  onSubmit() {
-    if (this.registerForm.valid) {
-      this.isSubmitting = true;
-      const payload = {
-        email: this.email?.value,
-        displayName: this.displayName?.value,
-        password: this.password?.value,
-      }
-      this.accountService.register(payload).subscribe({
-        next: (user) => {
-          this.isSubmitting = false;
-          localStorage.setItem('access_token', user.token);
-          localStorage.setItem('user', JSON.stringify(user));
-          this.accountService.setCurrentUser();
-          this.router.navigate(['/daily-log']);
-        },
-        error: () => {
-          this.isSubmitting = false;
-        }
-      });
-    } 
   }
 }

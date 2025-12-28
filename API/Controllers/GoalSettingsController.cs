@@ -92,7 +92,7 @@ namespace API.Controllers
                 Protein = e.Protein,
                 Carbs = e.Carbs,
                 Fat = e.Fat,
-                WeightUnit = e.WeightUnit == WeightUnit.G ? "g" : "oz",
+                ConfirmDeleteFood = e.ConfirmDeleteFood,
                 ShowMacroPercent = e.ShowMacroPercent
             };
         }
@@ -104,7 +104,7 @@ namespace API.Controllers
             e.Protein = dto.Protein;
             e.Carbs = dto.Carbs;
             e.Fat = dto.Fat;
-            e.WeightUnit = dto.WeightUnit == "g" ? WeightUnit.G : WeightUnit.Oz;
+            e.ConfirmDeleteFood = dto.ConfirmDeleteFood;
             e.ShowMacroPercent = dto.ShowMacroPercent;
         }
     }

@@ -34,8 +34,7 @@
   min-width: 0;
 }
 
-/* Reuse login button style for logged-out state */
-.public-header .login-btn {
+.public-header .auth-btn {
   font-size: 17px;
   font-weight: 500;
   color: #374151 !important;
@@ -45,9 +44,23 @@
   line-height: 1.4;
 }
 
-.public-header .login-btn:hover {
+.public-header .auth-btn:hover {
   background: rgba(37, 99, 235, 0.08);
   color: #1e293b !important;
+}
+
+.public-header .auth-btn:disabled,
+.public-header .auth-btn.mat-button-disabled {
+  color: #9ca3af !important;
+  background: transparent !important;
+  cursor: default !important;
+  opacity: 0.6;
+}
+
+.public-header .auth-btn:disabled:hover,
+.public-header .auth-btn.mat-button-disabled:hover {
+  background: transparent !important;
+  color: #9ca3af !important;
 }
 
 /* User chip (menu trigger) */

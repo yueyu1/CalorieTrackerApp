@@ -294,7 +294,7 @@
     <h2 class="meals-title">Today's Meals</h2>
 
     @if (!pageLoading()) {
-    @for (meal of meals(); track meal.id) {
+    @for (meal of meals(); track $index) {
     <mat-card class="meal-card" [class.meal-card--expanded]="isMealExpanded(meal)">
       <!-- Meal header button -->
       <button matRipple type="button" class="meal-header" (click)="toggleMeal(meal)">
@@ -441,12 +441,16 @@
             </span>
             <span class="col-actions" (click)="$event.stopPropagation()">
               <button mat-icon-button type="button" class="row-action-btn"
-                (click)="onEditItem(item); $event.stopPropagation()">
+                (click)="onEditItem(item); $event.stopPropagation()" [disabled]="isDeleting(item.id)">
                 <mat-icon fontIcon="edit"></mat-icon>
               </button>
               <button mat-icon-button type="button" color="warn" class="row-action-btn"
-                (click)="onDeleteItem(meal, item); $event.stopPropagation()">
-                <mat-icon fontIcon="delete"></mat-icon>
+                (click)="onDeleteItem(meal, item); $event.stopPropagation()" [disabled]="isDeleting(item.id)">
+                @if (!isDeleting(item.id)) {
+                  <mat-icon fontIcon="delete"></mat-icon>
+                } @else {
+                  <mat-progress-spinner diameter="18" mode="indeterminate" class="row-spinner"></mat-progress-spinner>
+                }
               </button>
             </span>
           </div>

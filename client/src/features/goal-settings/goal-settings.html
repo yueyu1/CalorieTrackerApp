@@ -15,7 +15,7 @@
 
       <div class="hero-value">
         <span class="hero-number">{{ caloriesControl?.value | number }}</span>
-        <span class="hero-unit">kcal</span>
+        <span class="hero-unit">calories</span>
       </div>
 
       <div class="hero-meta">
@@ -32,7 +32,7 @@
         <span class="pill">Fat: {{ fatControl?.value }} g</span>
         @if (macroCaloriesPreview !== null) {
         <span class="sum-pill">
-          ~{{ macroCaloriesPreview }} kcal from macros
+          ~{{ macroCaloriesPreview }} calories from macros
         </span>
         }
         }
@@ -84,7 +84,7 @@
               <div class="block-label inline">
                 <span>Daily calories</span>
                 <button mat-icon-button type="button" class="hint-icon"
-                  matTooltip="Common range: 1,600-3,000 kcal. You can go outside if needed.">
+                  matTooltip="Common range: 1,600-3,000. You can go outside if needed.">
                   <mat-icon fontIcon="info"></mat-icon>
                 </button>
               </div>
@@ -92,7 +92,7 @@
               <mat-form-field appearance="outline" class="calories-field">
                 <mat-label>Calories</mat-label>
                 <input matInput type="number" formControlName="calories" (blur)="onCaloriesBlur()" />
-                <span matTextSuffix>kcal</span>
+                <!-- <span matTextSuffix>kcal</span> -->
                 @if (this.caloriesControl?.hasError('min')) {
                 <mat-error>Calories must be at least 800</mat-error>
                 }
@@ -179,7 +179,7 @@
               <div class="macro-footer-left">
                 @if (macroCaloriesPreview !== null) {
                 <span class="badge">
-                  ~{{ macroCaloriesPreview }} kcal from macros
+                  ~{{ macroCaloriesPreview }} calories from macros
                 </span>
                 }
               </div>
@@ -207,17 +207,13 @@
         </div>
 
         <form [formGroup]="form" class="prefs">
-          <div class="pref-row">
+          <div class="pref-row pref-row--switch">
             <div class="pref-left">
-              <div class="pref-title">Weight units</div>
-              <div class="pref-sub">Used in food unit labels and conversions.</div>
+              <div class="pref-title">Confirm before deleting food</div>
+              <div class="pref-sub">Shows a confirmation step before removing a logged item.</div>
             </div>
 
-            <mat-button-toggle-group formControlName="weightUnit" aria-label="Weight units"
-              class="toggle toggle--compact">
-              <mat-button-toggle value="g">g</mat-button-toggle>
-              <mat-button-toggle value="oz">oz</mat-button-toggle>
-            </mat-button-toggle-group>
+            <mat-slide-toggle formControlName="confirmDeleteFood"></mat-slide-toggle>
           </div>
 
           <mat-divider class="divider"></mat-divider>
@@ -299,7 +295,7 @@
           </div>
           <div class="preset-foot">
             <span class="preset-chip">35/35/30</span>
-            <span class="preset-chip">-15% kcal</span>
+            <span class="preset-chip">-15% calories</span>
           </div>
         </button>
 
@@ -316,7 +312,7 @@
           </div>
           <div class="preset-foot">
             <span class="preset-chip">30/45/25</span>
-            <span class="preset-chip">+10% kcal</span>
+            <span class="preset-chip">+10% calories</span>
           </div>
         </button>
       </div>
@@ -339,7 +335,7 @@
     </div>
 
     <div class="save-actions">
-      <button mat-button type="button" class="save-btn save-btn--text" (click)="cancel()" 
+      <button mat-button type="button" class="save-btn save-btn--text" (click)="cancel()"
         [disabled]="isSaving() || !isDirty">
         <mat-icon fontIcon="undo"></mat-icon>
         Discard changes
@@ -347,10 +343,10 @@
       <button mat-raised-button color="primary" type="button" class="save-btn save-btn--primary" (click)="save()"
         [disabled]="isSaving() || form.invalid || !needsSave || (macroModeControl?.value === 'percent' && percentInvalid)">
         @if (this.isSaving()) {
-          <mat-progress-spinner diameter="18" mode="indeterminate" class="btn-spinner"></mat-progress-spinner>
-          <span>Saving…</span>
+        <mat-progress-spinner diameter="18" mode="indeterminate" class="btn-spinner"></mat-progress-spinner>
+        <span>Saving…</span>
         } @else {
-          {{ primaryLabel }}
+        {{ primaryLabel }}
         }
       </button>
     </div>

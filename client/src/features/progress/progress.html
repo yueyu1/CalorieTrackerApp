@@ -44,7 +44,6 @@
             <span class="slash">/</span>
             <span class="goal">{{ targetCalories() | number:'1.0-0' }}</span>
             }
-            <span class="unit">kcal</span>
           </div>
         </div>
       </div>
@@ -54,7 +53,7 @@
       <div class="today-slot today-slot--goal">
         <div class="today-slot-main">
           <div class="today-slot-title">{{ caloriesDeltaLabel() }}</div>
-          <div class="today-slot-sub">Target {{ targetCalories() | number:'1.0-0' }} kcal</div>
+          <div class="today-slot-sub">Target {{ targetCalories() | number:'1.0-0' }}</div>
         </div>
 
         <div class="today-slot-side">
@@ -198,7 +197,7 @@
           @if (!isLoading()) {
             @if (hasGoal()) {
             <span class="legend-sep">—</span>
-            <span class="legend-target">Target {{ targetCalories() | number:'1.0-0' }} kcal</span>
+            <span class="legend-target">Target {{ targetCalories() | number:'1.0-0' }}</span>
             }
             @else {
             <button type="button" class="legend-cta" (click)="goToGoals()">
@@ -337,7 +336,6 @@
           <div class="stat-label">Average calories</div>
           <div class="stat-value">
             <span class="stat-strong">{{ avgCalories() | number:'1.0-0' }}</span>
-            <span class="stat-muted">kcal</span>
           </div>
           @if (hasGoal()) {
           <div class="pill-note">Trend looks stable</div>

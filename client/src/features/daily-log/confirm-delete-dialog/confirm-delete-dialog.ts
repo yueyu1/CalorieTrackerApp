@@ -40,7 +40,7 @@ export class ConfirmDeleteDialog {
       error: (err) => {
         console.error('Failed to delete meal entry', err);
         this.isDeletingEntry.set(false);
-        this.dialogRef.close(true);
+        this.dialogRef.close(false);
       }
     });
   }

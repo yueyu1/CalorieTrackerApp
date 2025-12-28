@@ -1,7 +1,7 @@
 .copy-from-btn {
   border-radius: 999px;
-  padding: 6px 12px;
-  height: 36px;
+  padding: 0 12px;
+  min-height: 36px;
 
   font-weight: 500;
   font-size: 14px;
