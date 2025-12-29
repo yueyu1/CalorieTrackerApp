@@ -1,12 +1,12 @@
 using System;
 using API.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class AppDbContext(DbContextOptions options) : DbContext(options)
+public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>(options)
 {
-    public DbSet<AppUser> Users { get; set; }
     public DbSet<Meal> Meals { get; set; }
     public DbSet<Food> Foods { get; set; }
     public DbSet<MealFood> MealFoods { get; set; }

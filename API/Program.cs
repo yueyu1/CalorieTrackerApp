@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using API.Data;
+using API.Entities;
 using API.Interfaces;
 using API.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +24,11 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<INutritionCalculationService, NutritionCalculationService>();
+builder.Services.AddIdentityCore<AppUser>(options => 
+{
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
