@@ -1,7 +1,9 @@
+using System.Security.Claims;
 using API.Dtos;
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -77,6 +79,34 @@ namespace API.Controllers
       };
 
       Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+    }
+
+    [HttpPost("logout")]
+    public async Task<ActionResult> Logout()
+    {
+      var refreshToken = Request.Cookies["refreshToken"];
+      if (!string.IsNullOrEmpty(refreshToken))
+      {
+        var user = await userManager.Users
+            .FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+
+        if (user != null)
+        {
+          user.RefreshToken = null;
+          user.RefreshTokenExpiry = null;
+          await userManager.UpdateAsync(user);
+        }
+      }
+
+      // Delete cookie (must match cookie options you used when setting it)
+      Response.Cookies.Delete("refreshToken", new CookieOptions
+      {
+        HttpOnly = true,
+        Secure = true,
+        SameSite = SameSiteMode.Strict
+      });
+
+      return Ok();
     }
   }
 }

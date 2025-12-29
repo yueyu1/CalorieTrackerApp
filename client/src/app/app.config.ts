@@ -9,6 +9,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { loadingInterceptor } from '../core/interceptors/loading-interceptor';
 import { AccountService } from '../core/services/account-service';
 import { finalize } from 'rxjs/internal/operators/finalize';
+import { refreshOn401Interceptor } from '../core/interceptors/refresh-on-401-interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,7 +17,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideNativeDateAdapter(),
     provideHttpClient(
-      withInterceptors([jwtInterceptor, loadingInterceptor, errorInterceptor])
+      withInterceptors([jwtInterceptor, refreshOn401Interceptor, errorInterceptor, loadingInterceptor])
     ),
     provideAppInitializer(() => {
       const accountService = inject(AccountService);

@@ -8,18 +8,17 @@ import { catchError, finalize, Observable, of, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AccountService {
-  private httpClient = inject(HttpClient);
+  private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
   currentUser = signal<User | null>(null);
   sessionInitialized = signal(false);
 
   login(model: { email: string; password: string }) {
     const url = `${this.baseUrl}/account/login`;
-    return this.httpClient.post<User>(url, model, {withCredentials: true}).pipe(
+    return this.http.post<User>(url, model, { withCredentials: true }).pipe(
       tap(user => {
         if (user) {
           this.setCurrentUser(user);
-          this.startRefreshTokenInterval();
         }
       })
     );
@@ -27,11 +26,10 @@ export class AccountService {
 
   register(model: { email: string; displayName: string; password: string }) {
     const url = `${this.baseUrl}/account/register`;
-    return this.httpClient.post<User>(url, model, {withCredentials: true}).pipe(
+    return this.http.post<User>(url, model, { withCredentials: true }).pipe(
       tap(user => {
         if (user) {
           this.setCurrentUser(user);
-          this.startRefreshTokenInterval();
         }
       })
     );
@@ -39,11 +37,10 @@ export class AccountService {
 
   initializeSession(): Observable<User | null> {
     const url = `${this.baseUrl}/account/refresh-token`;
-    return this.httpClient.post<User>(url, {}, {withCredentials: true}).pipe(
+    return this.http.post<User>(url, {}, { withCredentials: true }).pipe(
       tap(user => {
         if (user) {
           this.setCurrentUser(user);
-          this.startRefreshTokenInterval();
         }
       }),
       catchError(() => {
@@ -57,28 +54,19 @@ export class AccountService {
 
   refreshToken() {
     const url = `${this.baseUrl}/account/refresh-token`;
-    return this.httpClient.post<User>(url, {}, {withCredentials: true});
+    return this.http.post<User>(url, {}, { withCredentials: true });
   }
 
-  startRefreshTokenInterval() {
-    setInterval(() => {
-      const url = `${this.baseUrl}/account/refresh-token`;
-      this.httpClient.post<User>(url, {}, {withCredentials: true}). subscribe({
-        next: (user) => {
-          this.setCurrentUser(user);
-        },
-        error: () => {
-          this.logout();
-        }
-      });
-    }, 4 * 60 * 1000); // every 4 minutes 
-  }
-  
   setCurrentUser(user: User) {
     this.currentUser.set(user);
   }
 
-  logout() {
+  logoutLocal() {
     this.currentUser.set(null);
+  }
+
+  logoutServer() {
+    const url = `${this.baseUrl}/account/logout`;
+    return this.http.post<void>(url, {}, { withCredentials: true });
   }
 }

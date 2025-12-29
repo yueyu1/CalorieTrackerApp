@@ -41,7 +41,15 @@ export class Nav {
   }
   
   logout(): void {
-    this.accountService.logout();
-    this.router.navigate(['/']);
+    this.accountService.logoutLocal();
+    this.accountService.logoutServer().subscribe(() => this.router.navigate(['/']));
+  }
+
+  onBrandClick(): void {
+    if (this.accountService.currentUser()) {
+      this.router.navigate(['/daily-log']);
+    } else {
+      this.router.navigate(['/']);
+    }
   }
 }
