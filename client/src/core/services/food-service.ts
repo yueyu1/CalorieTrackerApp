@@ -43,11 +43,11 @@ export class FoodService {
       tap((foods: Food[]) => {
         this.foods.set(foods);
       }),
-      finalize(() => {
-        this.loading.set(false);
-      }),
       catchError((error) => {
         return throwError(() => error);
+      }),
+      finalize(() => {
+        this.loading.set(false);
       })
     ).subscribe();
   }
@@ -57,12 +57,12 @@ export class FoodService {
     return this.http.post<Food>(`${this.apiUrl}/foods`, payload).pipe(
       tap((newFood: Food) => {
         this.foods.update((foods) => [newFood, ...foods]);
+      }), 
+      catchError((error) => {
+        return throwError(() => error);
       }),
       finalize(() => {
         this.saving.set(false);
-      }),
-      catchError((error) => {
-        return throwError(() => error);
       })
     );
   }
@@ -75,11 +75,11 @@ export class FoodService {
           food.id === foodId ? updatedFood : food
         ));
       }),
-      finalize(() => {
-        this.saving.set(false);
-      }),
       catchError((error) => {
         return throwError(() => error);
+      }),
+      finalize(() => {
+        this.saving.set(false);
       })
     );
   }
@@ -91,13 +91,13 @@ export class FoodService {
       tap(() => {
         this.foods.update((foods) => foods.filter((food) => food.id !== foodId));
       }),
+      catchError((error) => {
+        return throwError(() => error);
+      }),
       finalize(() => {
         const deletingSet = new Set(this.deletingIds());
         deletingSet.delete(foodId);
         this.deletingIds.set(deletingSet);
-      }),
-      catchError((error) => {
-        return throwError(() => error);
       })
     );
   }

@@ -88,10 +88,7 @@ export class Register implements OnInit {
     this.accountService.register(payload).pipe(
       finalize(() => this.layoutService.isRegistering.set(false))
     ).subscribe({
-      next: (user) => {
-        localStorage.setItem('access_token', user.token);
-        localStorage.setItem('user', JSON.stringify(user));
-        this.accountService.setCurrentUser();
+      next: () => {
         this.router.navigate(['/daily-log']);
         this.toastService.success('Registration successful!');
       },

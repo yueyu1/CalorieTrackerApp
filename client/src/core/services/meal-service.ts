@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { Meal, MealItem, MealType } from '../../types/meal';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
-import { catchError, finalize, forkJoin, tap, throwError } from 'rxjs';
+import { catchError, finalize, tap, throwError } from 'rxjs';
 import { MealEntryItem } from '../../types/meal-entry-item';
 import { getPastDays } from '../../shared/utils/date-utils';
 import { DailyTotals } from '../../types/progress';
@@ -41,11 +41,11 @@ export class MealService {
       tap((meals) => {
         this.meals.set(meals);
       }),
-      finalize(() => {
-        this.mealsLoading.set(false);
-      }),
       catchError((error) => {
         return throwError(() => error);
+      }),
+      finalize(() => {
+        this.mealsLoading.set(false);
       })
     );
   }
@@ -57,11 +57,11 @@ export class MealService {
       tap((dts) => {
         this.rangeTotals.set(dts);
       }),
-      finalize(() => {
-        this.rangeLoading.set(false);
-      }),
       catchError((error) => {
         return throwError(() => error);
+      }),
+      finalize(() => {
+        this.rangeLoading.set(false);
       })
     ).subscribe();
   }

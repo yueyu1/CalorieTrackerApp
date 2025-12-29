@@ -1,4 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { AccountService } from '../services/account-service';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
   // Skip auth header for login/register endpoints
@@ -6,11 +8,12 @@ export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
     return next(req);
   }
 
-  const token = localStorage.getItem('access_token');
-  if (token) {
+  const accountService = inject(AccountService);
+  const user = accountService.currentUser();
+  if (user?.token) {
     const cloned = req.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${user.token}`
       }
     });
     return next(cloned);

@@ -71,3 +71,64 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mat-mdc-snack-bar-container.info-toast .mat-mdc-button {
   color: #dbeafe !important;
 }
+
+/* ====================================== */
+/*    Initial Splash Screen Styles     */
+/* ====================================== */
+
+.initial-splash {
+  position: fixed;
+  inset: 0;
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  z-index: 9999;
+  pointer-events: all;
+
+  opacity: 1;
+  transition: opacity 150ms ease;
+}
+
+.initial-splash.is-hiding {
+  opacity: 0;
+}
+
+.initial-splash__brand {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1f2937;
+}
+
+.initial-splash__text {
+  font-size: 15px;
+  font-weight: 500;
+  color: #374151;
+}
+
+/* dot loader */
+.initial-splash__loader {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+
+.initial-splash__loader span {
+  width: 6px;
+  height: 6px;
+  background: #4f46e5;
+  border-radius: 50%;
+  opacity: 0;
+  animation: splashFade 1.4s infinite ease-in-out;
+}
+
+.initial-splash__loader span:nth-child(1) { animation-delay: 0s; }
+.initial-splash__loader span:nth-child(2) { animation-delay: 0.2s; }
+.initial-splash__loader span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes splashFade {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
+}

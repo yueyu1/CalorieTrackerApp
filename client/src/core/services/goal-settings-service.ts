@@ -38,7 +38,6 @@ export class GoalSettingsService {
     this.isLoading.set(true);
     return this.getGoalSettings().pipe(
       tap((dto) => {
-        console.log('Loaded goal settings:', dto);
         if (dto.isSet) {
           this.isSet.set(true);
           this.goalSettings.set(dto.settings);

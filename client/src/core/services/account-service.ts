@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { User } from '../../types/user';
-import { tap } from 'rxjs';
+import { catchError, finalize, Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,15 +11,15 @@ export class AccountService {
   private httpClient = inject(HttpClient);
   private baseUrl = environment.apiUrl;
   currentUser = signal<User | null>(null);
+  sessionInitialized = signal(false);
 
   login(model: { email: string; password: string }) {
     const url = `${this.baseUrl}/account/login`;
-    return this.httpClient.post<User>(url, model).pipe(
+    return this.httpClient.post<User>(url, model, {withCredentials: true}).pipe(
       tap(user => {
-        if (user){
-          localStorage.setItem('access_token', user.token);
-          localStorage.setItem('user', JSON.stringify(user));
-          this.currentUser.set(user);
+        if (user) {
+          this.setCurrentUser(user);
+          this.startRefreshTokenInterval();
         }
       })
     );
@@ -27,23 +27,58 @@ export class AccountService {
 
   register(model: { email: string; displayName: string; password: string }) {
     const url = `${this.baseUrl}/account/register`;
-    return this.httpClient.post<User>(url, model).pipe(
-      tap(response => {
-        localStorage.setItem('access_token', response.token);
+    return this.httpClient.post<User>(url, model, {withCredentials: true}).pipe(
+      tap(user => {
+        if (user) {
+          this.setCurrentUser(user);
+          this.startRefreshTokenInterval();
+        }
       })
     );
   }
 
-  logout() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('user');
-    this.currentUser.set(null);
+  initializeSession(): Observable<User | null> {
+    const url = `${this.baseUrl}/account/refresh-token`;
+    return this.httpClient.post<User>(url, {}, {withCredentials: true}).pipe(
+      tap(user => {
+        if (user) {
+          this.setCurrentUser(user);
+          this.startRefreshTokenInterval();
+        }
+      }),
+      catchError(() => {
+        return of(null);
+      }),
+      finalize(() => {
+        this.sessionInitialized.set(true);
+      })
+    );
   }
 
-  setCurrentUser() {
-    const userString = localStorage.getItem('user');
-    if (!userString) return;
-    const user = JSON.parse(userString);
+  refreshToken() {
+    const url = `${this.baseUrl}/account/refresh-token`;
+    return this.httpClient.post<User>(url, {}, {withCredentials: true});
+  }
+
+  startRefreshTokenInterval() {
+    setInterval(() => {
+      const url = `${this.baseUrl}/account/refresh-token`;
+      this.httpClient.post<User>(url, {}, {withCredentials: true}). subscribe({
+        next: (user) => {
+          this.setCurrentUser(user);
+        },
+        error: () => {
+          this.logout();
+        }
+      });
+    }, 4 * 60 * 1000); // every 4 minutes 
+  }
+  
+  setCurrentUser(user: User) {
     this.currentUser.set(user);
+  }
+
+  logout() {
+    this.currentUser.set(null);
   }
 }
