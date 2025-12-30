@@ -1,17 +1,9 @@
 import { inject, Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
-import { Food } from '../../types/food';
+import { Food, FoodQuery } from '../../types/food';
 import { environment } from '../../environments/environment';
 import { UpsertCustomFoodRequest } from '../../types/custom-food';
-
-export type FoodQuery = {
-  scope?: 'all' | 'global' | 'mine';
-  search?: string;
-  sort?: string;
-  take?: number;
-  brandsOnly?: boolean;
-};
 
 @Injectable({
   providedIn: 'root',
@@ -30,6 +22,7 @@ export class FoodService {
     if (query.scope) params = params.set('scope', query.scope);   // all|global|mine
     if (query.search) params = params.set('search', query.search);
     if (query.sort) params = params.set('sort', query.sort);      // relevance|recentCreated|recentUsed...
+    if (query.skip) params = params.set('skip', query.skip);
     if (query.take) params = params.set('take', query.take);
     if (query.brandsOnly) params = params.set('brandsOnly', 'true');
 

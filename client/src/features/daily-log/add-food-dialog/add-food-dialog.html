@@ -47,7 +47,7 @@
   </div>
 
   <!-- FOOD LIST -->
-  <div class="afd-list" formArrayName="foods" [class.is-disabled]="isAddingFood()">
+  <div class="afd-list" formArrayName="foods" [class.is-disabled]="isAddingFood()" (scroll)="onListScroll($event)">
     @if (!this.loading()) {
     @if (showMyFoodsEmptyState) {
     <div class="afd-empty">
@@ -66,54 +66,64 @@
     </div>
     }
     @else {
-    @for (item of foods(); track item.id) {
-    <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected(item.id, $index)">
-      <!-- LEFT -->
-      <div class="afd-left">
-        <div class="afd-name">{{ item.name }}</div>
-        <div class="afd-brand">{{ item.brand }}</div>
-        <div class="afd-macros">
-          {{ getRowCalories($index) | number: '1.0-0' }} kcal ·
-          Protein {{ getRowProtein($index) | number: '1.2-2' }} g ·
-          Carbs {{ getRowCarbs($index) | number: '1.2-2' }} g ·
-          Fat {{ getRowFat($index) | number: '1.2-2' }} g
+      @for (item of foods(); track item.id) {
+        <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected(item.id, $index)">
+          <!-- LEFT -->
+          <div class="afd-left">
+            <div class="afd-name">{{ item.name }}</div>
+            <div class="afd-brand">{{ item.brand }}</div>
+            <div class="afd-macros">
+              {{ getRowCalories($index) | number: '1.0-0' }} kcal ·
+              Protein {{ getRowProtein($index) | number: '1.2-2' }} g ·
+              Carbs {{ getRowCarbs($index) | number: '1.2-2' }} g ·
+              Fat {{ getRowFat($index) | number: '1.2-2' }} g
+            </div>
+          </div>
+
+          <!-- RIGHT: quantity + unit -->
+          <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
+            <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
+              <mat-icon>remove</mat-icon>
+            </button>
+
+            <mat-form-field appearance="outline" class="afd-qty-input">
+              <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
+                (blur)="onQtyBlur($index)" />
+            </mat-form-field>
+
+            <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
+              <mat-icon>add</mat-icon>
+            </button>
+
+            <mat-form-field appearance="outline" class="afd-unit-select">
+              <mat-select formControlName="unitId" (click)="onUnitClick($event)">
+                @for (unit of item.units; track unit.id) {
+                <mat-option [value]="unit.id">
+                  {{ unit.label }}
+                </mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <!-- CHECKMARK (always visible) -->
+          <div class="afd-check" [class.is-selected]="isSelected(item.id)">
+            <mat-icon aria-hidden="true">
+              {{ isSelected(item.id) ? 'check' : 'radio_button_unchecked' }}
+            </mat-icon>
+          </div>
         </div>
-      </div>
+      }
+      @if (loadingMore()) {
+        <div class="afd-load-more">
+          <mat-progress-spinner diameter="22" mode="indeterminate"></mat-progress-spinner>
+          <span>Loading more…</span>
+        </div>
+      }
 
-      <!-- RIGHT: quantity + unit -->
-      <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
-        <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
-          <mat-icon>remove</mat-icon>
-        </button>
-
-        <mat-form-field appearance="outline" class="afd-qty-input">
-          <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
-            (blur)="onQtyBlur($index)" />
-        </mat-form-field>
-
-        <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
-          <mat-icon>add</mat-icon>
-        </button>
-
-        <mat-form-field appearance="outline" class="afd-unit-select">
-          <mat-select formControlName="unitId" (click)="onUnitClick($event)">
-            @for (unit of item.units; track unit.id) {
-            <mat-option [value]="unit.id">
-              {{ unit.label }}
-            </mat-option>
-            }
-          </mat-select>
-        </mat-form-field>
-      </div>
-
-      <!-- CHECKMARK (always visible) -->
-      <div class="afd-check" [class.is-selected]="isSelected(item.id)">
-        <mat-icon aria-hidden="true">
-          {{ isSelected(item.id) ? 'check' : 'radio_button_unchecked' }}
-        </mat-icon>
-      </div>
-    </div>
-    }
+      @if (!loadingMore() && !hasMore() && foods().length > 0) {
+        <div class="afd-end">End of results</div>
+      }
     }
     }
     @else {

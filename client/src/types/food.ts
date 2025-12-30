@@ -14,3 +14,12 @@ export type Food = {
   isArchived: boolean;
   updatedAt?: string;
 };
+
+export type FoodQuery = {
+  scope?: 'all' | 'global' | 'mine';
+  search?: string;
+  sort?: string;
+  skip?: number;
+  take?: number;
+  brandsOnly?: boolean;
+};

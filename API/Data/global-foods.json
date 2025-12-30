@@ -1,5 +1,695 @@
 [
   {
+    "name": "Chicken Breast (raw)",
+    "brand": null,
+    "calories": 120,
+    "protein": 22.0,
+    "carbs": 0.0,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chicken Thigh (raw)",
+    "brand": null,
+    "calories": 176,
+    "protein": 18.0,
+    "carbs": 0.0,
+    "fat": 11.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Turkey Breast (deli, sliced)",
+    "brand": null,
+    "calories": 104,
+    "protein": 17.0,
+    "carbs": 2.0,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (25 g)",
+        "unitType": "Weight",
+        "conversionFactor": 25.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ground Beef (90/10, raw)",
+    "brand": null,
+    "calories": 176,
+    "protein": 20.0,
+    "carbs": 0.0,
+    "fat": 10.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 patty (113 g)",
+        "unitType": "Weight",
+        "conversionFactor": 113.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Salmon (raw)",
+    "brand": null,
+    "calories": 208,
+    "protein": 20.0,
+    "carbs": 0.0,
+    "fat": 13.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 fillet (140 g)",
+        "unitType": "Weight",
+        "conversionFactor": 140.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tuna (canned, in water)",
+    "brand": null,
+    "calories": 116,
+    "protein": 26.0,
+    "carbs": 0.0,
+    "fat": 1.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 can drained (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Egg (whole)",
+    "brand": null,
+    "calories": 155,
+    "protein": 13.0,
+    "carbs": 1.1,
+    "fat": 11.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 large egg (50 g)",
+        "unitType": "Weight",
+        "conversionFactor": 50.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Egg Whites",
+    "brand": null,
+    "calories": 52,
+    "protein": 11.0,
+    "carbs": 0.7,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (100 g)",
+        "unitType": "Weight",
+        "conversionFactor": 100.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "White Rice (cooked)",
+    "brand": null,
+    "calories": 130,
+    "protein": 2.7,
+    "carbs": 28.0,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (158 g)",
+        "unitType": "Weight",
+        "conversionFactor": 158.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Brown Rice (cooked)",
+    "brand": null,
+    "calories": 123,
+    "protein": 2.6,
+    "carbs": 25.6,
+    "fat": 1.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (195 g)",
+        "unitType": "Weight",
+        "conversionFactor": 195.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Quinoa (cooked)",
+    "brand": null,
+    "calories": 120,
+    "protein": 4.4,
+    "carbs": 21.3,
+    "fat": 1.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (185 g)",
+        "unitType": "Weight",
+        "conversionFactor": 185.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Oats (rolled, dry)",
+    "brand": null,
+    "calories": 389,
+    "protein": 16.9,
+    "carbs": 66.3,
+    "fat": 6.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1/2 cup dry (40 g)",
+        "unitType": "Weight",
+        "conversionFactor": 40.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Whole Wheat Bread",
+    "brand": null,
+    "calories": 247,
+    "protein": 13.0,
+    "carbs": 41.0,
+    "fat": 4.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "White Bread",
+    "brand": null,
+    "calories": 266,
+    "protein": 8.9,
+    "carbs": 49.0,
+    "fat": 3.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (25 g)",
+        "unitType": "Weight",
+        "conversionFactor": 25.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pasta (cooked)",
+    "brand": null,
+    "calories": 157,
+    "protein": 5.8,
+    "carbs": 30.0,
+    "fat": 0.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (140 g)",
+        "unitType": "Weight",
+        "conversionFactor": 140.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Potato (baked)",
+    "brand": null,
+    "calories": 93,
+    "protein": 2.5,
+    "carbs": 21.0,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (173 g)",
+        "unitType": "Weight",
+        "conversionFactor": 173.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Sweet Potato (baked)",
+    "brand": null,
+    "calories": 90,
+    "protein": 2.0,
+    "carbs": 21.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (180 g)",
+        "unitType": "Weight",
+        "conversionFactor": 180.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Greek Yogurt (plain, nonfat)",
+    "brand": null,
+    "calories": 59,
+    "protein": 10.0,
+    "carbs": 3.6,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Milk (2%)",
+    "brand": null,
+    "calories": 50,
+    "protein": 3.4,
+    "carbs": 5.0,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (245 g)",
+        "unitType": "Weight",
+        "conversionFactor": 245.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cheddar Cheese",
+    "brand": null,
+    "calories": 403,
+    "protein": 25.0,
+    "carbs": 1.3,
+    "fat": 33.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Peanut Butter",
+    "brand": null,
+    "calories": 588,
+    "protein": 25.0,
+    "carbs": 20.0,
+    "fat": 50.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (16 g)",
+        "unitType": "Weight",
+        "conversionFactor": 16.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Olive Oil",
+    "brand": null,
+    "calories": 884,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 100.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (13.5 g)",
+        "unitType": "Weight",
+        "conversionFactor": 13.5
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Butter",
+    "brand": null,
+    "calories": 717,
+    "protein": 0.9,
+    "carbs": 0.1,
+    "fat": 81.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (14 g)",
+        "unitType": "Weight",
+        "conversionFactor": 14.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
     "name": "Banana",
     "brand": null,
     "calories": 89,
@@ -8,74 +698,26 @@
     "fat": 0.3,
     "baseQuantity": 100,
     "baseUnit": "g",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
-  },
-  {
-    "name": "Chicken Breast (grilled)",
-    "brand": null,
-    "calories": 165,
-    "protein": 31.0,
-    "carbs": 0.0,
-    "fat": 3.6,
-    "baseQuantity": 100,
-    "baseUnit": "g",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
-  },
-  {
-    "name": "Broccoli (raw)",
-    "brand": null,
-    "calories": 34,
-    "protein": 2.8,
-    "carbs": 6.6,
-    "fat": 0.4,
-    "baseQuantity": 100,
-    "baseUnit": "g",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
-  },
-  {
-    "name": "Egg (whole, cooked)",
-    "brand": null,
-    "calories": 78,
-    "protein": 6.0,
-    "carbs": 0.6,
-    "fat": 5.3,
-    "baseQuantity": 1,
-    "baseUnit": "piece",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
-  },
-  {
-    "name": "Whole Milk",
-    "brand": null,
-    "calories": 150,
-    "protein": 8.0,
-    "carbs": 12.0,
-    "fat": 8.0,
-    "baseQuantity": 8,
-    "baseUnit": "fl oz",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
-  },
-  {
-    "name": "Oatmeal (cooked)",
-    "brand": null,
-    "calories": 158,
-    "protein": 6.0,
-    "carbs": 27.0,
-    "fat": 3.2,
-    "baseQuantity": 1,
-    "baseUnit": "cup",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (118 g)",
+        "unitType": "Weight",
+        "conversionFactor": 118.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
   },
   {
     "name": "Apple",
@@ -86,35 +728,1256 @@
     "fat": 0.2,
     "baseQuantity": 100,
     "baseUnit": "g",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (182 g)",
+        "unitType": "Weight",
+        "conversionFactor": 182.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
   },
   {
-    "name": "Greek Yogurt (Plain, Nonfat)",
-    "brand": "Kirkland",
-    "calories": 90,
-    "protein": 16.0,
-    "carbs": 6.0,
-    "fat": 0.0,
-    "baseQuantity": 170,
+    "name": "Avocado",
+    "brand": null,
+    "calories": 160,
+    "protein": 2.0,
+    "carbs": 8.5,
+    "fat": 14.7,
+    "baseQuantity": 100,
     "baseUnit": "g",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
+    "units": [
+      {
+        "code": "serving",
+        "label": "1/3 avocado (50 g)",
+        "unitType": "Weight",
+        "conversionFactor": 50.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
   },
   {
-    "name": "Costco Burrito Bowl",
-    "brand": "Costco",
-    "calories": 450,
-    "protein": 28.0,
-    "carbs": 45.0,
-    "fat": 16.0,
-    "baseQuantity": 1,
-    "baseUnit": "serving",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
+    "name": "Broccoli (raw)",
+    "brand": null,
+    "calories": 34,
+    "protein": 2.8,
+    "carbs": 6.6,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup chopped (91 g)",
+        "unitType": "Weight",
+        "conversionFactor": 91.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Spinach (raw)",
+    "brand": null,
+    "calories": 23,
+    "protein": 2.9,
+    "carbs": 3.6,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (30 g)",
+        "unitType": "Weight",
+        "conversionFactor": 30.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tomato",
+    "brand": null,
+    "calories": 18,
+    "protein": 0.9,
+    "carbs": 3.9,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (123 g)",
+        "unitType": "Weight",
+        "conversionFactor": 123.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Onion",
+    "brand": null,
+    "calories": 40,
+    "protein": 1.1,
+    "carbs": 9.3,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (110 g)",
+        "unitType": "Weight",
+        "conversionFactor": 110.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Bell Pepper",
+    "brand": null,
+    "calories": 31,
+    "protein": 1.0,
+    "carbs": 6.0,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (119 g)",
+        "unitType": "Weight",
+        "conversionFactor": 119.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Strawberries",
+    "brand": null,
+    "calories": 32,
+    "protein": 0.7,
+    "carbs": 7.7,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (152 g)",
+        "unitType": "Weight",
+        "conversionFactor": 152.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Blueberries",
+    "brand": null,
+    "calories": 57,
+    "protein": 0.7,
+    "carbs": 14.5,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (148 g)",
+        "unitType": "Weight",
+        "conversionFactor": 148.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Raspberries",
+    "brand": null,
+    "calories": 52,
+    "protein": 1.2,
+    "carbs": 11.9,
+    "fat": 0.7,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (123 g)",
+        "unitType": "Weight",
+        "conversionFactor": 123.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Grapes",
+    "brand": null,
+    "calories": 69,
+    "protein": 0.7,
+    "carbs": 18.1,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (151 g)",
+        "unitType": "Weight",
+        "conversionFactor": 151.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Orange",
+    "brand": null,
+    "calories": 47,
+    "protein": 0.9,
+    "carbs": 11.8,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (140 g)",
+        "unitType": "Weight",
+        "conversionFactor": 140.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pineapple",
+    "brand": null,
+    "calories": 50,
+    "protein": 0.5,
+    "carbs": 13.1,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (165 g)",
+        "unitType": "Weight",
+        "conversionFactor": 165.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Watermelon",
+    "brand": null,
+    "calories": 30,
+    "protein": 0.6,
+    "carbs": 7.6,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (152 g)",
+        "unitType": "Weight",
+        "conversionFactor": 152.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mango",
+    "brand": null,
+    "calories": 60,
+    "protein": 0.8,
+    "carbs": 15.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (165 g)",
+        "unitType": "Weight",
+        "conversionFactor": 165.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pear",
+    "brand": null,
+    "calories": 57,
+    "protein": 0.4,
+    "carbs": 15.2,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (178 g)",
+        "unitType": "Weight",
+        "conversionFactor": 178.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Peach",
+    "brand": null,
+    "calories": 39,
+    "protein": 0.9,
+    "carbs": 9.5,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 medium (150 g)",
+        "unitType": "Weight",
+        "conversionFactor": 150.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Carrots (raw)",
+    "brand": null,
+    "calories": 41,
+    "protein": 0.9,
+    "carbs": 9.6,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (128 g)",
+        "unitType": "Weight",
+        "conversionFactor": 128.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cucumber",
+    "brand": null,
+    "calories": 15,
+    "protein": 0.7,
+    "carbs": 3.6,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (104 g)",
+        "unitType": "Weight",
+        "conversionFactor": 104.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Lettuce (romaine)",
+    "brand": null,
+    "calories": 17,
+    "protein": 1.2,
+    "carbs": 3.3,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup shredded (47 g)",
+        "unitType": "Weight",
+        "conversionFactor": 47.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Kale (raw)",
+    "brand": null,
+    "calories": 49,
+    "protein": 4.3,
+    "carbs": 8.8,
+    "fat": 0.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup chopped (67 g)",
+        "unitType": "Weight",
+        "conversionFactor": 67.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Zucchini",
+    "brand": null,
+    "calories": 17,
+    "protein": 1.2,
+    "carbs": 3.1,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (124 g)",
+        "unitType": "Weight",
+        "conversionFactor": 124.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mushrooms",
+    "brand": null,
+    "calories": 22,
+    "protein": 3.1,
+    "carbs": 3.3,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (70 g)",
+        "unitType": "Weight",
+        "conversionFactor": 70.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cauliflower",
+    "brand": null,
+    "calories": 25,
+    "protein": 1.9,
+    "carbs": 5.0,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (107 g)",
+        "unitType": "Weight",
+        "conversionFactor": 107.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Green Beans",
+    "brand": null,
+    "calories": 31,
+    "protein": 1.8,
+    "carbs": 7.0,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (125 g)",
+        "unitType": "Weight",
+        "conversionFactor": 125.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Asparagus",
+    "brand": null,
+    "calories": 20,
+    "protein": 2.2,
+    "carbs": 3.9,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (90 g)",
+        "unitType": "Weight",
+        "conversionFactor": 90.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Corn (cooked kernels)",
+    "brand": null,
+    "calories": 96,
+    "protein": 3.4,
+    "carbs": 21.0,
+    "fat": 1.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (164 g)",
+        "unitType": "Weight",
+        "conversionFactor": 164.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Peas (green)",
+    "brand": null,
+    "calories": 81,
+    "protein": 5.4,
+    "carbs": 14.5,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (160 g)",
+        "unitType": "Weight",
+        "conversionFactor": 160.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chickpeas (cooked)",
+    "brand": null,
+    "calories": 164,
+    "protein": 8.9,
+    "carbs": 27.4,
+    "fat": 2.6,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (164 g)",
+        "unitType": "Weight",
+        "conversionFactor": 164.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Black Beans (cooked)",
+    "brand": null,
+    "calories": 132,
+    "protein": 8.9,
+    "carbs": 23.7,
+    "fat": 0.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (172 g)",
+        "unitType": "Weight",
+        "conversionFactor": 172.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Lentils (cooked)",
+    "brand": null,
+    "calories": 116,
+    "protein": 9.0,
+    "carbs": 20.1,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (198 g)",
+        "unitType": "Weight",
+        "conversionFactor": 198.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Edamame (shelled)",
+    "brand": null,
+    "calories": 121,
+    "protein": 11.9,
+    "carbs": 8.9,
+    "fat": 5.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (155 g)",
+        "unitType": "Weight",
+        "conversionFactor": 155.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Garlic",
+    "brand": null,
+    "calories": 149,
+    "protein": 6.4,
+    "carbs": 33.1,
+    "fat": 0.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tsp",
+        "label": "1 tsp minced (3 g)",
+        "unitType": "Weight",
+        "conversionFactor": 3.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ginger (raw)",
+    "brand": null,
+    "calories": 80,
+    "protein": 1.8,
+    "carbs": 17.8,
+    "fat": 0.8,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp grated (6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 6.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Lime",
+    "brand": null,
+    "calories": 30,
+    "protein": 0.7,
+    "carbs": 10.5,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 lime (67 g)",
+        "unitType": "Weight",
+        "conversionFactor": 67.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Lemon",
+    "brand": null,
+    "calories": 29,
+    "protein": 1.1,
+    "carbs": 9.3,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 lemon (58 g)",
+        "unitType": "Weight",
+        "conversionFactor": 58.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cabbage",
+    "brand": null,
+    "calories": 25,
+    "protein": 1.3,
+    "carbs": 5.8,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup shredded (89 g)",
+        "unitType": "Weight",
+        "conversionFactor": 89.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Celery",
+    "brand": null,
+    "calories": 16,
+    "protein": 0.7,
+    "carbs": 3.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (101 g)",
+        "unitType": "Weight",
+        "conversionFactor": 101.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Beets (cooked)",
+    "brand": null,
+    "calories": 44,
+    "protein": 1.7,
+    "carbs": 10.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pomegranate Arils",
+    "brand": null,
+    "calories": 83,
+    "protein": 1.7,
+    "carbs": 18.7,
+    "fat": 1.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (174 g)",
+        "unitType": "Weight",
+        "conversionFactor": 174.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Kiwi",
+    "brand": null,
+    "calories": 61,
+    "protein": 1.1,
+    "carbs": 14.7,
+    "fat": 0.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 kiwi (75 g)",
+        "unitType": "Weight",
+        "conversionFactor": 75.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pine Nuts",
+    "brand": null,
+    "calories": 673,
+    "protein": 13.7,
+    "carbs": 13.1,
+    "fat": 68.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (9 g)",
+        "unitType": "Weight",
+        "conversionFactor": 9.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
   },
   {
     "name": "Almonds (raw)",
@@ -125,21 +1988,4615 @@
     "fat": 50.0,
     "baseQuantity": 100,
     "baseUnit": "g",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
   },
   {
-    "name": "Orange Juice",
+    "name": "Walnuts",
+    "brand": null,
+    "calories": 654,
+    "protein": 15.2,
+    "carbs": 13.7,
+    "fat": 65.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cashews",
+    "brand": null,
+    "calories": 553,
+    "protein": 18.2,
+    "carbs": 30.2,
+    "fat": 43.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pistachios",
+    "brand": null,
+    "calories": 562,
+    "protein": 20.2,
+    "carbs": 28.0,
+    "fat": 45.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Milk (whole)",
+    "brand": null,
+    "calories": 61,
+    "protein": 3.2,
+    "carbs": 4.8,
+    "fat": 3.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (245 g)",
+        "unitType": "Weight",
+        "conversionFactor": 245.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Milk (skim)",
+    "brand": null,
+    "calories": 34,
+    "protein": 3.4,
+    "carbs": 5.0,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (245 g)",
+        "unitType": "Weight",
+        "conversionFactor": 245.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Almond Milk (unsweetened)",
+    "brand": null,
+    "calories": 15,
+    "protein": 0.6,
+    "carbs": 0.3,
+    "fat": 1.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (240 g)",
+        "unitType": "Weight",
+        "conversionFactor": 240.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Oat Milk",
+    "brand": null,
+    "calories": 47,
+    "protein": 1.0,
+    "carbs": 7.5,
+    "fat": 1.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (240 g)",
+        "unitType": "Weight",
+        "conversionFactor": 240.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cottage Cheese (2%)",
+    "brand": null,
+    "calories": 81,
+    "protein": 11.1,
+    "carbs": 3.4,
+    "fat": 2.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (226 g)",
+        "unitType": "Weight",
+        "conversionFactor": 226.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ricotta Cheese (part skim)",
+    "brand": null,
+    "calories": 138,
+    "protein": 11.3,
+    "carbs": 5.1,
+    "fat": 7.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1/4 cup (62 g)",
+        "unitType": "Weight",
+        "conversionFactor": 62.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cream Cheese",
+    "brand": null,
+    "calories": 342,
+    "protein": 6.2,
+    "carbs": 4.1,
+    "fat": 34.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (14 g)",
+        "unitType": "Weight",
+        "conversionFactor": 14.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mozzarella Cheese (part skim)",
+    "brand": null,
+    "calories": 254,
+    "protein": 24.3,
+    "carbs": 2.8,
+    "fat": 15.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Parmesan Cheese",
+    "brand": null,
+    "calories": 431,
+    "protein": 38.0,
+    "carbs": 4.1,
+    "fat": 29.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp grated (5 g)",
+        "unitType": "Weight",
+        "conversionFactor": 5.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Yogurt (plain, whole)",
+    "brand": null,
+    "calories": 61,
+    "protein": 3.5,
+    "carbs": 4.7,
+    "fat": 3.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Yogurt (vanilla, lowfat)",
+    "brand": null,
+    "calories": 99,
+    "protein": 3.5,
+    "carbs": 17.0,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Sour Cream",
+    "brand": null,
+    "calories": 193,
+    "protein": 2.4,
+    "carbs": 4.6,
+    "fat": 19.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (15 g)",
+        "unitType": "Weight",
+        "conversionFactor": 15.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Bagel (plain)",
+    "brand": null,
+    "calories": 250,
+    "protein": 9.0,
+    "carbs": 48.0,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 bagel (98 g)",
+        "unitType": "Weight",
+        "conversionFactor": 98.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tortilla (flour)",
+    "brand": null,
+    "calories": 313,
+    "protein": 8.0,
+    "carbs": 52.0,
+    "fat": 8.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 tortilla (45 g)",
+        "unitType": "Weight",
+        "conversionFactor": 45.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tortilla (corn)",
+    "brand": null,
+    "calories": 218,
+    "protein": 5.7,
+    "carbs": 44.6,
+    "fat": 2.9,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 tortilla (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "English Muffin",
+    "brand": null,
+    "calories": 227,
+    "protein": 8.3,
+    "carbs": 44.0,
+    "fat": 1.8,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 muffin (57 g)",
+        "unitType": "Weight",
+        "conversionFactor": 57.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cereal (corn flakes)",
+    "brand": null,
+    "calories": 357,
+    "protein": 7.0,
+    "carbs": 84.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (30 g)",
+        "unitType": "Weight",
+        "conversionFactor": 30.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Granola",
+    "brand": null,
+    "calories": 471,
+    "protein": 10.0,
+    "carbs": 64.0,
+    "fat": 20.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1/2 cup (55 g)",
+        "unitType": "Weight",
+        "conversionFactor": 55.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pancake",
+    "brand": null,
+    "calories": 227,
+    "protein": 6.0,
+    "carbs": 28.0,
+    "fat": 10.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 pancake (38 g)",
+        "unitType": "Weight",
+        "conversionFactor": 38.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Waffle",
+    "brand": null,
+    "calories": 291,
+    "protein": 7.0,
+    "carbs": 33.0,
+    "fat": 15.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 waffle (75 g)",
+        "unitType": "Weight",
+        "conversionFactor": 75.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Couscous (cooked)",
+    "brand": null,
+    "calories": 112,
+    "protein": 3.8,
+    "carbs": 23.2,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (157 g)",
+        "unitType": "Weight",
+        "conversionFactor": 157.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Barley (cooked)",
+    "brand": null,
+    "calories": 123,
+    "protein": 2.3,
+    "carbs": 28.2,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (157 g)",
+        "unitType": "Weight",
+        "conversionFactor": 157.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Buckwheat (cooked)",
+    "brand": null,
+    "calories": 92,
+    "protein": 3.4,
+    "carbs": 19.9,
+    "fat": 0.6,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (168 g)",
+        "unitType": "Weight",
+        "conversionFactor": 168.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Rice Noodles (cooked)",
+    "brand": null,
+    "calories": 109,
+    "protein": 1.8,
+    "carbs": 24.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (176 g)",
+        "unitType": "Weight",
+        "conversionFactor": 176.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ramen Noodles (cooked)",
+    "brand": null,
+    "calories": 138,
+    "protein": 3.5,
+    "carbs": 21.0,
+    "fat": 5.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (180 g)",
+        "unitType": "Weight",
+        "conversionFactor": 180.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pizza Crust (plain)",
+    "brand": null,
+    "calories": 270,
+    "protein": 9.0,
+    "carbs": 52.0,
+    "fat": 3.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice crust (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ketchup",
     "brand": null,
     "calories": 112,
     "protein": 1.7,
     "carbs": 26.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (17 g)",
+        "unitType": "Weight",
+        "conversionFactor": 17.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mustard",
+    "brand": null,
+    "calories": 66,
+    "protein": 4.4,
+    "carbs": 5.8,
+    "fat": 4.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (15 g)",
+        "unitType": "Weight",
+        "conversionFactor": 15.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mayonnaise",
+    "brand": null,
+    "calories": 680,
+    "protein": 1.0,
+    "carbs": 0.6,
+    "fat": 75.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (13.8 g)",
+        "unitType": "Weight",
+        "conversionFactor": 13.8
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Soy Sauce",
+    "brand": null,
+    "calories": 53,
+    "protein": 8.1,
+    "carbs": 4.9,
+    "fat": 0.6,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (16 g)",
+        "unitType": "Weight",
+        "conversionFactor": 16.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Salsa",
+    "brand": null,
+    "calories": 36,
+    "protein": 1.5,
+    "carbs": 7.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (15 g)",
+        "unitType": "Weight",
+        "conversionFactor": 15.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "BBQ Sauce",
+    "brand": null,
+    "calories": 172,
+    "protein": 0.9,
+    "carbs": 41.0,
+    "fat": 0.6,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (17 g)",
+        "unitType": "Weight",
+        "conversionFactor": 17.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Honey",
+    "brand": null,
+    "calories": 304,
+    "protein": 0.3,
+    "carbs": 82.4,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (21 g)",
+        "unitType": "Weight",
+        "conversionFactor": 21.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Maple Syrup",
+    "brand": null,
+    "calories": 260,
+    "protein": 0.0,
+    "carbs": 67.0,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (20 g)",
+        "unitType": "Weight",
+        "conversionFactor": 20.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Jam (strawberry)",
+    "brand": null,
+    "calories": 250,
+    "protein": 0.3,
+    "carbs": 64.0,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (20 g)",
+        "unitType": "Weight",
+        "conversionFactor": 20.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Hot Sauce",
+    "brand": null,
+    "calories": 30,
+    "protein": 1.3,
+    "carbs": 7.0,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (15 g)",
+        "unitType": "Weight",
+        "conversionFactor": 15.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Vinaigrette Dressing",
+    "brand": null,
+    "calories": 300,
+    "protein": 0.0,
+    "carbs": 4.0,
+    "fat": 32.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (15 g)",
+        "unitType": "Weight",
+        "conversionFactor": 15.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ranch Dressing",
+    "brand": null,
+    "calories": 460,
+    "protein": 1.0,
+    "carbs": 7.0,
+    "fat": 45.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (15 g)",
+        "unitType": "Weight",
+        "conversionFactor": 15.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Dark Chocolate (70-85%)",
+    "brand": null,
+    "calories": 600,
+    "protein": 7.8,
+    "carbs": 46.0,
+    "fat": 43.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 piece (20 g)",
+        "unitType": "Weight",
+        "conversionFactor": 20.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Milk Chocolate",
+    "brand": null,
+    "calories": 535,
+    "protein": 7.6,
+    "carbs": 59.0,
+    "fat": 30.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 piece (20 g)",
+        "unitType": "Weight",
+        "conversionFactor": 20.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Potato Chips",
+    "brand": null,
+    "calories": 536,
+    "protein": 7.0,
+    "carbs": 52.0,
+    "fat": 35.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pretzels",
+    "brand": null,
+    "calories": 380,
+    "protein": 10.0,
+    "carbs": 80.0,
+    "fat": 3.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Popcorn (air-popped)",
+    "brand": null,
+    "calories": 387,
+    "protein": 12.9,
+    "carbs": 77.8,
+    "fat": 4.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (8 g)",
+        "unitType": "Weight",
+        "conversionFactor": 8.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Granola Bar",
+    "brand": null,
+    "calories": 420,
+    "protein": 8.0,
+    "carbs": 64.0,
+    "fat": 15.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 bar (40 g)",
+        "unitType": "Weight",
+        "conversionFactor": 40.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ice Cream (vanilla)",
+    "brand": null,
+    "calories": 207,
+    "protein": 3.5,
+    "carbs": 24.0,
+    "fat": 11.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (132 g)",
+        "unitType": "Weight",
+        "conversionFactor": 132.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cookie (chocolate chip)",
+    "brand": null,
+    "calories": 488,
+    "protein": 5.0,
+    "carbs": 67.0,
+    "fat": 23.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 cookie (16 g)",
+        "unitType": "Weight",
+        "conversionFactor": 16.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Brownie",
+    "brand": null,
+    "calories": 466,
+    "protein": 5.0,
+    "carbs": 59.0,
+    "fat": 23.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 piece (60 g)",
+        "unitType": "Weight",
+        "conversionFactor": 60.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Gummy Candy",
+    "brand": null,
+    "calories": 340,
+    "protein": 0.0,
+    "carbs": 80.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (30 g)",
+        "unitType": "Weight",
+        "conversionFactor": 30.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Trail Mix",
+    "brand": null,
+    "calories": 462,
+    "protein": 14.0,
+    "carbs": 34.0,
+    "fat": 31.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (30 g)",
+        "unitType": "Weight",
+        "conversionFactor": 30.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Hummus",
+    "brand": null,
+    "calories": 166,
+    "protein": 8.0,
+    "carbs": 14.0,
+    "fat": 10.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (15 g)",
+        "unitType": "Weight",
+        "conversionFactor": 15.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Coffee (black)",
+    "brand": null,
+    "calories": 1,
+    "protein": 0.1,
+    "carbs": 0.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (240 g)",
+        "unitType": "Weight",
+        "conversionFactor": 240.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tea (unsweetened)",
+    "brand": null,
+    "calories": 1,
+    "protein": 0.0,
+    "carbs": 0.2,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (240 g)",
+        "unitType": "Weight",
+        "conversionFactor": 240.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Orange Juice",
+    "brand": null,
+    "calories": 45,
+    "protein": 0.7,
+    "carbs": 10.4,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (248 g)",
+        "unitType": "Weight",
+        "conversionFactor": 248.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Apple Juice",
+    "brand": null,
+    "calories": 46,
+    "protein": 0.1,
+    "carbs": 11.3,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (248 g)",
+        "unitType": "Weight",
+        "conversionFactor": 248.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Soda (cola)",
+    "brand": null,
+    "calories": 42,
+    "protein": 0.0,
+    "carbs": 10.6,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "fl_oz",
+        "label": "1 fl oz (29.6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 29.6
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Sparkling Water",
+    "brand": null,
+    "calories": 0,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "fl_oz",
+        "label": "1 fl oz (29.6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 29.6
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Greek Yogurt (Plain)",
+    "brand": "Chobani",
+    "calories": 59,
+    "protein": 10.0,
+    "carbs": 3.6,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Greek Yogurt (Vanilla)",
+    "brand": "Chobani",
+    "calories": 95,
+    "protein": 5.5,
+    "carbs": 12.0,
+    "fat": 2.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Protein Bar (Chocolate Chip Cookie Dough)",
+    "brand": "Quest",
+    "calories": 333,
+    "protein": 33.0,
+    "carbs": 26.0,
+    "fat": 12.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 bar (60 g)",
+        "unitType": "Weight",
+        "conversionFactor": 60.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Protein Bar (Cookies & Cream)",
+    "brand": "Quest",
+    "calories": 333,
+    "protein": 33.0,
+    "carbs": 26.0,
+    "fat": 12.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 bar (60 g)",
+        "unitType": "Weight",
+        "conversionFactor": 60.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Whey Protein Powder (Vanilla)",
+    "brand": "Optimum Nutrition",
+    "calories": 400,
+    "protein": 80.0,
+    "carbs": 10.0,
+    "fat": 6.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "scoop",
+        "label": "1 scoop (30 g)",
+        "unitType": "Weight",
+        "conversionFactor": 30.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Whey Protein Powder (Chocolate)",
+    "brand": "Dymatize",
+    "calories": 400,
+    "protein": 78.0,
+    "carbs": 10.0,
+    "fat": 6.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "scoop",
+        "label": "1 scoop (32 g)",
+        "unitType": "Weight",
+        "conversionFactor": 32.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Oatmilk",
+    "brand": "Oatly",
+    "calories": 47,
+    "protein": 1.0,
+    "carbs": 7.5,
+    "fat": 1.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (240 g)",
+        "unitType": "Weight",
+        "conversionFactor": 240.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Almond Butter",
+    "brand": "Justin's",
+    "calories": 614,
+    "protein": 21.0,
+    "carbs": 19.0,
+    "fat": 55.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (16 g)",
+        "unitType": "Weight",
+        "conversionFactor": 16.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Peanut Butter",
+    "brand": "Jif",
+    "calories": 588,
+    "protein": 25.0,
+    "carbs": 20.0,
+    "fat": 50.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (16 g)",
+        "unitType": "Weight",
+        "conversionFactor": 16.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ketchup",
+    "brand": "Heinz",
+    "calories": 112,
+    "protein": 1.7,
+    "carbs": 26.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (17 g)",
+        "unitType": "Weight",
+        "conversionFactor": 17.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cheddar Cheese",
+    "brand": "Kraft",
+    "calories": 403,
+    "protein": 25.0,
+    "carbs": 1.3,
+    "fat": 33.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (19 g)",
+        "unitType": "Weight",
+        "conversionFactor": 19.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mac & Cheese (prepared)",
+    "brand": "Kraft",
+    "calories": 165,
+    "protein": 4.7,
+    "carbs": 20.0,
+    "fat": 7.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (189 g)",
+        "unitType": "Weight",
+        "conversionFactor": 189.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Instant Oatmeal (Maple & Brown Sugar)",
+    "brand": "Quaker",
+    "calories": 370,
+    "protein": 9.0,
+    "carbs": 70.0,
+    "fat": 6.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "packet",
+        "label": "1 packet (43 g)",
+        "unitType": "Weight",
+        "conversionFactor": 43.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Granola",
+    "brand": "Nature Valley",
+    "calories": 471,
+    "protein": 10.0,
+    "carbs": 64.0,
+    "fat": 20.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1/2 cup (55 g)",
+        "unitType": "Weight",
+        "conversionFactor": 55.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cereal (Honey Nut)",
+    "brand": "Cheerios",
+    "calories": 380,
+    "protein": 7.0,
+    "carbs": 80.0,
+    "fat": 5.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Peanut Butter Sandwich Crackers",
+    "brand": "Lance",
+    "calories": 510,
+    "protein": 10.0,
+    "carbs": 54.0,
+    "fat": 28.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "pack",
+        "label": "1 pack (27 g)",
+        "unitType": "Weight",
+        "conversionFactor": 27.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chocolate Sandwich Cookies",
+    "brand": "Oreo",
+    "calories": 480,
+    "protein": 5.0,
+    "carbs": 72.0,
+    "fat": 20.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "3 cookies (34 g)",
+        "unitType": "Weight",
+        "conversionFactor": 34.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chocolate Hazelnut Spread",
+    "brand": "Nutella",
+    "calories": 539,
+    "protein": 6.0,
+    "carbs": 57.0,
+    "fat": 31.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (20 g)",
+        "unitType": "Weight",
+        "conversionFactor": 20.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cinnamon Cereal",
+    "brand": "Cinnamon Toast Crunch",
+    "calories": 410,
+    "protein": 5.0,
+    "carbs": 80.0,
+    "fat": 9.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (31 g)",
+        "unitType": "Weight",
+        "conversionFactor": 31.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Breakfast Sandwich (Egg & Cheese)",
+    "brand": "Starbucks",
+    "calories": 260,
+    "protein": 12.0,
+    "carbs": 28.0,
+    "fat": 11.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 sandwich (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Caffè Latte (2% milk)",
+    "brand": "Starbucks",
+    "calories": 50,
+    "protein": 2.7,
+    "carbs": 5.0,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 tall (355 g)",
+        "unitType": "Weight",
+        "conversionFactor": 355.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cheeseburger",
+    "brand": "McDonald's",
+    "calories": 263,
+    "protein": 13.0,
+    "carbs": 30.0,
+    "fat": 13.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 burger (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Big Mac",
+    "brand": "McDonald's",
+    "calories": 257,
+    "protein": 13.0,
+    "carbs": 20.0,
+    "fat": 15.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 burger (219 g)",
+        "unitType": "Weight",
+        "conversionFactor": 219.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chicken Nuggets",
+    "brand": "McDonald's",
+    "calories": 296,
+    "protein": 15.0,
+    "carbs": 18.0,
+    "fat": 18.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 nugget (16 g)",
+        "unitType": "Weight",
+        "conversionFactor": 16.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "French Fries",
+    "brand": "McDonald's",
+    "calories": 312,
+    "protein": 3.4,
+    "carbs": 41.0,
+    "fat": 15.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 medium (117 g)",
+        "unitType": "Weight",
+        "conversionFactor": 117.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Burrito Bowl (Chicken)",
+    "brand": "Chipotle",
+    "calories": 170,
+    "protein": 10.0,
+    "carbs": 15.0,
+    "fat": 7.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 bowl (450 g)",
+        "unitType": "Weight",
+        "conversionFactor": 450.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chicken Sandwich",
+    "brand": "Chick-fil-A",
+    "calories": 231,
+    "protein": 12.0,
+    "carbs": 18.0,
+    "fat": 12.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 sandwich (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pepperoni Pizza",
+    "brand": "Domino's",
+    "calories": 300,
+    "protein": 12.0,
+    "carbs": 33.0,
+    "fat": 13.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (107 g)",
+        "unitType": "Weight",
+        "conversionFactor": 107.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Iced Coffee (sweetened)",
+    "brand": "Dunkin'",
+    "calories": 45,
+    "protein": 0.6,
+    "carbs": 10.0,
+    "fat": 0.1,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 medium (473 g)",
+        "unitType": "Weight",
+        "conversionFactor": 473.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pork Chop (raw)",
+    "brand": null,
+    "calories": 231,
+    "protein": 20.0,
+    "carbs": 0.0,
+    "fat": 16.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 chop (140 g)",
+        "unitType": "Weight",
+        "conversionFactor": 140.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Shrimp (raw)",
+    "brand": null,
+    "calories": 99,
+    "protein": 24.0,
+    "carbs": 0.2,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cod (raw)",
+    "brand": null,
+    "calories": 82,
+    "protein": 18.0,
+    "carbs": 0.0,
+    "fat": 0.7,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 fillet (140 g)",
+        "unitType": "Weight",
+        "conversionFactor": 140.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tofu (firm)",
+    "brand": null,
+    "calories": 144,
+    "protein": 15.0,
+    "carbs": 3.9,
+    "fat": 8.7,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tempeh",
+    "brand": null,
+    "calories": 193,
+    "protein": 20.3,
+    "carbs": 7.6,
+    "fat": 10.8,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (84 g)",
+        "unitType": "Weight",
+        "conversionFactor": 84.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Bacon (cooked)",
+    "brand": null,
+    "calories": 541,
+    "protein": 37.0,
+    "carbs": 1.4,
+    "fat": 42.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (8 g)",
+        "unitType": "Weight",
+        "conversionFactor": 8.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ham (deli)",
+    "brand": null,
+    "calories": 145,
+    "protein": 20.0,
+    "carbs": 1.5,
+    "fat": 6.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Sausage (pork)",
+    "brand": null,
+    "calories": 301,
+    "protein": 14.0,
+    "carbs": 2.0,
+    "fat": 26.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "link",
+        "label": "1 link (75 g)",
+        "unitType": "Weight",
+        "conversionFactor": 75.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Romaine Lettuce",
+    "brand": null,
+    "calories": 17,
+    "protein": 1.2,
+    "carbs": 3.3,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (47 g)",
+        "unitType": "Weight",
+        "conversionFactor": 47.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cilantro",
+    "brand": null,
+    "calories": 23,
+    "protein": 2.1,
+    "carbs": 3.7,
     "fat": 0.5,
-    "baseQuantity": 8,
-    "baseUnit": "fl oz",
-    "createdAt": "2024-01-01T00:00:00Z",
-    "updatedAt": null,
-    "userId": null
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (1 g)",
+        "unitType": "Weight",
+        "conversionFactor": 1.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Parsley",
+    "brand": null,
+    "calories": 36,
+    "protein": 3.0,
+    "carbs": 6.3,
+    "fat": 0.8,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (4 g)",
+        "unitType": "Weight",
+        "conversionFactor": 4.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Basil",
+    "brand": null,
+    "calories": 23,
+    "protein": 3.2,
+    "carbs": 2.7,
+    "fat": 0.6,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (2 g)",
+        "unitType": "Weight",
+        "conversionFactor": 2.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mint",
+    "brand": null,
+    "calories": 44,
+    "protein": 3.3,
+    "carbs": 8.4,
+    "fat": 0.7,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (2 g)",
+        "unitType": "Weight",
+        "conversionFactor": 2.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Coconut (raw)",
+    "brand": null,
+    "calories": 354,
+    "protein": 3.3,
+    "carbs": 15.2,
+    "fat": 33.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1/2 cup (45 g)",
+        "unitType": "Weight",
+        "conversionFactor": 45.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Almond Flour",
+    "brand": null,
+    "calories": 571,
+    "protein": 21.0,
+    "carbs": 21.0,
+    "fat": 50.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (96 g)",
+        "unitType": "Weight",
+        "conversionFactor": 96.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "All-Purpose Flour",
+    "brand": null,
+    "calories": 364,
+    "protein": 10.0,
+    "carbs": 76.0,
+    "fat": 1.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (125 g)",
+        "unitType": "Weight",
+        "conversionFactor": 125.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Sugar (granulated)",
+    "brand": null,
+    "calories": 387,
+    "protein": 0.0,
+    "carbs": 100.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (12.5 g)",
+        "unitType": "Weight",
+        "conversionFactor": 12.5
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Brown Sugar",
+    "brand": null,
+    "calories": 380,
+    "protein": 0.0,
+    "carbs": 98.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (13 g)",
+        "unitType": "Weight",
+        "conversionFactor": 13.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Salt",
+    "brand": null,
+    "calories": 0,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tsp",
+        "label": "1 tsp (6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 6.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Black Pepper",
+    "brand": null,
+    "calories": 251,
+    "protein": 10.4,
+    "carbs": 64.0,
+    "fat": 3.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tsp",
+        "label": "1 tsp (2.3 g)",
+        "unitType": "Weight",
+        "conversionFactor": 2.3
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cinnamon",
+    "brand": null,
+    "calories": 247,
+    "protein": 4.0,
+    "carbs": 81.0,
+    "fat": 1.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tsp",
+        "label": "1 tsp (2.6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 2.6
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cocoa Powder",
+    "brand": null,
+    "calories": 228,
+    "protein": 19.6,
+    "carbs": 57.9,
+    "fat": 13.7,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (5 g)",
+        "unitType": "Weight",
+        "conversionFactor": 5.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Baking Powder",
+    "brand": null,
+    "calories": 53,
+    "protein": 0.0,
+    "carbs": 28.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tsp",
+        "label": "1 tsp (4 g)",
+        "unitType": "Weight",
+        "conversionFactor": 4.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Baking Soda",
+    "brand": null,
+    "calories": 0,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tsp",
+        "label": "1 tsp (4.6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 4.6
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chia Seeds",
+    "brand": null,
+    "calories": 486,
+    "protein": 16.5,
+    "carbs": 42.1,
+    "fat": 30.7,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (12 g)",
+        "unitType": "Weight",
+        "conversionFactor": 12.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Flax Seeds",
+    "brand": null,
+    "calories": 534,
+    "protein": 18.3,
+    "carbs": 28.9,
+    "fat": 42.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (10 g)",
+        "unitType": "Weight",
+        "conversionFactor": 10.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Sunflower Seeds",
+    "brand": null,
+    "calories": 584,
+    "protein": 20.8,
+    "carbs": 20.0,
+    "fat": 51.5,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pumpkin Seeds",
+    "brand": null,
+    "calories": 559,
+    "protein": 30.2,
+    "carbs": 10.7,
+    "fat": 49.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Hemp Seeds",
+    "brand": null,
+    "calories": 553,
+    "protein": 31.6,
+    "carbs": 8.7,
+    "fat": 48.8,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "tbsp",
+        "label": "1 tbsp (10 g)",
+        "unitType": "Weight",
+        "conversionFactor": 10.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Greek Yogurt (plain, 2%)",
+    "brand": null,
+    "calories": 73,
+    "protein": 9.6,
+    "carbs": 3.9,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 cup (170 g)",
+        "unitType": "Weight",
+        "conversionFactor": 170.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Cottage Cheese (lowfat)",
+    "brand": null,
+    "calories": 72,
+    "protein": 12.0,
+    "carbs": 3.0,
+    "fat": 1.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (226 g)",
+        "unitType": "Weight",
+        "conversionFactor": 226.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ground Turkey (93/7, raw)",
+    "brand": null,
+    "calories": 170,
+    "protein": 21.0,
+    "carbs": 0.0,
+    "fat": 9.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 patty (113 g)",
+        "unitType": "Weight",
+        "conversionFactor": 113.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chicken Breast (cooked)",
+    "brand": null,
+    "calories": 165,
+    "protein": 31.0,
+    "carbs": 0.0,
+    "fat": 3.6,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Salmon (cooked)",
+    "brand": null,
+    "calories": 206,
+    "protein": 22.0,
+    "carbs": 0.0,
+    "fat": 12.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 fillet (140 g)",
+        "unitType": "Weight",
+        "conversionFactor": 140.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Rice (jasmine, cooked)",
+    "brand": null,
+    "calories": 130,
+    "protein": 2.6,
+    "carbs": 28.2,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (158 g)",
+        "unitType": "Weight",
+        "conversionFactor": 158.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Rice (basmati, cooked)",
+    "brand": null,
+    "calories": 121,
+    "protein": 2.7,
+    "carbs": 25.2,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (158 g)",
+        "unitType": "Weight",
+        "conversionFactor": 158.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Pasta (whole wheat, cooked)",
+    "brand": null,
+    "calories": 124,
+    "protein": 5.3,
+    "carbs": 26.0,
+    "fat": 0.8,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (140 g)",
+        "unitType": "Weight",
+        "conversionFactor": 140.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Bread (sourdough)",
+    "brand": null,
+    "calories": 289,
+    "protein": 9.0,
+    "carbs": 56.0,
+    "fat": 2.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (32 g)",
+        "unitType": "Weight",
+        "conversionFactor": 32.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Bread (rye)",
+    "brand": null,
+    "calories": 259,
+    "protein": 9.0,
+    "carbs": 48.0,
+    "fat": 3.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (32 g)",
+        "unitType": "Weight",
+        "conversionFactor": 32.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Rice Cakes",
+    "brand": null,
+    "calories": 387,
+    "protein": 8.0,
+    "carbs": 81.0,
+    "fat": 3.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 cake (9 g)",
+        "unitType": "Weight",
+        "conversionFactor": 9.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Tortilla Chips",
+    "brand": null,
+    "calories": 498,
+    "protein": 7.0,
+    "carbs": 63.0,
+    "fat": 24.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 oz (28 g)",
+        "unitType": "Weight",
+        "conversionFactor": 28.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Zero Sugar Soda",
+    "brand": "Coca-Cola",
+    "calories": 0,
+    "protein": 0.0,
+    "carbs": 0.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "fl_oz",
+        "label": "1 fl oz (29.6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 29.6
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Energy Drink (Original)",
+    "brand": "Red Bull",
+    "calories": 45,
+    "protein": 0.0,
+    "carbs": 11.0,
+    "fat": 0.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "fl_oz",
+        "label": "1 fl oz (29.6 g)",
+        "unitType": "Weight",
+        "conversionFactor": 29.6
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Chocolate Milk",
+    "brand": "Fairlife",
+    "calories": 77,
+    "protein": 5.8,
+    "carbs": 9.5,
+    "fat": 1.6,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "cup",
+        "label": "1 cup (240 g)",
+        "unitType": "Weight",
+        "conversionFactor": 240.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Protein Shake",
+    "brand": "Premier Protein",
+    "calories": 67,
+    "protein": 16.7,
+    "carbs": 5.0,
+    "fat": 1.7,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 bottle (325 g)",
+        "unitType": "Weight",
+        "conversionFactor": 325.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Ice Cream Bar",
+    "brand": "Haagen-Dazs",
+    "calories": 270,
+    "protein": 4.0,
+    "carbs": 23.0,
+    "fat": 18.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "piece",
+        "label": "1 bar (80 g)",
+        "unitType": "Weight",
+        "conversionFactor": 80.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Frozen Pepperoni Pizza",
+    "brand": "DiGiorno",
+    "calories": 280,
+    "protein": 12.0,
+    "carbs": 33.0,
+    "fat": 13.0,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "slice",
+        "label": "1 slice (112 g)",
+        "unitType": "Weight",
+        "conversionFactor": 112.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #203",
+    "brand": null,
+    "calories": 35,
+    "protein": 3.0,
+    "carbs": 9.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #204",
+    "brand": null,
+    "calories": 40,
+    "protein": 3.0,
+    "carbs": 7.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (100 g)",
+        "unitType": "Weight",
+        "conversionFactor": 100.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #205",
+    "brand": null,
+    "calories": 50,
+    "protein": 2.0,
+    "carbs": 7.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #206",
+    "brand": null,
+    "calories": 40,
+    "protein": 3.0,
+    "carbs": 7.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (100 g)",
+        "unitType": "Weight",
+        "conversionFactor": 100.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #207",
+    "brand": null,
+    "calories": 50,
+    "protein": 2.0,
+    "carbs": 10.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (100 g)",
+        "unitType": "Weight",
+        "conversionFactor": 100.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #208",
+    "brand": null,
+    "calories": 35,
+    "protein": 2.0,
+    "carbs": 10.0,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #209",
+    "brand": null,
+    "calories": 40,
+    "protein": 2.0,
+    "carbs": 9.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #210",
+    "brand": null,
+    "calories": 50,
+    "protein": 2.0,
+    "carbs": 9.0,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #211",
+    "brand": null,
+    "calories": 35,
+    "protein": 3.0,
+    "carbs": 10.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #212",
+    "brand": null,
+    "calories": 50,
+    "protein": 2.0,
+    "carbs": 9.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #213",
+    "brand": null,
+    "calories": 40,
+    "protein": 3.0,
+    "carbs": 7.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #214",
+    "brand": null,
+    "calories": 45,
+    "protein": 2.0,
+    "carbs": 8.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (100 g)",
+        "unitType": "Weight",
+        "conversionFactor": 100.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #215",
+    "brand": null,
+    "calories": 45,
+    "protein": 2.5,
+    "carbs": 9.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (150 g)",
+        "unitType": "Weight",
+        "conversionFactor": 150.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #216",
+    "brand": null,
+    "calories": 45,
+    "protein": 2.0,
+    "carbs": 9.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #217",
+    "brand": null,
+    "calories": 40,
+    "protein": 3.0,
+    "carbs": 8.0,
+    "fat": 0.2,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (85 g)",
+        "unitType": "Weight",
+        "conversionFactor": 85.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #218",
+    "brand": null,
+    "calories": 50,
+    "protein": 2.5,
+    "carbs": 8.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (150 g)",
+        "unitType": "Weight",
+        "conversionFactor": 150.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #219",
+    "brand": null,
+    "calories": 35,
+    "protein": 2.0,
+    "carbs": 7.0,
+    "fat": 0.3,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (120 g)",
+        "unitType": "Weight",
+        "conversionFactor": 120.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
+  },
+  {
+    "name": "Mixed Vegetables (frozen) #220",
+    "brand": null,
+    "calories": 45,
+    "protein": 2.0,
+    "carbs": 8.0,
+    "fat": 0.4,
+    "baseQuantity": 100,
+    "baseUnit": "g",
+    "units": [
+      {
+        "code": "serving",
+        "label": "1 serving (150 g)",
+        "unitType": "Weight",
+        "conversionFactor": 150.0
+      },
+      {
+        "code": "g",
+        "label": "g",
+        "unitType": "Weight",
+        "conversionFactor": 1
+      },
+      {
+        "code": "oz",
+        "label": "oz",
+        "unitType": "Weight",
+        "conversionFactor": 28.35
+      }
+    ]
   }
 ]

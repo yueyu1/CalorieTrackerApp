@@ -24,7 +24,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 builder.Services.AddCors();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<INutritionCalculationService, NutritionCalculationService>();
-builder.Services.AddIdentityCore<AppUser>(options => 
+builder.Services.AddIdentityCore<AppUser>(options =>
 {
     options.User.RequireUniqueEmail = true;
 })
@@ -32,7 +32,7 @@ builder.Services.AddIdentityCore<AppUser>(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
-        var tokenKey = builder.Configuration["TokenKey"] 
+        var tokenKey = builder.Configuration["TokenKey"]
             ?? throw new InvalidOperationException("TokenKey configuration is missing.");
         options.TokenValidationParameters = new TokenValidationParameters
         {
@@ -60,10 +60,22 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+// Seed on startup
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
-var context = services.GetRequiredService<AppDbContext>();
-await context.Database.MigrateAsync();
-// await Seed.SeedGlobalFoodsAsync(context);
+try
+{
+    var context = services.GetRequiredService<AppDbContext>();
+    var env = services.GetRequiredService<IWebHostEnvironment>();
+
+    await context.Database.MigrateAsync();
+
+    await Seed.SeedGlobalFoodsAsync(context, env);
+}
+catch (Exception ex)
+{
+    var logger = services.GetRequiredService<ILogger<Program>>();
+    logger.LogError(ex, "Error seeding global foods");
+}
 
 app.Run();

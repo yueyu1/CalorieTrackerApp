@@ -107,6 +107,21 @@
   text-overflow: ellipsis;
 }
 
+.afd-load-more,
+.afd-end {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 8px 18px;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.afd-load-more {
+  user-select: none;
+}
+
 /* CONTROLS */
 .afd-controls {
   display: flex;

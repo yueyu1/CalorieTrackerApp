@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MealType } from '../../../types/meal';
 import { FoodService } from '../../../core/services/food-service';
-import { debounceTime, distinctUntilChanged, finalize, Subscription, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, Subscription, switchMap, tap } from 'rxjs';
 import { Food } from '../../../types/food';
 import { MealEntryItem } from '../../../types/meal-entry-item';
 import { DecimalPipe } from '@angular/common';
@@ -17,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MealService } from '../../../core/services/meal-service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { delay, of } from 'rxjs';
 
 @Component({
   selector: 'app-add-food-dialog',
@@ -53,6 +54,12 @@ export class AddFoodDialog implements OnInit {
   protected activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
   protected isAddingFood = signal(false);
 
+  protected loadingMore = signal(false);
+  protected hasMore = signal(true);
+
+  private readonly pageSize = 25;
+  private offset = 0;
+
   constructor() {
     this.form = this.fb.group({
       search: [''],
@@ -61,32 +68,17 @@ export class AddFoodDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadFoods();
+    this.loadFirstPage();
 
-    // react to search changes
     this.searchCtrl.valueChanges.pipe(
       debounceTime(250),
       distinctUntilChanged(),
-      tap(() => {
-        this.loadFoods();
-      })
+      tap(() => this.loadFirstPage())
     ).subscribe();
   }
 
   ngOnDestroy(): void {
     this.searchSub?.unsubscribe();
-  }
-
-  private buildFormFromFoods(): void {
-    const foodsArray = this.fb.array(
-      this.foods().map((food) =>
-        this.fb.group({
-          quantity: [1],
-          unitId: [food.units[0].id ?? null],
-        })
-      )
-    )
-    this.form.setControl('foods', foodsArray);
   }
 
   /* ---------- per-row computed values ---------- */
@@ -234,10 +226,79 @@ export class AddFoodDialog implements OnInit {
 
   setFilter(filter: typeof this.activeFilter): void {
     this.activeFilter = filter;
-    this.loadFoods();
+    this.loadFirstPage();
   }
 
-  private loadFoods(): void {
+  private loadFirstPage(): void {
+    this.offset = 0;
+    this.hasMore.set(true);
+    this.selectedIds.clear();
+
+    this.loading.set(true);
+    this.loadingMore.set(false);
+    this.foods.set([]);
+    this.form.setControl('foods', this.fb.array([]));
+    
+    this.fetchFoodsPage(this.offset, this.pageSize).subscribe({
+      next: (page) => {
+        this.appendFoods(page);
+        this.offset += page.length;
+        this.hasMore.set(page.length === this.pageSize);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.hasMore.set(false);
+        this.loading.set(false);
+      }
+    });
+  }
+
+  loadMore(): void {
+    if (this.loading() || this.loadingMore() || !this.hasMore()) return;
+    this.loadingMore.set(true);
+
+    this.fetchFoodsPage(this.offset, this.pageSize).subscribe({
+      next: (page) => {
+        this.appendFoods(page);
+        this.offset += page.length;
+        this.hasMore.set(page.length === this.pageSize);
+        this.loadingMore.set(false);
+      },
+      error: () => {
+        this.hasMore.set(false);
+        this.loadingMore.set(false);
+      }
+    });
+  }
+
+  onListScroll(evt: Event): void {
+    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
+
+    const el = evt.target as HTMLElement;
+    const thresholdPx = 220; // load a bit before bottom
+    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+    if (remaining <= thresholdPx) {
+      this.loadMore();
+    }
+  }
+
+  private appendFoods(newFoods: Food[]): void {
+    if (newFoods.length === 0) return;
+
+    // 1) append to the signal list
+    this.foods.update(curr => [...curr, ...newFoods]);
+
+    // 2) append matching form rows (so we don't reset existing quantities)
+    const arr = this.foodsArray;
+    for (const food of newFoods) {
+      arr.push(this.fb.group({
+        quantity: [1],
+        unitId: [food.units[0]?.id ?? null],
+      }));
+    }
+  }
+
+  private fetchFoodsPage(skip: number, take: number): Observable<Food[]> {
     const search = (this.searchCtrl.value ?? '').trim();
     const scope =
       this.activeFilter === 'myFoods' ? 'mine' :
@@ -246,25 +307,14 @@ export class AddFoodDialog implements OnInit {
       this.activeFilter === 'recent' ? 'recentUsed' :
         'relevance';
     const brandsOnly = this.activeFilter === 'brands';
-    this.loading.set(true);
 
-    this.foodService.getFoods({
+    return this.foodService.getFoods({
       scope,
       search,
       sort,
-      take: 50,
+      skip,
+      take,
       brandsOnly
-    }).subscribe({
-      next: (foods) => {
-        this.foods.set(foods);
-        this.buildFormFromFoods();
-        this.loading.set(false);
-      },
-      error: () => {
-        this.foods.set([]);
-        this.buildFormFromFoods();
-        this.loading.set(false);
-      }
     });
   }
 
@@ -299,7 +349,7 @@ export class AddFoodDialog implements OnInit {
           unit: unit.code,
         };
       });
-    
+
     this.dialogRef.disableClose = true;
     this.isAddingFood.set(true);
     this.searchCtrl.disable({ emitEvent: false });
