@@ -72,31 +72,44 @@
           <div class="afd-left">
             <div class="afd-name">{{ item.name }}</div>
             <div class="afd-brand">{{ item.brand }}</div>
+
+            @let n = getRowNutrition(item);
+            
             <div class="afd-macros">
-              {{ getRowCalories($index) | number: '1.0-0' }} kcal ·
-              Protein {{ getRowProtein($index) | number: '1.2-2' }} g ·
-              Carbs {{ getRowCarbs($index) | number: '1.2-2' }} g ·
-              Fat {{ getRowFat($index) | number: '1.2-2' }} g
+              {{ n.calories | number: '1.0-0' }} kcal ·
+              Protein {{ n.protein | number: '1.2-2' }} g ·
+              Carbs {{ n.carbs | number: '1.2-2' }} g ·
+              Fat {{ n.fat | number: '1.2-2' }} g
             </div>
           </div>
 
           <!-- RIGHT: quantity + unit -->
           <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
-            <button mat-icon-button type="button" (click)="decreaseQty($index, $event)">
+            <button mat-icon-button type="button" 
+              (click)="decreaseQty($index, $event)"
+              [disabled]="!isSelected(item.id)">
               <mat-icon>remove</mat-icon>
             </button>
 
             <mat-form-field appearance="outline" class="afd-qty-input">
-              <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
+              <input matInput type="number" 
+                min="0" step="0.5" 
+                formControlName="quantity" 
+                (click)="$event.stopPropagation()"
+                (input)="onQtyChange($index)"
                 (blur)="onQtyBlur($index)" />
             </mat-form-field>
 
-            <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
+            <button mat-icon-button type="button" 
+              (click)="increaseQty($index, $event)">
               <mat-icon>add</mat-icon>
             </button>
 
             <mat-form-field appearance="outline" class="afd-unit-select">
-              <mat-select formControlName="unitId" (click)="onUnitClick($event)">
+              <mat-select 
+                formControlName="unitId" 
+                (click)="$event.stopPropagation()"
+                (selectionChange)="onUnitChange($index)">
                 @for (unit of item.units; track unit.id) {
                 <mat-option [value]="unit.id">
                   {{ unit.label }}
@@ -149,12 +162,12 @@
   <!-- FOOTER -->
   <div class="afd-footer">
     <div class="afd-summary">
-      {{ selectedCount }} item{{ selectedCount === 1 ? '' : 's' }} selected ·
-      {{ selectedCalories }} kcal
+      {{ this.selected().size }} item{{ this.selected().size === 1 ? '' : 's' }} selected ·
+      {{ selectedCalories() }} kcal
     </div>
 
     <button mat-flat-button class="add-btn" color="primary" type="button" (click)="confirmAdd()"
-      [disabled]="selectedCount === 0 || isAddingFood()">
+      [disabled]="this.selected().size === 0 || isAddingFood()">
       @if (!isAddingFood()) {
       Add to {{ this.data.mealType }}
       }

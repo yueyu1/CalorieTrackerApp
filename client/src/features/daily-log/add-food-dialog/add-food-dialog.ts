@@ -1,5 +1,5 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, Signal, signal } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatSelectModule } from '@angular/material/select';
@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MealType } from '../../../types/meal';
 import { FoodService } from '../../../core/services/food-service';
-import { debounceTime, distinctUntilChanged, Observable, Subscription, switchMap, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, Subscription, tap } from 'rxjs';
 import { Food } from '../../../types/food';
 import { MealEntryItem } from '../../../types/meal-entry-item';
 import { DecimalPipe } from '@angular/common';
@@ -17,7 +17,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MealService } from '../../../core/services/meal-service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { delay, of } from 'rxjs';
+import { nutritionFor } from '../../../shared/nutrition/nutrition-calculator';
+import { Nutrition, RowNutritionEntry } from '../../../types/nutrition';
 
 @Component({
   selector: 'app-add-food-dialog',
@@ -41,7 +42,6 @@ import { delay, of } from 'rxjs';
 export class AddFoodDialog implements OnInit {
   private foodService = inject(FoodService);
   private mealsService = inject(MealService);
-  private searchSub: Subscription | undefined;
   protected loading = signal(true);
   protected form!: FormGroup;
   private fb = inject(FormBuilder);
@@ -49,7 +49,6 @@ export class AddFoodDialog implements OnInit {
   protected data = inject(MAT_DIALOG_DATA) as {
     mealId: number; mealType: MealType; mealDate: string
   };
-  protected selectedIds = new Set<number>();
   protected foods = signal<Food[]>([]);
   protected activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
   protected isAddingFood = signal(false);
@@ -59,6 +58,23 @@ export class AddFoodDialog implements OnInit {
 
   private readonly pageSize = 25;
   private offset = 0;
+
+  // Map<foodId, { quantity, unitId, snapshot }>
+  protected selected = signal(new Map<number, { quantity: number; unitId: number; snapshot: Food }>());
+
+  // Map<foodId, RowNutritionEntry>
+  protected rowNutrition = new Map<number, RowNutritionEntry>();
+
+  // computed total calories of selected items
+  protected readonly selectedCalories = computed(() => {
+    const map = this.selected();
+    let total = 0;
+    for (const { quantity, unitId, snapshot } of map.values()) {
+      const nutrition = nutritionFor(snapshot, quantity, unitId);
+      total += nutrition.calories;
+    }
+    return total;
+  });
 
   constructor() {
     this.form = this.fb.group({
@@ -77,124 +93,168 @@ export class AddFoodDialog implements OnInit {
     ).subscribe();
   }
 
-  ngOnDestroy(): void {
-    this.searchSub?.unsubscribe();
+
+  /* ---------- nutrition calculation ---------- */
+
+  getRowNutrition(food: Food): Nutrition {
+    return this.rowNutrition.get(food.id)?.nutritionSig() ?? {
+      calories: 0,
+      protein: 0,
+      carbs: 0,
+      fat: 0,
+    };
   }
 
-  /* ---------- per-row computed values ---------- */
+  private buildRowSignals(food: Food, group: FormGroup) {
+    // Create a signal to track the form group value changes
+    const valueSig = signal(group.getRawValue());
 
-  getRowCalories(index: number): number {
+    // Subscribe to form group value changes to update the signal
+    const sub: Subscription = group.valueChanges.subscribe(v => valueSig.set(v));
+
+    // Create a computed signal for nutrition based on the value signal
+    const nutritionSig = computed(() => {
+      const v = valueSig();
+      return nutritionFor(food, Number(v.quantity ?? 0), Number(v.unitId ?? 0));
+    });
+
+    // Clean up any existing subscription for this food
+    this.rowNutrition.get(food.id)?.cleanup();
+
+    // Store the computed signal and cleanup function
+    this.rowNutrition.set(food.id, {
+      nutritionSig,
+      cleanup: () => sub.unsubscribe()
+    });
+  }
+
+  private clearRowNutrition(): void {
+    for (const entry of this.rowNutrition.values()) {
+      entry.cleanup();
+    }
+    this.rowNutrition.clear();
+  }
+
+  /* ---------- selection management ---------- */
+
+  ensureSelected(index: number, seed?: { quantity?: number, unitId?: number }): void {
     const food = this.foods()[index];
-    if (!food) return 0;
+    if (this.isSelected(food.id)) return;
 
-    const scale = this.getRowScale(index);
-    return food.calories * scale;
+    // enable controls
+    this.setRowEnabled(index, true);
+
+    // seed from current form values unless overridden
+    const row = this.foodsArray.at(index) as FormGroup;
+    const quantity = seed?.quantity ?? Number(row.get('quantity')!.value ?? 0);
+    const unitId = seed?.unitId ?? Number(row.get('unitId')!.value);
+    this.selected.update(prev => {
+      const next = new Map(prev);
+      next.set(food.id, { quantity: quantity, unitId: unitId, snapshot: food });
+      return next;
+    });
   }
 
-  getRowProtein(index: number): number {
+  deselect(index: number): void {
     const food = this.foods()[index];
-    if (!food) return 0;
-
-    const scale = this.getRowScale(index);
-    return food.protein * scale;
-  }
-
-  getRowCarbs(index: number): number {
-    const food = this.foods()[index];
-    if (!food) return 0;
-
-    const scale = this.getRowScale(index);
-    return food.carbs * scale;
-  }
-
-  getRowFat(index: number): number {
-    const food = this.foods()[index];
-    if (!food) return 0;
-
-    const scale = this.getRowScale(index);
-    return food.fat * scale;
-  }
-
-  private getRowScale(index: number): number {
-    const food = this.foods()[index];
-    if (!food) return 0;
-
-    const group = this.foodsArray.at(index) as FormGroup;
-    const quantity = group.get('quantity')!.value ?? 0;
-    if (quantity <= 0) return 0;
-
-    const unitId = group.get('unitId')!.value;
-    const unit = food.units.find(u => u.id === unitId);
-    if (!unit) return 0;
-
-    const baseAmount = quantity * (unit.conversionFactor ?? 1);
-    return baseAmount / food.baseQuantity;
-  }
-
-
-  /* ---------- selection + footer ---------- */
-
-  isSelected(id: number): boolean {
-    return this.selectedIds.has(id);
+    const row = this.foodsArray.at(index) as FormGroup;
+    if (!this.isSelected(food.id)) return;
+    this.selected.update(prev => {
+      const next = new Map(prev);
+      next.delete(food.id);
+      return next;
+    });
+    this.setRowEnabled(index, false);
+    row.get('quantity')!.setValue(1, { emitEvent: false });
+    row.get('unitId')!.setValue(food.units[0]?.id ?? null, { emitEvent: false });
   }
 
   toggleSelected(id: number, index: number): void {
-    if (this.selectedIds.has(id)) {
-      this.selectedIds.delete(id);
+    if (this.selected().has(id)) {
+      this.deselect(index);
     } else {
-      this.selectedIds.add(id);
-      // ensure there is at least 1 by default
-      const group = this.foodsArray.at(index) as FormGroup;
-      const qty = group.get('quantity')!.value ?? 0;
-      if (qty <= 0) group.get('quantity')!.setValue(1);
+      this.ensureSelected(index);
     }
   }
 
-  get selectedCount(): number {
-    return this.selectedIds.size;
+  isSelected(id: number): boolean {
+    return this.selected().has(id);
   }
 
-  /**
-   * Compute calories using:
-   * - quantity (in selected unit)
-   * - unit.conversionFactor: how much base-mass one unit represents
-   * - food.baseQuantity / food.calories as the reference
-   */
-  get selectedCalories(): number {
-    return this.foods().reduce((sum, food, index) => {
-      if (!this.selectedIds.has(food.id)) return sum;
-      const group = this.foodsArray.at(index) as FormGroup;
-      const quantity = group.get('quantity')!.value ?? 0;
-      if (quantity <= 0) return sum;
-      const unitId = group.get('unitId')!.value;
-      const unit = food.units.find(u => u.id === unitId);
-      if (!unit) return sum;
-      const baseQuantity = quantity * (unit.conversionFactor ?? 1);
-      return sum + (food.calories * baseQuantity) / food.baseQuantity;
-    }, 0);
+  private setRowEnabled(index: number, enabled: boolean): void {
+    const row = this.foodsArray.at(index) as FormGroup;
+
+    const qty = row.get('quantity');
+    const unitId = row.get('unitId');
+
+    if (!qty || !unitId) return;
+
+    if (enabled) {
+      qty.enable({ emitEvent: false });
+      unitId.enable({ emitEvent: false });
+    } else {
+      qty.disable({ emitEvent: false });
+      unitId.disable({ emitEvent: false });
+    }
   }
+
 
   /* ---------- quantity + unit controls ---------- */
 
   increaseQty(index: number, event?: MouseEvent): void {
     event?.stopPropagation();
-    const group = this.foodsArray.at(index) as FormGroup;
-    const current = group.get('quantity')!.value ?? 0;
-    group.get('quantity')!.setValue(current + 1);
+
+    const row = this.foodsArray.at(index) as FormGroup;
+    const current = Number(row.get('quantity')!.value ?? 0);
+    const next = current + 1;
+
+    // seed selection with the next quantity
+    this.ensureSelected(index, { quantity: next });
+
+    // keep the form control in sync too
+    row.get('quantity')!.setValue(next, { emitEvent: false });
   }
 
   decreaseQty(index: number, event?: MouseEvent): void {
     event?.stopPropagation();
-    const group = this.foodsArray.at(index) as FormGroup;
-    const current = group.get('quantity')!.value ?? 0;
-    const next = Math.max(current - 1, 0);
-    group.get('quantity')!.setValue(next);
-
-    // if quantity hits 0, unselect this food
     const food = this.foods()[index];
-    if (next <= 0 && this.selectedIds.has(food.id)) {
-      this.selectedIds.delete(food.id);
+    if (!this.isSelected(food.id)) return;
+
+    const row = this.foodsArray.at(index) as FormGroup;
+    const current = Number(row.get('quantity')!.value ?? 0);
+    const next = Math.max(0, current - 1);
+    row.get('quantity')!.setValue(next);
+
+    if (next <= 0 && this.selected().has(food.id)) {
+      // if quantity hits 0, unselect this food
+      this.deselect(index);
+    } else {
+      // keep selected map in sync
+      const cur = this.selected().get(food.id)!;
+      this.selected.update((prev) => {
+        const nextMap = new Map(prev);
+        nextMap.set(food.id, { ...cur, quantity: next });
+        return nextMap;
+      });
     }
+  }
+
+  onQtyChange(index: number): void {
+    const food = this.foods()[index];
+    if (!this.isSelected(food.id)) return;
+
+    const group = this.foodsArray.at(index) as FormGroup;
+    const raw = group.get('quantity')!.value;
+    const parsed = Number(raw);
+    const quantity = Number.isFinite(parsed) ? parsed : 1;
+
+    // Update selected map
+    const cur = this.selected().get(food.id)!;
+    this.selected.update((prev) => {
+      const nextMap = new Map(prev);
+      nextMap.set(food.id, { ...cur, quantity });
+      return nextMap;
+    });
   }
 
   onQtyBlur(index: number): void {
@@ -217,28 +277,33 @@ export class AddFoodDialog implements OnInit {
     }
   }
 
-  onUnitClick(event: MouseEvent): void {
-    // prevent row toggle when opening mat-select
-    event.stopPropagation();
+  onUnitChange(index: number): void {
+    const food = this.foods()[index];
+    if (!this.isSelected(food.id)) return;
+
+    const group = this.foodsArray.at(index) as FormGroup;
+    const unitId = group.get('unitId')!.value;
+
+    const cur = this.selected().get(food.id)!;
+    this.selected.update(() => {
+      const nextMap = new Map();
+      nextMap.set(food.id, { ...cur, unitId });
+      return nextMap;
+    });
   }
 
-  /* ---------- filters + actions ---------- */
-
-  setFilter(filter: typeof this.activeFilter): void {
-    this.activeFilter = filter;
-    this.loadFirstPage();
-  }
+  /* ---------- data loading + pagination ---------- */
 
   private loadFirstPage(): void {
     this.offset = 0;
     this.hasMore.set(true);
-    this.selectedIds.clear();
 
     this.loading.set(true);
     this.loadingMore.set(false);
+    this.clearRowNutrition();
     this.foods.set([]);
     this.form.setControl('foods', this.fb.array([]));
-    
+
     this.fetchFoodsPage(this.offset, this.pageSize).subscribe({
       next: (page) => {
         this.appendFoods(page);
@@ -271,17 +336,6 @@ export class AddFoodDialog implements OnInit {
     });
   }
 
-  onListScroll(evt: Event): void {
-    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
-
-    const el = evt.target as HTMLElement;
-    const thresholdPx = 220; // load a bit before bottom
-    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
-    if (remaining <= thresholdPx) {
-      this.loadMore();
-    }
-  }
-
   private appendFoods(newFoods: Food[]): void {
     if (newFoods.length === 0) return;
 
@@ -291,10 +345,12 @@ export class AddFoodDialog implements OnInit {
     // 2) append matching form rows (so we don't reset existing quantities)
     const arr = this.foodsArray;
     for (const food of newFoods) {
-      arr.push(this.fb.group({
-        quantity: [1],
-        unitId: [food.units[0]?.id ?? null],
-      }));
+      const group = this.fb.group({
+        quantity: [{ value: 1, disabled: true }],
+        unitId: [{ value: food.units[0]?.id ?? null, disabled: true }],
+      });
+      arr.push(group);
+      this.buildRowSignals(food, group);
     }
   }
 
@@ -318,10 +374,24 @@ export class AddFoodDialog implements OnInit {
     });
   }
 
-  /**
-   * Close this dialog with a special action so the caller
-   * can open a dedicated "Create custom food" flow.
-   */
+  onListScroll(evt: Event): void {
+    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
+
+    const el = evt.target as HTMLElement;
+    const thresholdPx = 220; // load a bit before bottom
+    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+    if (remaining <= thresholdPx) {
+      this.loadMore();
+    }
+  }
+
+  /* ---------- filters + actions ---------- */
+
+  setFilter(filter: typeof this.activeFilter): void {
+    this.activeFilter = filter;
+    this.loadFirstPage();
+  }
+
   openCustomFood(): void {
     this.dialogRef.close({
       action: 'createCustomFood',
@@ -332,23 +402,14 @@ export class AddFoodDialog implements OnInit {
   }
 
   confirmAdd(): void {
-    const items: MealEntryItem[] = this.foods()
-      .map((food, index) => {
-        const group = this.foodsArray.at(index) as FormGroup;
-        const quantity = group.get('quantity')!.value ?? 0;
-        return { food, index, quantity };
-      })
-      .filter(x => this.selectedIds.has(x.food.id) && x.quantity > 0)
-      .map(x => {
-        const group = this.foodsArray.at(x.index) as FormGroup;
-        const unitId = group.get('unitId')!.value;
-        const unit = x.food.units.find(u => u.id === unitId) ?? x.food.units[0];
-        return {
-          foodId: x.food.id,
-          quantity: x.quantity,
-          unit: unit.code,
-        };
+    const items: MealEntryItem[] = [];
+    for (const { quantity, unitId, snapshot } of this.selected().values()) {
+      items.push({
+        foodId: snapshot.id,
+        quantity,
+        unit: snapshot.units.find(u => u.id === unitId)?.code ?? '',
       });
+    }
 
     this.dialogRef.disableClose = true;
     this.isAddingFood.set(true);
