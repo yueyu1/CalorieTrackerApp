@@ -41,16 +41,11 @@ public class AppDbContext(DbContextOptions options) : IdentityDbContext<AppUser>
             .HasForeignKey(mf => mf.MealId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<MealFood>()
-            .HasOne(mf => mf.Meal)
-            .WithMany(m => m.MealFoods)
-            .HasForeignKey(mf => mf.MealId);
-
         modelBuilder.Entity<Food>()
             .HasMany(f => f.MealFoods)
             .WithOne(mf => mf.Food)
             .HasForeignKey(mf => mf.FoodId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Food>()
             .HasMany(f => f.Units)
