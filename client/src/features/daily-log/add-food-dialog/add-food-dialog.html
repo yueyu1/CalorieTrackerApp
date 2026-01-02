@@ -37,6 +37,14 @@
         (click)="setFilter('brands')">
         Brands
       </mat-chip-option>
+
+      <mat-chip-option
+        [selected]="activeFilter === 'selected'"
+        [disabled]="activeFilter === 'selected' || isAddingFood() || selectedCount() === 0"
+        (click)="setFilter('selected')">
+        Selected ({{ selectedCount() }})
+      </mat-chip-option>
+
     </mat-chip-listbox>
 
     <button mat-button type="button" class="afd-custom-food-btn" color="primary" (click)="openCustomFood()"
@@ -49,32 +57,64 @@
   <!-- FOOD LIST -->
   <div class="afd-list" formArrayName="foods" [class.is-disabled]="isAddingFood()" (scroll)="onListScroll($event)">
     @if (!this.loading()) {
-    @if (showMyFoodsEmptyState) {
-    <div class="afd-empty">
-      <div class="afd-empty-title">
-        {{ myFoodsEmptyTitle }}
-      </div>
+      @if (showMyFoodsEmptyState) {
+      <div class="afd-empty">
+        <div class="afd-empty-title">
+          {{ myFoodsEmptyTitle }}
+        </div>
 
-      <div class="afd-empty-sub">
-        {{ myFoodsEmptySubtitle }}
-      </div>
+        <div class="afd-empty-sub">
+          {{ myFoodsEmptySubtitle }}
+        </div>
 
-      <button mat-stroked-button color="primary" type="button" (click)="openCustomFood()">
-        <mat-icon fontIcon="add" />
-        Create custom food
-      </button>
-    </div>
-    }
-    @else {
-      @for (item of foods(); track item.id) {
-        <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected(item.id, $index)">
+        <button mat-stroked-button color="primary" type="button" (click)="openCustomFood()">
+          <mat-icon fontIcon="add" />
+          Create custom food
+        </button>
+      </div>
+      }
+      @else if (isSelectedView() && foods().length === 0) {
+        <!-- Selected empty state -->
+        <div class="afd-empty">
+          <div class="afd-empty-title">
+            @if (selectedCount() === 0) {
+              No foods selected
+            } @else {
+              No selected foods match your search
+            }
+          </div>
+
+          <div class="afd-empty-sub">
+            @if (selectedCount() === 0) {
+              Select foods from the list to review them here.
+            } @else {
+              Try clearing your search to see your selected items.
+            }
+          </div>
+
+          <div class="afd-empty-actions">
+            @if (selectedCount() > 0 && hasSearch()) {
+              <button mat-stroked-button type="button" (click)="searchCtrl.setValue('')">
+                Clear search
+              </button>
+            }
+
+            <button mat-stroked-button color="primary" type="button" (click)="setFilter('all')">
+              Browse foods
+            </button>
+          </div>
+        </div>
+      }
+      @else {
+        @for (item of foods(); track $index) {
+        <div class="afd-row" [class.is-selected]="isSelected(item.id)" (click)="toggleSelected($index)">
           <!-- LEFT -->
           <div class="afd-left">
             <div class="afd-name">{{ item.name }}</div>
             <div class="afd-brand">{{ item.brand }}</div>
 
             @let n = getRowNutrition(item);
-            
+
             <div class="afd-macros">
               {{ n.calories | number: '1.0-0' }} kcal ·
               Protein {{ n.protein | number: '1.2-2' }} g ·
@@ -85,30 +125,21 @@
 
           <!-- RIGHT: quantity + unit -->
           <div class="afd-controls" [formGroupName]="$index" (click)="$event.stopPropagation()">
-            <button mat-icon-button type="button" 
-              (click)="decreaseQty($index, $event)"
-              [disabled]="!isSelected(item.id)">
+            <button mat-icon-button type="button" (click)="decreaseQty($index, $event)" [disabled]="!isSelected(item.id)">
               <mat-icon>remove</mat-icon>
             </button>
 
             <mat-form-field appearance="outline" class="afd-qty-input">
-              <input matInput type="number" 
-                min="0" step="0.5" 
-                formControlName="quantity" 
-                (click)="$event.stopPropagation()"
-                (input)="onQtyChange($index)"
-                (blur)="onQtyBlur($index)" />
+              <input matInput type="number" min="0" step="0.5" formControlName="quantity" (click)="$event.stopPropagation()"
+                (input)="onQtyChange($index)" (blur)="onQtyBlur($index)" />
             </mat-form-field>
 
-            <button mat-icon-button type="button" 
-              (click)="increaseQty($index, $event)">
+            <button mat-icon-button type="button" (click)="increaseQty($index, $event)">
               <mat-icon>add</mat-icon>
             </button>
 
             <mat-form-field appearance="outline" class="afd-unit-select">
-              <mat-select 
-                formControlName="unitId" 
-                (click)="$event.stopPropagation()"
+              <mat-select formControlName="unitId" (click)="$event.stopPropagation()"
                 (selectionChange)="onUnitChange($index)">
                 @for (unit of item.units; track unit.id) {
                 <mat-option [value]="unit.id">
@@ -126,18 +157,18 @@
             </mat-icon>
           </div>
         </div>
-      }
-      @if (loadingMore()) {
+        }
+        @if (loadingMore()) {
         <div class="afd-load-more">
           <mat-progress-spinner diameter="22" mode="indeterminate"></mat-progress-spinner>
           <span>Loading more…</span>
         </div>
-      }
+        }
 
-      @if (!loadingMore() && !hasMore() && foods().length > 0) {
+        @if (!loadingMore() && !hasMore() && foods().length > 0) {
         <div class="afd-end">End of results</div>
+        }
       }
-    }
     }
     @else {
     <!-- LOADING SKELETON -->
@@ -162,19 +193,33 @@
   <!-- FOOTER -->
   <div class="afd-footer">
     <div class="afd-summary">
-      {{ this.selected().size }} item{{ this.selected().size === 1 ? '' : 's' }} selected ·
-      {{ selectedCalories() }} kcal
+      {{ selectedCount() }} item{{ selectedCount() === 1 ? '' : 's' }} selected ·
+      {{ selectedCalories() | number:'1.0-0' }} kcal
+
+      @if (selectedCount() > 0) {
+        <button mat-button type="button" class="afd-link"
+                (click)="viewSelected()"
+                [disabled]="activeFilter === 'selected' || isAddingFood()">
+          View
+        </button>
+
+        <button mat-button type="button" class="afd-link"
+                (click)="clearSelected()"
+                [disabled]="isAddingFood()">
+          Clear
+        </button>
+      }
     </div>
 
     <button mat-flat-button class="add-btn" color="primary" type="button" (click)="confirmAdd()"
-      [disabled]="this.selected().size === 0 || isAddingFood()">
+      [disabled]="selectedCount() === 0 || isAddingFood()">
       @if (!isAddingFood()) {
-      Add to {{ this.data.mealType }}
+        Add {{ selectedCount() }} item{{ selectedCount() === 1 ? '' : 's' }} to {{ data.mealType }}
       }
       @else {
-      <mat-progress-spinner diameter="18" mode="indeterminate" class="btn-spinner">
-      </mat-progress-spinner>
-      <span class="saving-text">Saving…</span>
+        <mat-progress-spinner diameter="18" mode="indeterminate" class="btn-spinner">
+        </mat-progress-spinner>
+        <span class="saving-text">Saving…</span>
       }
     </button>
   </div>

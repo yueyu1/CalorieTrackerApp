@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MealType } from '../../../types/meal';
 import { FoodService } from '../../../core/services/food-service';
-import { debounceTime, distinctUntilChanged, Observable, Subscription, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, of, Subscription, tap } from 'rxjs';
 import { Food } from '../../../types/food';
 import { MealEntryItem } from '../../../types/meal-entry-item';
 import { DecimalPipe } from '@angular/common';
@@ -50,7 +50,7 @@ export class AddFoodDialog implements OnInit {
     mealId: number; mealType: MealType; mealDate: string
   };
   protected foods = signal<Food[]>([]);
-  protected activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' = 'all';
+  protected activeFilter: 'all' | 'myFoods' | 'recent' | 'brands' | 'selected' = 'all';
   protected isAddingFood = signal(false);
 
   protected loadingMore = signal(false);
@@ -64,6 +64,9 @@ export class AddFoodDialog implements OnInit {
 
   // Map<foodId, RowNutritionEntry>
   protected rowNutrition = new Map<number, RowNutritionEntry>();
+
+  // computed count of selected items
+  protected readonly selectedCount = computed(() => this.selected().size);
 
   // computed total calories of selected items
   protected readonly selectedCalories = computed(() => {
@@ -137,22 +140,9 @@ export class AddFoodDialog implements OnInit {
 
   /* ---------- selection management ---------- */
 
-  ensureSelected(index: number, seed?: { quantity?: number, unitId?: number }): void {
-    const food = this.foods()[index];
-    if (this.isSelected(food.id)) return;
-
-    // enable controls
+  ensureSelected(index: number): void {
     this.setRowEnabled(index, true);
-
-    // seed from current form values unless overridden
-    const row = this.foodsArray.at(index) as FormGroup;
-    const quantity = seed?.quantity ?? Number(row.get('quantity')!.value ?? 0);
-    const unitId = seed?.unitId ?? Number(row.get('unitId')!.value);
-    this.selected.update(prev => {
-      const next = new Map(prev);
-      next.set(food.id, { quantity: quantity, unitId: unitId, snapshot: food });
-      return next;
-    });
+    this.syncSelectedFromRow(index);
   }
 
   deselect(index: number): void {
@@ -167,10 +157,18 @@ export class AddFoodDialog implements OnInit {
     this.setRowEnabled(index, false);
     row.get('quantity')!.setValue(1, { emitEvent: false });
     row.get('unitId')!.setValue(food.units[0]?.id ?? null, { emitEvent: false });
+
+    if (this.activeFilter === 'selected') {
+      this.foods.update(curr => curr.filter((_, i) => i !== index));
+      this.foodsArray.removeAt(index);
+    }
   }
 
-  toggleSelected(id: number, index: number): void {
-    if (this.selected().has(id)) {
+  toggleSelected(index: number): void {
+    const food = this.foods()[index];
+    if (!food) return;
+
+    if (this.isSelected(food.id)) {
       this.deselect(index);
     } else {
       this.ensureSelected(index);
@@ -207,12 +205,10 @@ export class AddFoodDialog implements OnInit {
     const row = this.foodsArray.at(index) as FormGroup;
     const current = Number(row.get('quantity')!.value ?? 0);
     const next = current + 1;
-
-    // seed selection with the next quantity
-    this.ensureSelected(index, { quantity: next });
-
-    // keep the form control in sync too
     row.get('quantity')!.setValue(next, { emitEvent: false });
+
+    this.syncSelectedFromRow(index);
+    this.setRowEnabled(index, true);
   }
 
   decreaseQty(index: number, event?: MouseEvent): void {
@@ -223,38 +219,19 @@ export class AddFoodDialog implements OnInit {
     const row = this.foodsArray.at(index) as FormGroup;
     const current = Number(row.get('quantity')!.value ?? 0);
     const next = Math.max(0, current - 1);
-    row.get('quantity')!.setValue(next);
+    row.get('quantity')!.setValue(next, { emitEvent: false });
 
     if (next <= 0 && this.selected().has(food.id)) {
       // if quantity hits 0, unselect this food
       this.deselect(index);
     } else {
       // keep selected map in sync
-      const cur = this.selected().get(food.id)!;
-      this.selected.update((prev) => {
-        const nextMap = new Map(prev);
-        nextMap.set(food.id, { ...cur, quantity: next });
-        return nextMap;
-      });
+      this.syncSelectedFromRow(index);
     }
   }
 
   onQtyChange(index: number): void {
-    const food = this.foods()[index];
-    if (!this.isSelected(food.id)) return;
-
-    const group = this.foodsArray.at(index) as FormGroup;
-    const raw = group.get('quantity')!.value;
-    const parsed = Number(raw);
-    const quantity = Number.isFinite(parsed) ? parsed : 1;
-
-    // Update selected map
-    const cur = this.selected().get(food.id)!;
-    this.selected.update((prev) => {
-      const nextMap = new Map(prev);
-      nextMap.set(food.id, { ...cur, quantity });
-      return nextMap;
-    });
+    this.syncSelectedFromRow(index);
   }
 
   onQtyBlur(index: number): void {
@@ -280,16 +257,42 @@ export class AddFoodDialog implements OnInit {
   onUnitChange(index: number): void {
     const food = this.foods()[index];
     if (!this.isSelected(food.id)) return;
+    this.syncSelectedFromRow(index);
+  }
+
+  private syncSelectedFromRow(index: number): void {
+    const food = this.foods()[index];
+    const group = this.foodsArray.at(index) as FormGroup;
+    const quantity = Number(group.get('quantity')!.value ?? 1) || 1;
+    const unitId = Number(group.get('unitId')!.value ?? food.units[0]?.id ?? 0);
+
+    if (!this.isSelected(food.id)) {
+      this.selected.update(prev => {
+        const next = new Map(prev);
+        next.set(food.id, { quantity, unitId, snapshot: food });
+        return next;
+      });
+    } else {
+        this.selected.update(prev => {
+        const next = new Map(prev);
+        const existing = next.get(food.id);
+        if (!existing) return prev;
+        next.set(food.id, { ...existing, quantity, unitId });
+        return next;
+      });
+    }
+  }
+
+  private syncRowFromSelected(index: number): void {
+    const food = this.foods()[index];
+    if (!this.isSelected(food.id)) return;
 
     const group = this.foodsArray.at(index) as FormGroup;
-    const unitId = group.get('unitId')!.value;
+    const saved = this.selected().get(food.id);
+    if (!saved) return;
 
-    const cur = this.selected().get(food.id)!;
-    this.selected.update(() => {
-      const nextMap = new Map();
-      nextMap.set(food.id, { ...cur, unitId });
-      return nextMap;
-    });
+    group.get('quantity')!.setValue(saved.quantity, { emitEvent: false });
+    group.get('unitId')!.setValue(saved.unitId, { emitEvent: false });
   }
 
   /* ---------- data loading + pagination ---------- */
@@ -339,22 +342,47 @@ export class AddFoodDialog implements OnInit {
   private appendFoods(newFoods: Food[]): void {
     if (newFoods.length === 0) return;
 
-    // 1) append to the signal list
+    // append to the signal list
     this.foods.update(curr => [...curr, ...newFoods]);
 
-    // 2) append matching form rows (so we don't reset existing quantities)
+    // append matching form rows (so we don't reset existing quantities)
     const arr = this.foodsArray;
     for (const food of newFoods) {
       const group = this.fb.group({
         quantity: [{ value: 1, disabled: true }],
         unitId: [{ value: food.units[0]?.id ?? null, disabled: true }],
       });
+
+      // append to form array
       arr.push(group);
+
+      // if this food is already selected, restore its quantity + unit
+      const saved = this.selected().get(food.id);
+      if (saved) {
+        group.get('quantity')!.setValue(saved.quantity, { emitEvent: false });
+        group.get('unitId')!.setValue(saved.unitId, { emitEvent: false });
+        this.setRowEnabled(arr.length - 1, true);
+        this.syncRowFromSelected(arr.length - 1);
+      }
+
       this.buildRowSignals(food, group);
     }
   }
 
   private fetchFoodsPage(skip: number, take: number): Observable<Food[]> {
+    if (this.activeFilter === 'selected') {
+      const rows = [...this.selected().values()].map(x => x.snapshot);
+
+      const search = (this.searchCtrl.value ?? '').trim().toLowerCase();
+      const filtered = !search ? rows : rows.filter(f =>
+        f.name.toLowerCase().includes(search) ||
+        (f.brand ?? '').toLowerCase().includes(search)
+      );
+
+      const page = filtered.slice(skip, skip + take);
+      return of(page);
+    }
+
     const search = (this.searchCtrl.value ?? '').trim();
     const scope =
       this.activeFilter === 'myFoods' ? 'mine' :
@@ -433,6 +461,28 @@ export class AddFoodDialog implements OnInit {
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  viewSelected(): void {
+  if (this.selectedCount() === 0) return;
+    this.activeFilter = 'selected';
+    this.loadFirstPage();
+  }
+
+  clearSelected(): void {
+    this.selected.set(new Map());
+    if (this.activeFilter === 'selected') {
+      this.loadFirstPage();
+    }
+  }
+
+  isSelectedView(): boolean {
+    return this.activeFilter === 'selected';
+  }
+
+  hasSearch(): boolean {
+    const q = (this.searchCtrl.value ?? '').trim();
+    return q.length > 0;
   }
 
   /* ---------- form getters ---------- */
