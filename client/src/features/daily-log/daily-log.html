@@ -341,7 +341,7 @@
                 <span class="macro-chip">
                   {{ formatGrams(meal.totalProtein) }}
                 </span>
-                @if (this.goalSettingsService.goalSettings()?.showMacroPercent) {
+                @if (showMacroPercent()) {
                 <span class="macro-percent">
                   {{ formatMacroPercent(mp.protein) }}
                 </span>
@@ -356,7 +356,7 @@
                 <span class="macro-chip">
                   {{ formatGrams(meal.totalCarbs) }}
                 </span>
-                @if (this.goalSettingsService.goalSettings()?.showMacroPercent) {
+                @if (showMacroPercent()) {
                 <span class="macro-percent">
                   {{ formatMacroPercent(mp.carbs) }}
                 </span>
@@ -371,7 +371,7 @@
                 <span class="macro-chip">
                   {{ formatGrams(meal.totalFat) }}
                 </span>
-                @if (this.goalSettingsService.goalSettings()?.showMacroPercent) {
+                @if (showMacroPercent()) {
                 <span class="macro-percent">
                   {{ formatMacroPercent(mp.fat) }}
                 </span>

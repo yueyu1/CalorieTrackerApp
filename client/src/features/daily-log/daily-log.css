@@ -696,7 +696,7 @@
   padding: 4px 12px;
   display: grid;
   /* Food | Calories | P | C | F | Actions */
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr auto;
+  grid-template-columns: 3fr 1fr 1fr 1fr 1fr auto;
   align-items: center;
 }
 

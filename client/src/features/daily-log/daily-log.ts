@@ -184,6 +184,10 @@ export class DailyLog implements OnInit {
       : 0
   );
 
+  showMacroPercent = computed(() =>
+    this.goalSettingsService.goalSettings() === null ||
+    this.goalSettingsService.goalSettings()?.showMacroPercent === true
+  );
   // ---- Per-meal helpers ----
 
   /** Macro distribution for a meal based on macro calories (P=4, C=4, F=9 kcal) */
