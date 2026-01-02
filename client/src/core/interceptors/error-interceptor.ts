@@ -6,6 +6,7 @@ import { ToastService } from '../services/toast-service';
 import { Router } from '@angular/router';
 import { throwError } from 'rxjs/internal/observable/throwError';
 import { environment } from '../../environments/environment';
+import { Injector } from '@angular/core';
 
 function isAuthEndpoint(url: string) {
   return (
@@ -16,12 +17,13 @@ function isAuthEndpoint(url: string) {
 }
 
 export const errorInterceptor: HttpInterceptorFn = (req, next) => {
-  const router = inject(Router);
+  const injector = inject(Injector);
   const toastService = inject(ToastService);
   const accountService = inject(AccountService);
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
+      const router = injector.get(Router);
       switch (error.status) {
         case 400:
           let message = '';

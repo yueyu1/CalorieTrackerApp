@@ -10,9 +10,10 @@ import { MyFoods } from '../features/my-foods/my-foods';
 import { Progress } from '../features/progress/progress';
 import { preventUnsavedChangesGuard } from '../core/guards/prevent-unsaved-changes-guard';
 import { authGuard } from '../core/guards/auth-guard';
+import { redirectRootGuard } from '../core/guards/redirect-root-guard';
 
 export const routes: Routes = [
-    { path: '', component: Home, title: 'Home' },
+    { path: '', pathMatch: 'full', component: Home, title: 'Home', canMatch: [redirectRootGuard]},
     { path: 'account/login', component: Login, title: 'Login' },
     { path: 'account/register', component: Register, title: 'Register' },
     { path: 'daily-log', component: DailyLog, title: 'Daily Log', canActivate: [authGuard] },
@@ -22,6 +23,6 @@ export const routes: Routes = [
         canActivate: [authGuard],
         canDeactivate: [preventUnsavedChangesGuard]
      },
-    { path: 'test-errors', component: TestErrors },
+    // { path: 'test-errors', component: TestErrors },
     { path: '**', component: NotFound }
 ];
