@@ -31,3 +31,9 @@ export type MealItem = {
   fat: number;
   units: FoodUnit[];
 };
+
+export type MealEntryItem = {
+  foodId: number;
+  quantity: number;
+  unit: string;
+};

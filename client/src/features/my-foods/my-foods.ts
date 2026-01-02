@@ -15,7 +15,7 @@ import { Food } from '../../types/food';
 import { MatSelectModule } from "@angular/material/select";
 import { MatDialog } from '@angular/material/dialog';
 import { CustomFoodDialog } from './dialogs/custom-food-dialog/custom-food-dialog';
-import { CustomFoodDialogResult } from '../../types/custom-food';
+import { CustomFoodDialogResult } from '../../types/food';
 import { FoodService } from '../../core/services/food-service';
 import { ToastService } from '../../core/services/toast-service';
 import { debounceTime, distinctUntilChanged } from 'rxjs';

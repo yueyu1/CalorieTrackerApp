@@ -1,9 +1,7 @@
-using System.Security.Claims;
 using API.Dtos;
 using API.Entities;
 using API.Extensions;
 using API.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

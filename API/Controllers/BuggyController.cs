@@ -2,8 +2,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
+    #if DEBUG
     [Route("api/[controller]")]
     [ApiController]
+    [ApiExplorerSettings(IgnoreApi = true)]
     public class BuggyController : ControllerBase
     {
         [HttpGet("not-found")]
@@ -36,4 +38,10 @@ namespace API.Controllers
             return Forbid();
         }
     }
+    #else
+    [NonController]
+    public class BuggyController : ControllerBase
+    {
+    }
+    #endif
 }

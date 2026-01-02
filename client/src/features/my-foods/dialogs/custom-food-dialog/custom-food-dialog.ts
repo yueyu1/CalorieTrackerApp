@@ -6,7 +6,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { UpsertCustomFoodRequest, CustomFoodDialogResult } from '../../../../types/custom-food';
+import { UpsertCustomFoodRequest, CustomFoodDialogResult } from '../../../../types/food';
 import { FoodService } from '../../../../core/services/food-service';
 import { Food } from '../../../../types/food';
 import { UnitService } from '../../../../core/services/unit-service';

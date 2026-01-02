@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, finalize, Observable, tap, throwError } from 'rxjs';
 import { Food, FoodQuery } from '../../types/food';
 import { environment } from '../../environments/environment';
-import { UpsertCustomFoodRequest } from '../../types/custom-food';
+import { UpsertCustomFoodRequest } from '../../types/food';
 
 @Injectable({
   providedIn: 'root',

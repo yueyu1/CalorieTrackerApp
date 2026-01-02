@@ -11,7 +11,7 @@ import { MealType } from '../../../types/meal';
 import { FoodService } from '../../../core/services/food-service';
 import { debounceTime, distinctUntilChanged, Observable, of, Subscription, tap } from 'rxjs';
 import { Food } from '../../../types/food';
-import { MealEntryItem } from '../../../types/meal-entry-item';
+import { MealEntryItem } from '../../../types/meal';
 import { DecimalPipe } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';

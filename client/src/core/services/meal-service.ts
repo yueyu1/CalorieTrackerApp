@@ -5,7 +5,7 @@ import { Meal, MealItem, MealType } from '../../types/meal';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { catchError, finalize, tap, throwError } from 'rxjs';
-import { MealEntryItem } from '../../types/meal-entry-item';
+import { MealEntryItem } from '../../types/meal';
 import { getPastDays } from '../../shared/utils/date-utils';
 import { DailyTotals } from '../../types/progress';
 
