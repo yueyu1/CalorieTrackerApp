@@ -19,7 +19,7 @@
     <div class="quantity-row">
       <mat-form-field appearance="outline" class="quantity-field">
         <mat-label>Quantity</mat-label>
-        <input matInput type="number" min="0.01" step="0.01" formControlName="quantity" />
+        <input matInput type="number" min="0" step="0.5" formControlName="quantity" />
         @if (quantityCtrl?.hasError('required')) {
           <mat-error>Quantity is required</mat-error>
         }

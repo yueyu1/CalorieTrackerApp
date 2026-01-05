@@ -361,12 +361,15 @@ namespace API.Controllers
         }
 
         [HttpPut("{mealId}/entries/{entryId}")]
-        public async Task<ActionResult<DailyMealItemDto>> UpdateMealEntry(int mealId, int entryId, UpdateMealEntryDto dto)
+        public async Task<ActionResult<DailyMealDto>> UpdateMealEntry(int mealId, int entryId, UpdateMealEntryDto dto)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
             var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == mealId)
+                .Include(m => m.MealFoods)
+                    .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.Units)
                 .FirstOrDefaultAsync();
 
             if (meal == null) return NotFound();
@@ -392,18 +395,21 @@ namespace API.Controllers
 
             await db.SaveChangesAsync();
 
-            return Ok(MapMealFoodToItemDto(mealFood));
+            return Ok(MapMealToDailyDto(meal));
         }
 
         [HttpDelete("{mealId}/entries/{entryId}")]
-        public async Task<IActionResult> DeleteMealEntry(int mealId, int entryId)
+        public async Task<ActionResult<DailyMealDto>> DeleteMealEntry(int mealId, int entryId)
         {
             var currentUserId = HttpContext.GetCurrentUserId();
 
             var meal = await db.Meals
                 .Where(m => m.UserId == currentUserId && m.Id == mealId)
+                .Include(m => m.MealFoods)
+                    .ThenInclude(mf => mf.Food)
+                        .ThenInclude(f => f.Units)
                 .FirstOrDefaultAsync();
-
+            
             if (meal == null) return NotFound();
 
             var mealFood = await db.MealFoods
@@ -415,7 +421,7 @@ namespace API.Controllers
             db.MealFoods.Remove(mealFood);
             await db.SaveChangesAsync();
 
-            return NoContent();
+            return MapMealToDailyDto(meal);
         }
 
         /// <summary>

@@ -212,7 +212,7 @@ export class AddFoodDialog implements OnInit {
     const row = this.foodsArray.at(index) as FormGroup;
     const current = Number(row.get('quantity')!.value ?? 0);
     const next = current + 1;
-    row.get('quantity')!.setValue(next, { emitEvent: false });
+    row.get('quantity')!.setValue(next);
 
     this.syncSelectedFromRow(index);
     this.setRowEnabled(index, true);
@@ -226,7 +226,7 @@ export class AddFoodDialog implements OnInit {
     const row = this.foodsArray.at(index) as FormGroup;
     const current = Number(row.get('quantity')!.value ?? 0);
     const next = Math.max(0, current - 1);
-    row.get('quantity')!.setValue(next, { emitEvent: false });
+    row.get('quantity')!.setValue(next);
 
     if (next <= 0 && this.selected().has(food.id)) {
       // if quantity hits 0, unselect this food

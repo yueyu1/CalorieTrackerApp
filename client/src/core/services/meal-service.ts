@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { computed, inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { Meal, MealItem, MealType } from '../../types/meal';
+import { Meal, MealType } from '../../types/meal';
 import { Observable } from 'rxjs/internal/Observable';
 import { switchMap } from 'rxjs/internal/operators/switchMap';
 import { catchError, finalize, tap, throwError } from 'rxjs';
@@ -20,19 +20,6 @@ export class MealService {
   readonly rangeLoading = signal<boolean>(false);
   readonly days = getPastDays(7);
   readonly rangeTotals = signal<DailyTotals[]>([]);
-
-  readonly currentDayTotals = computed(() => {
-    return this.meals().reduce(
-      (acc, m) => {
-        acc.calories += m.totalCalories ?? 0;
-        acc.protein += m.totalProtein ?? 0;
-        acc.carbs += m.totalCarbs ?? 0;
-        acc.fat += m.totalFat ?? 0;
-        return acc;
-      },
-      { calories: 0, protein: 0, carbs: 0, fat: 0 }
-    );
-  });
 
   /** Load meals (with totals and items) for a specific date */
   loadDailyMeals(date: string): Observable<Meal[]> {
@@ -73,24 +60,12 @@ export class MealService {
     });
   }
 
-  /** Get meals in a date range */
-  private getMealsInRange(from: string, to: string): Observable<DailyTotals[]> {
-    return this.http.get<DailyTotals[]>(`${this.apiUrl}/meals/range`, {
-      params: { from, to },
-    });
-  }
-
   /** Create a new meal */
   createMeal(mealType: string, mealDate: string): Observable<Meal> {
     return this.http.post<Meal>(`${this.apiUrl}/meals`, {
       mealType,
       mealDate
     });
-  }
-
-  /** Add multiple food entries to a meal in bulk */
-  addMealEntriesBulk(mealId: number, items: MealEntryItem[]): Observable<Meal> {
-    return this.http.post<Meal>(`${this.apiUrl}/meals/${mealId}/entries/bulk`, items);
   }
 
   /**
@@ -126,55 +101,31 @@ export class MealService {
     );
   }
 
-  deleteFoodFromMeal(mealId: number, entryId: number): Observable<void> {
-    return this.deleteMealEntry(mealId, entryId).pipe(
-      tap(() => {
-        // Update the meal in the signal
-        this.meals.update(meals =>
-          meals.map(m => {
-            if (m.id === mealId) {
-              return {
-                ...m,
-                items: m.items.filter(x => x.id !== entryId)
-              };
-            }
-            return m;
-          })
-        );
-      })
-    );
-  }
-
-  private deleteMealEntry(mealId: number, entryId: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/meals/${mealId}/entries/${entryId}`);
-  }
-
-  updateMealEntryQuantity(mealId: number, entryId: number, quantity: number, unit: string): Observable<MealItem> {
+  /** Update a meal entry's quantity and unit */
+  updateMealEntryQuantity(mealId: number, entryId: number, quantity: number, unit: string): Observable<Meal> {
     return this.updateMealEntry(mealId, entryId, quantity, unit).pipe(
-      tap((updatedMealItem) => {
+      tap((updatedMeal) => {
         // Update the meal entry in the signal
         this.meals.update(meals =>
-          meals.map(m => {
-            if (m.id === mealId) {
-              return {
-                ...m,
-                items: m.items.map(item => item.id === entryId ? updatedMealItem : item)
-              };
-            }
-            return m;
-          })
+          meals.map(m => m.id === updatedMeal.id ? updatedMeal : m)
         );
       })
     );
   }
 
-  private updateMealEntry(mealId: number, entryId: number, quantity: number, unit: string): Observable<MealItem> {
-    return this.http.put<MealItem>(`${this.apiUrl}/meals/${mealId}/entries/${entryId}`, {
-      quantity,
-      unit: unit
-    });
+  /** Delete a food entry from a meal */
+  deleteFoodFromMeal(mealId: number, entryId: number): Observable<Meal> {
+    return this.deleteMealEntry(mealId, entryId).pipe(
+      tap((updatedMeal: Meal) => {
+        // Update the meal in the signal
+        this.meals.update(meals =>
+          meals.map(m => m.id === updatedMeal.id ? updatedMeal : m)
+        );
+      })
+    );
   }
-  
+
+  /** Copy entries from one meal to another meal */
   copyEntriesBetweenMeals(sourceMealId: number, targetMeal: Meal, mode: 'append' | 'replace' = 'append'): Observable<Meal> {
     if (targetMeal.id === 0) {
       return this.createMeal(targetMeal.mealType, targetMeal.mealDate).pipe(
@@ -201,6 +152,32 @@ export class MealService {
     }
   }
 
+  /** Delete a meal entry */
+  private deleteMealEntry(mealId: number, entryId: number): Observable<Meal> {
+    return this.http.delete<Meal>(`${this.apiUrl}/meals/${mealId}/entries/${entryId}`);
+  }
+
+  /** Get meals in a date range */
+  private getMealsInRange(from: string, to: string): Observable<DailyTotals[]> {
+    return this.http.get<DailyTotals[]>(`${this.apiUrl}/meals/range`, {
+      params: { from, to },
+    });
+  }
+
+  /** Add multiple food entries to a meal in bulk */
+  private addMealEntriesBulk(mealId: number, items: MealEntryItem[]): Observable<Meal> {
+    return this.http.post<Meal>(`${this.apiUrl}/meals/${mealId}/entries/bulk`, items);
+  }
+
+  /** Update a meal entry's quantity and unit */
+  private updateMealEntry(mealId: number, entryId: number, quantity: number, unit: string): Observable<Meal> {
+    return this.http.put<Meal>(`${this.apiUrl}/meals/${mealId}/entries/${entryId}`, {
+      quantity,
+      unit: unit
+    });
+  }
+
+  /** Copy meal entries from one meal to another */
   private copyMealEntries(sourceMealId: number, targetMealId: number, mode: 'append' | 'replace' = 'append'): Observable<Meal> {
     return this.http.post<Meal>(`${this.apiUrl}/meals/${targetMealId}/copy-from/${sourceMealId}`, {});
   }

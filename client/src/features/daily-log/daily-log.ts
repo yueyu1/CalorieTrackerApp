@@ -59,15 +59,24 @@ export class DailyLog implements OnInit {
   protected pageLoading = computed(() => this.mealService.mealsLoading()
     || this.goalSettingsService.isLoading());
   protected goal = this.goalSettingsService.goalSettings;
-  protected currentDayTotals = this.mealService.currentDayTotals;
   protected goalCalories = this.goalSettingsService.targetCalories;
   protected deletingIds = signal<Set<number>>(new Set());
   private busyByMealKey = signal<Record<string, boolean>>({});
 
-  ngOnInit(): void {
-    this.loadForDate(this.selectedDate());
-    this.goalSettingsService.loadGoalSettings().subscribe();
-  }
+  // ---- Daily totals and progress ----
+
+  protected readonly currentDayTotals = computed(() => {
+    return this.meals().reduce(
+      (acc, m) => {
+        acc.calories += m.totalCalories ?? 0;
+        acc.protein += m.totalProtein ?? 0;
+        acc.carbs += m.totalCarbs ?? 0;
+        acc.fat += m.totalFat ?? 0;
+        return acc;
+      },
+      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+    );
+  });
 
   protected caloriesRemaining = computed(() =>
     this.goalCalories() - this.currentDayTotals().calories
@@ -155,32 +164,34 @@ export class DailyLog implements OnInit {
     return 'Custom';
   }
 
-  // ---- Macro calorie calculations ----
+  // ---- Macro calorie breakdown ----
+
   proteinCalories = computed(() => this.currentDayTotals().protein * 4);
+
   carbsCalories = computed(() => this.currentDayTotals().carbs * 4);
+
   fatCalories = computed(() => this.currentDayTotals().fat * 9);
 
-  get totalMacroCalories() {
-    return this.proteinCalories() +
-      this.carbsCalories() +
-      this.fatCalories();
-  }
+  totalMacroCalories = computed(() => this.proteinCalories() +
+    this.carbsCalories() +
+    this.fatCalories()
+  );
 
   proteinCaloriePercent = computed(() =>
-    this.totalMacroCalories > 0
-      ? (this.proteinCalories() / this.totalMacroCalories) * 100
+    this.totalMacroCalories() > 0
+      ? (this.proteinCalories() / this.totalMacroCalories()) * 100
       : 0
   );
 
   carbsCaloriePercent = computed(() =>
-    this.totalMacroCalories > 0
-      ? (this.carbsCalories() / this.totalMacroCalories) * 100
+    this.totalMacroCalories() > 0
+      ? (this.carbsCalories() / this.totalMacroCalories()) * 100
       : 0
   );
 
   fatCaloriePercent = computed(() =>
-    this.totalMacroCalories > 0
-      ? (this.fatCalories() / this.totalMacroCalories) * 100
+    this.totalMacroCalories() > 0
+      ? (this.fatCalories() / this.totalMacroCalories()) * 100
       : 0
   );
 
@@ -188,6 +199,14 @@ export class DailyLog implements OnInit {
     this.goalSettingsService.goalSettings() === null ||
     this.goalSettingsService.goalSettings()?.showMacroPercent === true
   );
+
+  // ---- Lifecycle ----
+
+  ngOnInit(): void {
+    this.loadForDate(this.selectedDate());
+    this.goalSettingsService.loadGoalSettings().subscribe();
+  }
+
   // ---- Per-meal helpers ----
 
   /** Macro distribution for a meal based on macro calories (P=4, C=4, F=9 kcal) */
