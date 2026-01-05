@@ -19,28 +19,28 @@
   <div class="afd-filters-row">
     <mat-chip-listbox class="afd-chips" [multiple]="false">
       <mat-chip-option [selected]="activeFilter === 'all'" [disabled]="activeFilter === 'all' || isAddingFood()"
-        (click)="setFilter('all')">
+        (click)="setFilter('all')" [disabled]="this.loading()">
         All
       </mat-chip-option>
 
       <mat-chip-option [selected]="activeFilter === 'myFoods'" [disabled]="activeFilter === 'myFoods' || isAddingFood()"
-        (click)="setFilter('myFoods')">
+        (click)="setFilter('myFoods')" [disabled]="this.loading()">
         My Foods
       </mat-chip-option>
 
       <mat-chip-option [selected]="activeFilter === 'recent'" [disabled]="activeFilter === 'recent' || isAddingFood()"
-        (click)="setFilter('recent')">
+        (click)="setFilter('recent')" [disabled]="this.loading()">
         Recent
       </mat-chip-option>
 
       <mat-chip-option [selected]="activeFilter === 'brands'" [disabled]="activeFilter === 'brands' || isAddingFood()"
-        (click)="setFilter('brands')">
+        (click)="setFilter('brands')" [disabled]="this.loading()">
         Brands
       </mat-chip-option>
 
       <mat-chip-option
         [selected]="activeFilter === 'selected'"
-        [disabled]="activeFilter === 'selected' || isAddingFood() || selectedCount() === 0"
+        [disabled]="activeFilter === 'selected' || isAddingFood() || selectedCount() === 0 || this.loading()"
         (click)="setFilter('selected')">
         Selected ({{ selectedCount() }})
       </mat-chip-option>

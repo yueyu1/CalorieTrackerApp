@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatOptionModule } from '@angular/material/core';
 import { MealType } from '../../../types/meal';
 import { FoodService } from '../../../core/services/food-service';
-import { debounceTime, distinctUntilChanged, Observable, of, Subscription, tap } from 'rxjs';
+import { debounceTime, distinctUntilChanged, Observable, of, startWith, Subscription, switchMap, takeUntil, tap } from 'rxjs';
 import { Food } from '../../../types/food';
 import { MealEntryItem } from '../../../types/meal';
 import { DecimalPipe } from '@angular/common';
@@ -19,6 +19,7 @@ import { MealService } from '../../../core/services/meal-service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { nutritionFor } from '../../../shared/nutrition/nutrition-calculator';
 import { Nutrition, RowNutritionEntry } from '../../../types/nutrition';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-add-food-dialog',
@@ -42,7 +43,8 @@ import { Nutrition, RowNutritionEntry } from '../../../types/nutrition';
 export class AddFoodDialog implements OnInit {
   private foodService = inject(FoodService);
   private mealsService = inject(MealService);
-  protected loading = signal(true);
+  private destroyRef = inject(DestroyRef);
+  protected loading = signal(false);
   protected form!: FormGroup;
   private fb = inject(FormBuilder);
   private dialogRef = inject(MatDialogRef<AddFoodDialog>);
@@ -87,13 +89,18 @@ export class AddFoodDialog implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadFirstPage();
-
     this.searchCtrl.valueChanges.pipe(
+      startWith(this.searchCtrl.value ?? ''),
       debounceTime(250),
       distinctUntilChanged(),
-      tap(() => this.loadFirstPage())
-    ).subscribe();
+      tap(() => this.resetFirstPageState()),
+      switchMap(() => this.fetchFoodsPage(this.offset, this.pageSize)),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (page) => {
+        this.applyFirstPage(page);
+      }
+    });
   }
 
 
@@ -273,7 +280,7 @@ export class AddFoodDialog implements OnInit {
         return next;
       });
     } else {
-        this.selected.update(prev => {
+      this.selected.update(prev => {
         const next = new Map(prev);
         const existing = next.get(food.id);
         if (!existing) return prev;
@@ -298,25 +305,14 @@ export class AddFoodDialog implements OnInit {
   /* ---------- data loading + pagination ---------- */
 
   private loadFirstPage(): void {
-    this.offset = 0;
-    this.hasMore.set(true);
-
-    this.loading.set(true);
-    this.loadingMore.set(false);
-    this.clearRowNutrition();
-    this.foods.set([]);
-    this.form.setControl('foods', this.fb.array([]));
+    this.resetFirstPageState();
 
     this.fetchFoodsPage(this.offset, this.pageSize).subscribe({
       next: (page) => {
-        this.appendFoods(page);
-        this.offset += page.length;
-        this.hasMore.set(page.length === this.pageSize);
-        this.loading.set(false);
+        this.applyFirstPage(page);
       },
       error: () => {
-        this.hasMore.set(false);
-        this.loading.set(false);
+        this.failFirstPage();
       }
     });
   }
@@ -341,6 +337,8 @@ export class AddFoodDialog implements OnInit {
 
   private appendFoods(newFoods: Food[]): void {
     if (newFoods.length === 0) return;
+
+    // console.log('current foods:', this.foods());
 
     // append to the signal list
     this.foods.update(curr => [...curr, ...newFoods]);
@@ -402,15 +400,27 @@ export class AddFoodDialog implements OnInit {
     });
   }
 
-  onListScroll(evt: Event): void {
-    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
+  private resetFirstPageState(): void {
+    this.offset = 0;
+    this.hasMore.set(true);
 
-    const el = evt.target as HTMLElement;
-    const thresholdPx = 220; // load a bit before bottom
-    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
-    if (remaining <= thresholdPx) {
-      this.loadMore();
-    }
+    this.loading.set(true);
+    this.loadingMore.set(false);
+    this.clearRowNutrition();
+    this.foods.set([]);
+    this.form.setControl('foods', this.fb.array([]));
+  }
+
+  private applyFirstPage(page: Food[]): void {
+    this.appendFoods(page);
+    this.offset += page.length;
+    this.hasMore.set(page.length === this.pageSize);
+    this.loading.set(false);
+  }
+
+  private failFirstPage(): void {
+    this.hasMore.set(false);
+    this.loading.set(false);
   }
 
   /* ---------- filters + actions ---------- */
@@ -463,8 +473,19 @@ export class AddFoodDialog implements OnInit {
     this.dialogRef.close();
   }
 
+  onListScroll(evt: Event): void {
+    if (!this.hasMore() || this.loading() || this.loadingMore()) return;
+
+    const el = evt.target as HTMLElement;
+    const thresholdPx = 220; // load a bit before bottom
+    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+    if (remaining <= thresholdPx) {
+      this.loadMore();
+    }
+  }
+
   viewSelected(): void {
-  if (this.selectedCount() === 0) return;
+    if (this.selectedCount() === 0) return;
     this.activeFilter = 'selected';
     this.loadFirstPage();
   }
