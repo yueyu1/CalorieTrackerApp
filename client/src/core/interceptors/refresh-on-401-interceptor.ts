@@ -17,6 +17,8 @@ export const refreshOn401Interceptor: HttpInterceptorFn = (req, next) => {
   const accountService = inject(AccountService);
   return next(req).pipe(
     catchError((error) => {
+      // Does NOT try to refresh on auth endpoints themselves
+      // Only refreshes when a “real” endpoint fails with 401
       if (error.status !== 401 || isAuthEndpoint(req.url)) {
         return throwError(() => error);
       }

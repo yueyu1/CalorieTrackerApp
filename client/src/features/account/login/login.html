@@ -31,7 +31,7 @@
       </mat-form-field>
 
       <div class="auth-actions">
-        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="layoutService.isLoggingIn()">
+        <button mat-flat-button color="primary" type="submit" class="primary-btn" [disabled]="layoutService.isLoggingIn() || loginForm.invalid">
           {{ layoutService.isLoggingIn() ? 'Logging in…' : 'Login' }}
         </button>
       </div>
